@@ -338,7 +338,7 @@ class Layout extends PluginAbstract
         return self::getSelectSearchable($icons, $name, $selected, $id, $class . " iconSelect", true);
     }
 
-    static function getAvilableFlags()
+    static function getAvailableFlags()
     {
         global $global;
         $flags = array();
@@ -364,6 +364,9 @@ class Layout extends PluginAbstract
         }
         $flags = array();
         include_once $global['systemRootPath'] . 'objects/bcp47.php';
+        /**
+         * @var array $global
+         */
         foreach ($global['bcp47'] as $key => $filename) {
 
             $name = $filename['label'];
@@ -381,7 +384,7 @@ class Layout extends PluginAbstract
         if ($getAll) {
             $flags = self::getAllFlags();
         } else {
-            $flags = self::getAvilableFlags();
+            $flags = self::getAvailableFlags();
         }
         if (empty($id)) {
             $id = uniqid();

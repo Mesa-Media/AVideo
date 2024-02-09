@@ -8,6 +8,7 @@ require_once $global['systemRootPath'] . 'objects/user.php';
 if (!User::isLogged()) {
     gotToLoginAndComeBackHere('');
 }
+$global['laodPlaylistScript'] = 1;
 function getPlaylistOwnerUsersId()
 {
     if (!empty($_REQUEST['PlaylistOwnerUsersId'])) {
@@ -21,103 +22,105 @@ $timeName = "managerPlaylists.php";
 TimeLogStart($timeName);
 $users_id = getPlaylistOwnerUsersId();
 TimeLogEnd($timeName, __LINE__);
+require_once $global['systemRootPath'] . 'objects/functionInfiniteScroll.php';
+$infinityScrollGetFromSelector = 'managerPlaylists';
+setRowCount(8);
+setDefaultSort('created', 'DESC');
+
+$pl = PlayList::getAllFromUser($users_id, false);
+$total = PlayList::getTotalFromUser($users_id, false);
+$totalPages = ceil($total / getRowCount());
+
+$_page = new Page(array('Manage playlist'));
 ?>
-<!DOCTYPE html>
-<html lang="<?php echo getLanguage(); ?>">
+<style>
+    .playLists li {
+        min-height: 45px;
+    }
 
-<head>
-    <title><?php echo __("Users") . $config->getPageTitleSeparator() . $config->getWebSiteTitle(); ?></title>
-    <?php
-    TimeLogEnd($timeName, __LINE__);
-    include $global['systemRootPath'] . 'view/include/head.php';
-    TimeLogEnd($timeName, __LINE__);
-    include $global['systemRootPath'] . 'view/managerUsers_head.php';
-    TimeLogEnd($timeName, __LINE__);
-    ?>
-    <style>
-        .playLists li {
-            min-height: 45px;
-        }
+    .playLists .list-group {
+        height: 221px;
+        overflow: auto;
+    }
 
-        .playLists .list-group {
-            height: 221px;
-            overflow: auto;
-        }
+    .videoTitle.ellipsis {
+        width: calc(100% - 90px);
+        float: left;
+    }
 
-        .videoTitle.ellipsis {
-            width: calc(100% - 90px);
-            float: left;
-        }
+    .playLists .tab-content {
+        min-height: 250px;
+    }
 
-        .playLists .tab-content {
-            min-height: 250px;
-        }
+    .playLists {
+        min-height: 330px;
+    }
 
-        .playLists {
-            min-height: 330px;
-        }
+    .pl .panel-footer {
+        min-height: 42px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs">
+                <li class="active pl_filter" onclick="pl_filter('all', $(this));" data-toggle="tooltip" title="<?php echo __('Show all types'); ?>">
+                    <a href="#"><i class="fas fa-layer-group"></i>
+                        <i class="fas fa-list"></i>
+                        <i class="fas fa-film"></i> <?php echo __('All'); ?></a>
+                </li>
+                <li class="pl_filter" onclick="pl_filter('serie', $(this));" data-toggle="tooltip" title="<?php echo __('Show all programs that are listed in your video library'); ?>">
+                    <a href="#"><span class="label label-success"><i class="fas fa-list"></i>
+                            <?php echo __('Series'); ?></span></a>
+                </li>
+                <li class="pl_filter" onclick="pl_filter('collection', $(this));" data-toggle="tooltip" title="<?php echo __('Show all that is a collection of programs'); ?>">
+                    <a href="#"><span class="label label-primary"><i class="fas fa-layer-group"></i>
+                            <?php echo __('Collections'); ?></span></a>
+                </li>
+                <li class="pl_filter" onclick="pl_filter('videos', $(this));" data-toggle="tooltip" title="<?php echo __('Show all that include a list of videos'); ?>">
+                    <a href="#"><span class="label label-default"><i class="fas fa-film"></i>
+                            <?php echo __('Videos'); ?></span></a>
+                </li>
+                <li class="pull-right">
+                    <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="<?php echo __('New'); ?>" onclick="createNewProgram();">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </li>
+                <?php
 
-        .pl .panel-footer {
-            min-height: 42px;
-        }
-    </style>
-</head>
-
-<body class="<?php echo $global['bodyClass']; ?>">
-    <?php
-    include $global['systemRootPath'] . 'view/include/navbar.php';
-    ?>
-    <div class="container-fluid">
-        <br>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <ul class="nav nav-tabs">
-                    <li class="active pl_filter" onclick="pl_filter('all', $(this));" data-toggle="tooltip" title="<?php echo __('Show all types'); ?>">
-                        <a href="#"><i class="fas fa-layer-group"></i>
-                            <i class="fas fa-list"></i>
-                            <i class="fas fa-film"></i> <?php echo __('All'); ?></a>
-                    </li>
-                    <li class="pl_filter" onclick="pl_filter('serie', $(this));" data-toggle="tooltip" title="<?php echo __('Show all programs that are listed in your video library'); ?>">
-                        <a href="#"><span class="label label-success"><i class="fas fa-list"></i>
-                                <?php echo __('Series'); ?></span></a>
-                    </li>
-                    <li class="pl_filter" onclick="pl_filter('collection', $(this));" data-toggle="tooltip" title="<?php echo __('Show all that is a collection of programs'); ?>">
-                        <a href="#"><span class="label label-primary"><i class="fas fa-layer-group"></i>
-                                <?php echo __('Collections'); ?></span></a>
-                    </li>
-                    <li class="pl_filter" onclick="pl_filter('videos', $(this));" data-toggle="tooltip" title="<?php echo __('Show all that include a list of videos'); ?>">
-                        <a href="#"><span class="label label-default"><i class="fas fa-film"></i>
-                                <?php echo __('Videos'); ?></span></a>
-                    </li>
+                TimeLogEnd($timeName, __LINE__);
+                if (PlayLists::canManageAllPlaylists()) {
+                    TimeLogEnd($timeName, __LINE__);
+                ?>
                     <li class="pull-right">
-                        <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="<?php echo __('New'); ?>" onclick="createNewProgram();">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                        <?php
+                        $autocomplete = Layout::getUserAutocomplete(getPlaylistOwnerUsersId(), 'User_playlist_owner', array(), 'updatePlaylistOwner()');
+                        ?>
                     </li>
-                    <?php
-
+                <?php
                     TimeLogEnd($timeName, __LINE__);
-                    if (PlayLists::canManageAllPlaylists()) {
-                        TimeLogEnd($timeName, __LINE__);
-                    ?>
-                        <li class="pull-right">
-                            <?php
-                            $autocomplete = Layout::getUserAutocomplete(getPlaylistOwnerUsersId(), 'User_playlist_owner', array(), 'updatePlaylistOwner()');
-                            ?>
-                        </li>
-                    <?php
-                        TimeLogEnd($timeName, __LINE__);
-                    }
-                    TimeLogEnd($timeName, __LINE__);
-                    ?>
-                </ul>
-            </div>
-            <div class="panel-body">
+                }
+                TimeLogEnd($timeName, __LINE__);
+                ?>
+                <li class="pull-right ">
+                    <form class="navbar-form form-inline input-group" role="search" id="searchFormPlaylist" method="get">
+                        <input type="search" id="searchPlaylist" name="searchPlaylist" placeholder="<?php echo __('Search Playlist'); ?>" class="form-control" value="<?php echo @$_REQUEST['searchPlaylist']; ?>" autocomplete="off">
+                        <input type="hidden" name="PlaylistOwnerUsersId" value="<?php echo @$_REQUEST['PlaylistOwnerUsersId']; ?>" >
+                        <span class="input-group-append">
+                            <button class="btn btn-default btn-outline-secondary border-right-0 border py-2 faa-parent animated-hover" type="submit" id="buttonSearchPlaylist">
+                                <i class="fas fa-search faa-shake"></i>
+                            </button>
+                        </span>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div id="<?php echo $infinityScrollGetFromSelector; ?>">
                 <div class="row">
                     <?php
                     TimeLogEnd($timeName, __LINE__);
-                    $pl = PlayList::getAllFromUser($users_id, false);
+                    //var_dump($total);exit;
                     $count = 0;
                     TimeLogEnd($timeName, __LINE__);
                     foreach ($pl as $value) {
@@ -131,6 +134,10 @@ TimeLogEnd($timeName, __LINE__);
                         $rowsNOTSubPlaylists = PlayList::getAllNOTSubPlayLists($value["id"]);
                         $totalNOTSubPlaylists = count($rowsNOTSubPlaylists);
 
+                        $resp = PlayList::getTotalDurationAndTotalVideosFromPlaylist($value["id"]);
+                        $durationInSeconds = $resp['duration_in_seconds'];
+                        $totalVideos = $resp['totalVideos'];
+
                         $classes = array();
                         $isASerie = PlayLists::isPlayListASerie($value["id"]);
                         if ($isASerie) {
@@ -142,7 +149,6 @@ TimeLogEnd($timeName, __LINE__);
                         if ($totalNOTSubPlaylists) {
                             $classes[] = 'pl_videos';
                         }
-                        $durationInSeconds = 0;
                     ?>
                         <div class="col-sm-6 col-md-4 col-lg-3 pl pl<?php echo $value["id"]; ?> <?php echo implode(' ', $classes) ?>">
                             <div class="panel panel-<?php echo $totalSubPlaylists ? 'primary' : 'default'; ?>">
@@ -166,6 +172,9 @@ TimeLogEnd($timeName, __LINE__);
                                         <button type="button" class="btn btn-default btn-xs editBtn " onclick="editPlayList(<?php echo $value['id']; ?>);" data-toggle="tooltip" title="<?php echo __('Edit'); ?>">
                                             <i class="fas fa-edit"></i>
                                         </button>
+                                        <?php
+                                        echo PlayLists::scheduleLiveButton($value['id'], false);
+                                        ?>
                                     </div>
 
                                 </div>
@@ -219,18 +228,17 @@ TimeLogEnd($timeName, __LINE__);
                                                             $countItemsInPlaylist++;
                                                             if ($countItemsInPlaylist > $maxItemsInPlaylist) {
                                                     ?>
-                                                            <li class="list-group-item">
-                                                                <button type="button" class="btn btn-default btn-xs btn-block " onclick="editPlayList(<?php echo $value['id']; ?>);" data-toggle="tooltip" title="<?php echo __('Edit'); ?>">
-                                                                    <?php
-                                                                    echo __('More');
-                                                                    ?>
-                                                                    <i class="fas fa-ellipsis-h"></i>
-                                                                </button>
-                                                            </li>
+                                                                <li class="list-group-item">
+                                                                    <button type="button" class="btn btn-default btn-xs btn-block " onclick="editPlayList(<?php echo $value['id']; ?>);" data-toggle="tooltip" title="<?php echo __('Edit'); ?>">
+                                                                        <?php
+                                                                        echo __('More');
+                                                                        ?>
+                                                                        <i class="fas fa-ellipsis-h"></i>
+                                                                    </button>
+                                                                </li>
                                                             <?php
                                                                 break;
                                                             }
-                                                            $durationInSeconds += durationToSeconds($row["duration"]);
                                                             ?>
                                                             <li class="list-group-item" id="videos_id_<?php echo $row["id"]; ?>_playlists_id_<?php echo $value["id"]; ?>">
                                                                 <div class="ellipsis videoTitle">
@@ -279,7 +287,6 @@ TimeLogEnd($timeName, __LINE__);
                                                             break;
                                                         }
                                                         if ($totalNOTSubPlaylists > 0) {
-                                                            $durationInSeconds += durationToSeconds($row["duration"]);
                                                         ?>
                                                             <li class="list-group-item" id="videos_id_<?php echo $row["id"]; ?>_playlists_id_<?php echo $value["id"]; ?>">
                                                                 <div class="ellipsis videoTitle">
@@ -324,8 +331,13 @@ TimeLogEnd($timeName, __LINE__);
                                     if ($totalNOTSubPlaylists) {
                                         echo '<span class="label label-default"><i class="fas fa-film"></i> ' . __('Videos') . '</span>';
                                     }
-                                    echo '<span class="label label-default"><i class="far fa-clock"></i> ' . seconds2human($durationInSeconds) . '</span>';
                                     ?>
+                                    <span class="label label-default">
+                                        <i class="far fa-clock"></i> <?php echo seconds2human($durationInSeconds); ?>
+                                    </span>
+                                    <span class="label label-default">
+                                        <i class="fa-solid fa-layer-group"></i> <?php echo $totalVideos; ?> <?php echo __('total videos'); ?>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -341,147 +353,164 @@ TimeLogEnd($timeName, __LINE__);
                         }
                     }
                     if (empty($count)) {
+                        if (getCurrentPage() <= 1) {
                         ?>
-                        <div class="col-sm-12">
-                            <div class="alert alert-info">
-                                <?php echo __('Sorry you do not have any playlist yet'); ?>
+                            <div class="col-sm-12">
+                                <div class="alert alert-info">
+                                    <?php echo __('Sorry you do not have any playlist yet'); ?>
+                                </div>
                             </div>
-                        </div>
                     <?php
+                        }
                     }
                     TimeLogEnd($timeName, __LINE__);
                     ?>
 
                 </div>
             </div>
+            <?php
+
+            $url = "{$global['webSiteRootURL']}plugin/PlayLists/managerPlaylists.php";
+            if (!empty($_REQUEST['PlaylistOwnerUsersId'])) {
+                $url = addQueryStringParameter($url, 'PlaylistOwnerUsersId', $_REQUEST['PlaylistOwnerUsersId']);
+            }
+            if (!empty($_REQUEST['searchPlaylist'])) {
+                $url = addQueryStringParameter($url, 'searchPlaylist', $_REQUEST['searchPlaylist']);
+            }
+            echo getPagination($totalPages, $url, 10, "#{$infinityScrollGetFromSelector}", "#{$infinityScrollGetFromSelector}");
+            echo getPagination($totalPages, $url, 10);
+            ?>
         </div>
     </div>
-    <?php
-    TimeLogEnd($timeName, __LINE__);
-    include $global['systemRootPath'] . 'view/include/footer.php';
-    TimeLogEnd($timeName, __LINE__);
-    ?>
-    <script>
-        $(document).ready(function() {
-
-
-        });
-
-        function updatePlaylistOwner() {
+</div>
+<script>
+    $(document).ready(function() {
+        $("#searchFormPlaylist").submit(function(event) {
             modal.showPleaseWait();
-            var url = window.location.href;
-            url = addQueryStringParameter(url, 'PlaylistOwnerUsersId', $('#User_playlist_owner').val());
-            console.log('updatePlaylistOwner', url);
-            window.location.href = url;
-        }
-
-        function pl_filter(filter, t) {
-            $('.pl_filter').removeClass('active');
-            t.addClass('active');
-            if (filter === 'all') {
-                $('.pl').show();
-            } else {
-                var selector = '.pl_' + filter;
-                $(selector).show();
-                $('.pl').not(selector).hide();
+            var searchInput = $("#searchPlaylist").val();
+            if (empty(searchInput)) {
+                // Prevent the form from submitting
+                //event.preventDefault();
             }
+        });
+    });
+
+
+    function updatePlaylistOwner() {
+        modal.showPleaseWait();
+        var url = window.location.href;
+        url = addQueryStringParameter(url, 'PlaylistOwnerUsersId', $('#User_playlist_owner').val());
+        console.log('updatePlaylistOwner', url);
+        window.location.href = url;
+    }
+
+    function pl_filter(filter, t) {
+        $('.pl_filter').removeClass('active');
+        t.addClass('active');
+        if (filter === 'all') {
+            $('.pl').show();
+        } else {
+            var selector = '.pl_' + filter;
+            $(selector).show();
+            $('.pl').not(selector).hide();
         }
+    }
 
-        function editPlayList(playlists_id) {
-            avideoModalIframe(webSiteRootURL + 'viewProgram/' + playlists_id);
-        }
+    function editPlayList(playlists_id) {
+        avideoModalIframe(webSiteRootURL + 'viewProgram/' + playlists_id);
+    }
 
-        function removeFromSerie(playlists_id, videos_id) {
-            swal({
-                    title: "<?php echo __('Are you sure?'); ?>",
-                    text: "<?php echo __('You will not be able to recover this action!'); ?>",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then(function(willDelete) {
-                    if (willDelete) {
-                        addVideoToPlayList(videos_id, false, playlists_id);
-                        $('#videos_id_' + videos_id + '_playlists_id_' + playlists_id).fadeOut();
-                        $('#badge_playlists_id_' + playlists_id).text(parseInt($('#badge_playlists_id_' + playlists_id).text()) - 1);
-                    } else {
+    function removeFromSerie(playlists_id, videos_id) {
+        swal({
+                title: "<?php echo __('Are you sure?'); ?>",
+                text: "<?php echo __('You will not be able to recover this action!'); ?>",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then(function(willDelete) {
+                if (willDelete) {
+                    addVideoToPlayList(videos_id, false, playlists_id);
+                    $('#videos_id_' + videos_id + '_playlists_id_' + playlists_id).fadeOut();
+                    $('#badge_playlists_id_' + playlists_id).text(parseInt($('#badge_playlists_id_' + playlists_id).text()) - 1);
+                } else {
 
-                    }
-                });
-        }
-
-        function deleteProgram(playlists_id) {
-            swal({
-                    title: "<?php echo __('Are you sure?'); ?>",
-                    text: "<?php echo __('You will not be able to recover this action!'); ?>",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then(function(willDelete) {
-                    if (willDelete) {
-                        modal.showPleaseWait();
-                        $.ajax({
-                            url: webSiteRootURL + 'objects/playlistRemove.php',
-                            data: {
-                                "playlist_id": playlists_id
-                            },
-                            type: 'post',
-                            success: function(response) {
-                                $('.pl' + playlists_id).fadeOut();
-                                modal.hidePleaseWait();
-                                avideoToastSuccess('<?php echo __('Deleted'); ?>');
-                            }
-                        });
-                    } else {
-
-                    }
-                });
-        }
-
-
-        function createNewProgram() {
-            swal({
-                title: "<?php echo __('New program'); ?>",
-                text: "<?php echo __('Type your program title'); ?>",
-                content: {
-                    element: "input",
-                    attributes: {
-                        placeholder: "<?php echo __('Program title'); ?>",
-                        type: "text",
-                    },
-                },
-                showCancelButton: true,
-                closeOnConfirm: true,
-                inputPlaceholder: "<?php echo __('Program title'); ?>"
-            }).then((inputValue) => {
-                if (inputValue === false)
-                    return false;
-
-                if (inputValue === "") {
-                    swal.showInputError("<?php echo __('Please provide a title'); ?>");
-                    return false
                 }
-
-                $.ajax({
-                    url: webSiteRootURL + 'objects/playlistAddNew.json.php',
-                    method: 'POST',
-                    data: {
-                        'status': "public",
-                        'name': inputValue,
-                        'users_id': '<?php echo $users_id; ?>'
-                    },
-                    success: function(response) {
-                        if (response.status > 0) {
-                            location.reload();
-                        } else {
-                            modal.hidePleaseWait();
-                        }
-                    }
-                });
             });
-        }
-    </script>
-</body>
+    }
 
-</html>
+    function deleteProgram(playlists_id) {
+        swal({
+                title: "<?php echo __('Are you sure?'); ?>",
+                text: "<?php echo __('You will not be able to recover this action!'); ?>",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then(function(willDelete) {
+                if (willDelete) {
+                    modal.showPleaseWait();
+                    $.ajax({
+                        url: webSiteRootURL + 'objects/playlistRemove.php',
+                        data: {
+                            "playlist_id": playlists_id
+                        },
+                        type: 'post',
+                        success: function(response) {
+                            $('.pl' + playlists_id).fadeOut();
+                            modal.hidePleaseWait();
+                            avideoToastSuccess('<?php echo __('Deleted'); ?>');
+                        }
+                    });
+                } else {
+
+                }
+            });
+    }
+
+
+    function createNewProgram() {
+        swal({
+            title: "<?php echo __('New program'); ?>",
+            text: "<?php echo __('Type your program title'); ?>",
+            content: {
+                element: "input",
+                attributes: {
+                    placeholder: "<?php echo __('Program title'); ?>",
+                    type: "text",
+                },
+            },
+            showCancelButton: true,
+            closeOnConfirm: true,
+            inputPlaceholder: "<?php echo __('Program title'); ?>"
+        }).then((inputValue) => {
+            if (inputValue === false)
+                return false;
+
+            if (inputValue === "") {
+                swal.showInputError("<?php echo __('Please provide a title'); ?>");
+                return false
+            }
+
+            $.ajax({
+                url: webSiteRootURL + 'objects/playlistAddNew.json.php',
+                method: 'POST',
+                data: {
+                    'status': "public",
+                    'name': inputValue,
+                    'users_id': '<?php echo $users_id; ?>'
+                },
+                success: function(response) {
+                    if (response.status > 0) {
+                        location.reload();
+                    } else {
+                        modal.hidePleaseWait();
+                    }
+                }
+            });
+        });
+    }
+</script>
+<?php
+$_page->print();
+?>

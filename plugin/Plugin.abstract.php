@@ -352,6 +352,10 @@ abstract class PluginAbstract {
         return false;
     }
 
+    public function onDeleteVideo($videos_id) {
+        return false;
+    }
+
     public function onVideoLikeDislike($videos_id, $users_id, $isLike) {
         return false;
     }
@@ -614,11 +618,15 @@ abstract class PluginAbstract {
         return null;
     }
 
-    public function onLiveStream($users_id, $live_servers_id) {
+    public function on_publish($users_id, $live_servers_id, $liveTransmitionHistory_id, $key, $isReconnection) {
         return null;
     }
 
     public function on_publish_done($live_transmitions_history_id, $users_id, $key, $live_servers_id) {
+        return null;
+    }
+
+    public function on_publish_denied($key) {
         return null;
     }
 
@@ -857,7 +865,7 @@ abstract class PluginAbstract {
       ]
      * @return $file
      */
-    function modifyURL($file) {
+    function modifyURL($file, $videos_id=0) {
         return $file;
     }
 

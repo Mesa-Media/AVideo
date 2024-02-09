@@ -9,7 +9,7 @@ require_once $global['systemRootPath'] . 'objects/category.php';
 
 $_REQUEST['rowCount'] = 2;
 if (empty($_GET['current'])) {
-    $_REQUEST['current'] = 1;
+    unsetCurrentPage();
 } else {
     $_REQUEST['current'] = intval($_GET['current']);
 }
@@ -17,6 +17,8 @@ if (empty($_GET['current'])) {
 $uid = '{serie_uid}';
 
 $cacheName = "modeFlixCategory" . md5(json_encode($_GET)) . User::getId();
+$cacheName .= isForKidsSet()?'forKids':'';
+
 $cache = ObjectYPT::getCache($cacheName, 600);
 if (!empty($cache)) {
     echo str_replace('{serie_uid}', uniqid(), $cache);
@@ -67,7 +69,7 @@ $videosCounter = 0;
             $categories = array(Category::getCategoryByName($_REQUEST['catName']));
         } else {
             $categories = Category::getAllCategories(false, true);
-            $_REQUEST['current'] = 1;
+            unsetCurrentPage();
         }
         if (empty($categories)) {
             echo "</div>";

@@ -1,5 +1,6 @@
 <?php
 global $global;
+require_once $global['systemRootPath'].'objects/functionInfiniteScroll.php';
 
 if (empty($global['systemRootPath'])) {
     $global['systemRootPath'] = dirname(__FILE__) . '/../../../';
@@ -32,9 +33,6 @@ if (empty($channels)) {
     return '';
 }
 $totalPages = ceil($total / $itemsPerPage);
-if ($totalPages < $page) {
-    $page = $totalPages;
-}
 ?>
 <!-- mainAreaChannel start -->
 <div class="mainAreaChannels">  
@@ -45,10 +43,11 @@ if ($totalPages < $page) {
     }
     ?>
 </div>
-<div class="col-sm-12" style="z-index: 1;">
+<div class="col-sm-12 gallerySection" >
     <?php
 //getPagination($total, $page = 0, $link = "", $maxVisible = 10, $infinityScrollGetFromSelector="", $infinityScrollAppendIntoSelector="")
-    echo getPagination($totalPages, $page, "{$global['webSiteRootURL']}plugin/Gallery/view/mainAreaChannels.php", 10, ".mainAreaChannels", ".mainAreaChannels");
+    echo getPagination($totalPages, "{$global['webSiteRootURL']}plugin/Gallery/view/mainAreaChannels.php", 10, ".mainAreaChannels", ".mainAreaChannels");
+    echo getPagination($totalPages, "{$global['webSiteRootURL']}plugin/Gallery/view/mainAreaChannels.php");
     ?>
 </div>
 <!-- mainAreaChannel end -->

@@ -240,20 +240,20 @@ class API extends PluginAbstract
             //var_dump($desktop);exit;
             $desktopURLs = array();
             foreach ($desktop as $item) {
-                $desktopURLs[] = array('image'=>$item['imageURL'], 'url'=>$item['url'], 'info'=>$item['txt']);
+                $desktopURLs[] = array('image' => $item['imageURL'], 'url' => $item['url'], 'info' => $item['txt']);
             }
 
             $mobileURLs = array();
             foreach ($mobile as $item) {
-                $mobileURLs[] = array('image'=>$item['imageURL'], 'url'=>$item['url'], 'info'=>$item['txt']);
+                $mobileURLs[] = array('image' => $item['imageURL'], 'url' => $item['url'], 'info' => $item['txt']);
             }
             $label = '';
             eval("\$label = \$ad->{$type}Label;");
             $array['ads'][] = array(
                 'label' => $label,
                 'type' => $type,
-                'desktop' => array('isValid'=>!empty($desktopURLs), 'isGlobal'=>$desktopGlobal, 'urls'=>$desktopURLs),
-                'mobile' => array('isValid'=>!empty($mobileURLs), 'isGlobal'=>$mobileGlobal, 'urls'=>$mobileURLs)
+                'desktop' => array('isValid' => !empty($desktopURLs), 'isGlobal' => $desktopGlobal, 'urls' => $desktopURLs),
+                'mobile' => array('isValid' => !empty($mobileURLs), 'isGlobal' => $mobileGlobal, 'urls' => $mobileURLs)
             );
         }
 
@@ -805,7 +805,8 @@ class API extends PluginAbstract
      * ['current' current page]
      * ['searchPhrase' to search on the categories]
      * ['tags_id' the ID of the tag you want to filter]
-     * ['catName' the clean_APIName of the category you want to filter]
+     * ['catName' the clean_name of the category you want to filter, the value can be an array of categories clean titles]
+     * ['doNotShowCats' the clean_name of the category you want to exclude from the list, the value can be an array of categories clean titles]
      * ['channelName' the channelName of the videos you want to filter]
      * ['playlist' use playlist=1 to get a response compatible with the playlist endpoint]
      * ['videoType' the type of the video, the valid options are 'audio_and_video_and_serie', 'audio_and_video', 'audio', 'video', 'embed', 'linkVideo', 'linkAudio', 'torrent', 'pdf', 'image', 'gallery', 'article', 'serie', 'image', 'zip', 'notfound', 'blockedUser']
@@ -821,18 +822,21 @@ class API extends PluginAbstract
     public function get_api_video($parameters)
     {
         $start = microtime(true);
-
+        /*
         $cacheParameters = array('noRelated', 'APIName', 'catName', 'rowCount', 'APISecret', 'sort', 'searchPhrase', 'current', 'tags_id', 'channelName', 'videoType', 'is_serie', 'user', 'videos_id', 'playlist');
 
-        $cacheVars = array('users_id' => User::getId());
+        $cacheVars = array('users_id' => User::getId(), 'requestUniqueString'=>getRequestUniqueString());
         foreach ($cacheParameters as $value) {
             $cacheVars[$value] = @$_REQUEST[$value];
         }
+        */
 
         // use 1 hour cache
-        $cacheName = 'get_api_video' . md5(json_encode($cacheVars));
+        $videosListCache = new VideosListCacheHandler();
+        //$cacheName = 'get_api_video' . md5(json_encode($cacheVars));
         if (empty($parameters['videos_id'])) {
-            $obj = ObjectYPT::getCacheGlobal($cacheName, 3600);
+            //$obj = ObjectYPT::getCacheGlobal($cacheName, 3600);
+            $obj = $videosListCache->getCacheWithAutoSuffix(3600);
             if (!empty($obj)) {
                 $end = microtime(true) - $start;
                 return new ApiObject("Cached response in {$end} seconds", false, $obj);
@@ -899,7 +903,7 @@ class API extends PluginAbstract
 
         unsetSearch();
         $objMob = AVideoPlugin::getObjectData("MobileManager");
-        $SubtitleSwitcher = AVideoPlugin::loadPluginIfEnabled("SubtitleSwitcher");
+        $SubtitleSwitcher = AVideoPlugin::getDataObjectIfEnabled("SubtitleSwitcher");
 
         // check if there are custom ads for this video
         $objAds = AVideoPlugin::getDataObjectIfEnabled('ADs');
@@ -911,19 +915,18 @@ class API extends PluginAbstract
             if (empty($value['filename'])) {
                 continue;
             }
-            if ($value['type'] == 'serie') {
+            if ($value['type'] == Video::$videoTypeSerie) {
                 require_once $global['systemRootPath'] . 'objects/playlist.php';
                 $rows[$key]['playlist'] = PlayList::getVideosFromPlaylist($value['serie_playlists_id']);
                 //var_dump($rows[$key]['playlist']);exit;
             }
             $images = Video::getImageFromFilename($rows[$key]['filename'], $rows[$key]['type']);
             $rows[$key]['images'] = $images;
-            if ($rows[$key]['type'] !== 'linkVideo') {
+            if ($rows[$key]['type'] !== Video::$videoTypeLinkVideo) {
                 $rows[$key]['videos'] = Video::getVideosPaths($value['filename'], true);
             } else {
                 $extension = getExtension($rows[$key]['videoLink']);
-                //var_dump($rows[$key]['videoLink'], modifyURL($rows[$key]['videoLink']));exit;
-                $rows[$key]['videoLink'] = modifyURL($rows[$key]['videoLink']);
+                $rows[$key]['videoLink'] = AVideoPlugin::modifyURL($rows[$key]['videoLink'], $rows[$key]['id']);
                 if ($extension == 'mp4') {
                     $rows[$key]['videos'] = array(
                         'mp4' => array(
@@ -971,14 +974,13 @@ class API extends PluginAbstract
                 $rows[$key]['isSubscribed'] = Subscribe::isSubscribed($rows[$key]['users_id']);
             }
 
-            if ($SubtitleSwitcher) {
-                $rows[$key]['subtitles'] = getVTTTracks($value['filename'], true);
-                foreach ($rows[$key]['subtitles'] as $key2 => $value) {
-                    $rows[$key]['subtitlesSRT'][] = convertSRTTrack($value);
-                }
-            }else{
-                $rows[$key]['subtitles'] = [];
-            }
+            
+            $sub = self::getSubtitle($value['filename']);
+
+            $rows[$key]['subtitles_available'] = $sub['subtitles_available'];
+            $rows[$key]['subtitles'] = $sub['subtitles'];
+            $rows[$key]['subtitlesSRT'] = $sub['subtitlesSRT'];
+
             require_once $global['systemRootPath'] . 'objects/comment.php';
             require_once $global['systemRootPath'] . 'objects/subscribe.php';
             unset($_POST['sort']);
@@ -1015,15 +1017,32 @@ class API extends PluginAbstract
                 $rows[$key]['relatedVideos'] = Video::getRelatedMovies($rows[$key]['id']);
                 foreach ($rows[$key]['relatedVideos'] as $key2 => $value2) {
                     $rows[$key]['relatedVideos'][$key2]['tags'] = Video::getTags($value2['id']);
+
+                    $sub = self::getSubtitle($rows[$key]['relatedVideos'][$key2]['filename']);
+
+                    $rows[$key]['relatedVideos'][$key2]['subtitles_available'] = $sub['subtitles_available'];
+                    $rows[$key]['relatedVideos'][$key2]['subtitles'] = $sub['subtitles'];
+                    $rows[$key]['relatedVideos'][$key2]['subtitlesSRT'] = $sub['subtitlesSRT'];
+
                     if (AVideoPlugin::isEnabledByName("VideoTags")) {
                         $rows[$key]['relatedVideos'][$key2]['videoTags'] = Tags::getAllFromVideosId($value2['id']);
                         $rows[$key]['relatedVideos'][$key2]['videoTagsObject'] = Tags::getObjectFromVideosId($value2['id']);
                     }
-                    if ($rows[$key]['relatedVideos'][$key2]['type'] !== 'linkVideo') {
+                    if ($rows[$key]['relatedVideos'][$key2]['type'] !== Video::$videoTypeLinkVideo) {
                         $rows[$key]['relatedVideos'][$key2]['videos'] = Video::getVideosPaths($value2['filename'], true);
+                    } else if (preg_match('/m3u8/', $rows[$key]['relatedVideos'][$key2]['videoLink'])) {
+                        $url = AVideoPlugin::modifyURL($rows[$key]['relatedVideos'][$key2]['videoLink']);
+                        $rows[$key]['relatedVideos'][$key2]['videos']['m3u8']['url'] = $url;
+                        $rows[$key]['relatedVideos'][$key2]['videos']['m3u8']['url_noCDN'] = $url;
+                        $rows[$key]['relatedVideos'][$key2]['videos']['m3u8']['type'] = 'video';
+                        $rows[$key]['relatedVideos'][$key2]['videos']['m3u8']['format'] = 'm3u8';
+                        $rows[$key]['relatedVideos'][$key2]['videos']['m3u8']['resolution'] = 'auto';
                     }
-                    if(!empty($rows[$key]['relatedVideos'][$key2]['videoLink'])){
-                        $rows[$key]['relatedVideos'][$key2]['videoLink'] = modifyURL($rows[$key]['relatedVideos'][$key2]['videoLink']);
+                    if (!empty($rows[$key]['relatedVideos'][$key2]['videos'])) {
+                        $rows[$key]['relatedVideos'][$key2]['sources'] = Video::getVideosPathsToSource($rows[$key]['relatedVideos'][$key2]['videos']);
+                    }
+                    if (!empty($rows[$key]['relatedVideos'][$key2]['videoLink'])) {
+                        $rows[$key]['relatedVideos'][$key2]['videoLink'] = AVideoPlugin::modifyURL($rows[$key]['relatedVideos'][$key2]['videoLink'], $value2['id']);
                     }
                 }
             }
@@ -1044,8 +1063,32 @@ class API extends PluginAbstract
         }
         $obj = self::addRowInfo($obj);
         //var_dump($obj->rows );exit;
-        ObjectYPT::setCacheGlobal($cacheName, $obj);
+        //ObjectYPT::setCacheGlobal($cacheName, $obj);
+        $videosListCache->setCache($obj);
         return new ApiObject("", false, $obj);
+    }
+
+    private static function getSubtitle($filename)
+    {
+        global $_SubtitleSwitcher;
+        if (!isset($_SubtitleSwitcher)) {
+            $_SubtitleSwitcher = AVideoPlugin::getDataObjectIfEnabled("SubtitleSwitcher");
+        }
+        $row = array();
+        $row['subtitles_available'] = false;
+        $row['subtitles'] = [];
+        $row['subtitlesSRT'] = [];
+        if ($_SubtitleSwitcher) {
+            $subtitles = getVTTTracks($filename, true);
+            $row['subtitles_available'] = !empty($subtitles);
+            if (empty($_SubtitleSwitcher->disableOnAPI)) {
+                $row['subtitles'] = $subtitles;
+                foreach ($row['subtitles'] as $key2 => $value) {
+                    $row['subtitlesSRT'][] = convertSRTTrack($value);
+                }
+            }
+        }
+        return $row;
     }
 
     /**
@@ -1197,11 +1240,11 @@ class API extends PluginAbstract
             if (!empty($_REQUEST['APISecret']) && !self::isAPISecretValid()) {
                 return new ApiObject("Secret does not match");
             }
-            $obj = new Video("", "", $parameters['videos_id']);
-            if (!$obj->userCanManageVideo()) {
+            $vid = new Video('', '', $parameters['videos_id'], true);
+            if (!$vid->userCanManageVideo()) {
                 return new ApiObject("User cannot manage the video");
             }
-            $id = $obj->delete();
+            $id = $vid->delete();
             return new ApiObject("", !$id, $id);
         } else {
             return new ApiObject("Video ID is required");
@@ -2183,6 +2226,7 @@ class API extends PluginAbstract
                 $row[$key]['videos'][$key2] = cleanUpRowFromDatabase($row[$key]['videos'][$key2]);
             }
         }
+        header('Content-Type: application/json');
         echo json_encode($row);
         exit;
     }
@@ -2226,9 +2270,10 @@ class API extends PluginAbstract
         if (!User::isLogged()) {
             return new ApiObject("Wrong user or password");
         }
-        $_POST['videos_id'] = $parameters['videos_id'];
-        $_POST['add'] = $add;
-        $_POST['playlists_id'] = PlayLists::getFavoriteIdFromUser(User::getId());
+        $_REQUEST['videos_id'] = $parameters['videos_id'];
+        $_REQUEST['add'] = $add;
+        $_REQUEST['playlists_id'] = PlayLists::getFavoriteIdFromUser(User::getId());
+        header('Content-Type: application/json');
         require_once $global['systemRootPath'] . 'objects/playListAddVideo.json.php';
         exit;
     }

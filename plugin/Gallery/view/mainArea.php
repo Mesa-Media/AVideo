@@ -36,6 +36,9 @@ saveRequestVars();
             }
         }
     }
+    if (empty($_GET['search']) && !isInfiniteScroll()) {
+        include $global['systemRootPath'] . 'plugin/Gallery/view/BigVideoLive.php';
+    }
     //var_dump(!empty($video), debug_backtrace());exit;
     if (!empty($video)) {
         global $contentSearchFound;
@@ -49,7 +52,7 @@ saveRequestVars();
             $objLive = AVideoPlugin::getDataObject('Live');
             if (empty($objLive->doNotShowLiveOnVideosList)) {
             ?>
-                <!-- For Live Videos -->
+                <!-- For Live Videos mainArea -->
                 <div id="liveVideos" class="clear clearfix" style="display: none;">
                     <h3 class="galleryTitle text-danger"> <i class="fas fa-play-circle"></i> <?php echo __("Live"); ?></h3>
                     <div class="extraVideos"></div>

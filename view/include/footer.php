@@ -27,20 +27,20 @@ if (empty($advancedCustom)) {
         $custom = $ec->getFooter();
     }
     if (empty($custom)) {
-        ?>
+    ?>
         <ul class="list-inline">
             <li>
                 Powered by AVideo ® Platform v<?php echo $config->getVersion(); ?>
             </li>
         </ul>
-        <?php
+    <?php
     } else {
         echo $custom;
     }
     ?>
 </footer>
 <script>
-    $(function () {
+    $(function() {
         /** showAlertMessage **/
         <?php
         showAlertMessage();
@@ -78,7 +78,7 @@ $jsFiles[] = "view/js/BootstrapMenu.min.js";
 $jsFiles = array_merge($jsFiles, AVideoPlugin::getJSFiles());
 echo combineFilesHTML($jsFiles, "js", true);
 ?>
-<div id="pluginFooterCode" >
+<div id="pluginFooterCode">
     <?php
     if (!isForbidden()) {
         echo AVideoPlugin::getFooterCode();
@@ -87,8 +87,8 @@ echo combineFilesHTML($jsFiles, "js", true);
 </div>
 <?php
 if (isset($_SESSION['savedQuerys'])) {
-        echo "<!-- Saved querys: " . $_SESSION['savedQuerys'] . " -->";
-    }
+    echo "<!-- Saved querys: " . $_SESSION['savedQuerys'] . " -->";
+}
 if (!empty($advancedCustom->footerHTMLCode->value)) {
     echo $advancedCustom->footerHTMLCode->value;
 }
@@ -99,48 +99,48 @@ if (isFirstPage()) {
 ?>
 <script>
     var checkFooterTimout;
-    $(function () {
+    $(function() {
         checkFooter();
 
-        $(window).scroll(function () {
+        $(window).scroll(function() {
             clearTimeout(checkFooterTimout);
-            checkFooterTimout = setTimeout(function () {
+            checkFooterTimout = setTimeout(function() {
                 checkFooter();
             }, 100);
         });
-        $(window).resize(function () {
+        $(window).resize(function() {
             clearTimeout(checkFooterTimout);
-            checkFooterTimout = setTimeout(function () {
-                checkFooter();
-            }, 100);
-        });
-
-        $(window).mouseup(function () {
-            clearTimeout(checkFooterTimout);
-            checkFooterTimout = setTimeout(function () {
+            checkFooterTimout = setTimeout(function() {
                 checkFooter();
             }, 100);
         });
 
-<?php echo $footerjs; ?>
+        $(window).mouseup(function() {
+            clearTimeout(checkFooterTimout);
+            checkFooterTimout = setTimeout(function() {
+                checkFooter();
+            }, 100);
+        });
+
+        <?php echo $footerjs; ?>
 
     });
+
     function checkFooter() {
         $("#mainFooter").fadeIn();
         var height = $("#mainFooter").height();
         if (height < 150 && getPageHeight() <= $(window).height()) {
             clearTimeout(checkFooterTimout);
-            checkFooterTimout = setTimeout(function () {
+            checkFooterTimout = setTimeout(function() {
                 checkFooter();
             }, 1000);
             $("#mainFooter").css("position", "fixed");
-            $('body').css('padding-bottom', height+'px');
+            $('body').css('padding-bottom', height + 'px');
         } else {
             $("#mainFooter").css("position", "relative");
             $('body').css('padding-bottom', '');
         }
     }
-
 
     function getPageHeight() {
         var mainNavBarH = 0;
@@ -169,7 +169,6 @@ if (isFirstPage()) {
         }
         return height;
     }
-
 </script>
 <!--
 <?php

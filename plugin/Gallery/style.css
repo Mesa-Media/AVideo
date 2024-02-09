@@ -146,6 +146,10 @@ a.h6{
     text-decoration: none !important;
 }
 
+a.h6.galleryLink > strong{
+    margin-top: 8px;
+}
+
 .popover-title { 
     color: black;
     font-size: 1em;

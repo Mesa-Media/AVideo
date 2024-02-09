@@ -32,6 +32,9 @@ if (empty($_REQUEST)) {
 }
 //_error_log("aVideoEncoder.json: start");
 _error_log("aVideoEncoder.json: start");
+if(empty($global['allowedExtension'])){
+    $global['allowedExtension'] = array();
+}
 if (empty($_REQUEST['format']) || !in_array($_REQUEST['format'], $global['allowedExtension'])) {
     $obj->msg = "aVideoEncoder.json: ERROR Extension not allowed File {$_REQUEST['format']}";
     _error_log($obj->msg. ": " . json_encode($_REQUEST));
@@ -141,7 +144,7 @@ if (!empty($_FILES['video']['error'])) {
         $_FILES['video']['tmp_name'] = downloadVideoFromDownloadURL($_REQUEST['downloadURL']);
     }
 }
-
+$_REQUEST['chunkFile'] = str_replace('../', '', $_REQUEST['chunkFile']);
 if (empty($_FILES['video']['tmp_name']) && isValidURLOrPath($_REQUEST['chunkFile'])) {
     $_FILES['video']['tmp_name'] = $_REQUEST['chunkFile'];
 }
@@ -150,6 +153,11 @@ if (empty($_FILES['video']['tmp_name']) && isValidURLOrPath($_REQUEST['chunkFile
 if (!empty($_FILES['video']['tmp_name'])) {
     $resolution = '';
     if (!empty($_REQUEST['resolution'])) {
+        if(!in_array($_REQUEST['resolution'],$global['avideo_possible_resolutions'])){
+            $msg = "This resolution is not possible {$_REQUEST['resolution']}";
+            _error_log($msg);
+            forbiddenPage($msg);
+        }
         $resolution = "_{$_REQUEST['resolution']}";
     }
     $filename = "{$videoFileName}{$resolution}.{$_REQUEST['format']}";

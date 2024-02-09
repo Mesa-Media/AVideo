@@ -129,10 +129,10 @@ class PlayerSkins extends PluginAbstract
                 $htmlMediaTag = '<video ' . self::getPlaysinline()
                     . 'preload="auto" poster="' . $images->poster . '" controls controlsList="nodownload"
                         class="embed-responsive-item video-js vjs-default-skin vjs-big-play-centered vjs-16-9" id="mainVideo">';
-                if ($video['type'] == "video") {
-                    $htmlMediaTag .= "<!-- Video {$video['title']} {$video['filename']} -->" . getSources($video['filename']);
+                if ($video['type'] == Video::$videoTypeVideo) {
+                    $htmlMediaTag .= "<!-- Video title={$video['title']} {$video['filename']} -->" . getSources($video['filename']);
                 } else { // video link
-                    $url = modifyURL($video['videoLink']);
+                    $url = AVideoPlugin::modifyURL($video['videoLink'], $video['id']);
                     //var_dump($video['videoLink'], $url);exit;
                     $htmlMediaTag .= "<!-- Video Link {$video['title']} {$video['filename']} --><source src='{$url}' type='" . ((strpos($video['videoLink'], 'm3u8') !== false) ? "application/x-mpegURL" : "video/mp4") . "' >";
                     $html .= "<script>$(document).ready(function () {\$('time.duration').hide();});</script>";
@@ -237,10 +237,10 @@ class PlayerSkins extends PluginAbstract
 
     public function getHeadCode()
     {
-        if (isWebRTC()) {
+        global $global, $config, $video;
+        if (isWebRTC() || !empty($global['isForbidden'])) {
             return '';
         }
-        global $global, $config, $video;
         $obj = $this->getDataObject();
         $css = "";
         $js = "";
@@ -545,8 +545,10 @@ class PlayerSkins extends PluginAbstract
             $js .= file_get_contents($global['systemRootPath'] . 'plugin/PlayerSkins/events/playerReadyMobile.js');
         }
         if (empty($_REQUEST['mute'])) {
-            $js .= file_get_contents($global['systemRootPath'] . 'plugin/PlayerSkins/events/playerReadyUnmuted.js');
-        } else {
+            if(empty($global['ignorePersistVolume'] )){
+                $js .= file_get_contents($global['systemRootPath'] . 'plugin/PlayerSkins/events/playerReadyUnmuted.js');
+            } 
+        }else {
             $js .= file_get_contents($global['systemRootPath'] . 'plugin/PlayerSkins/events/playerReadyMuted.js');
         }
 

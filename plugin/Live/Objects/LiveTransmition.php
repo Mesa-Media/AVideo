@@ -134,8 +134,16 @@ class LiveTransmition extends ObjectYPT {
         $data = sqlDAL::fetchAssoc($res);
         sqlDAL::close($res);
         if (!empty($data)) {
-            $data['live_servers_id'] = Live::getLiveServersIdRequest();
-            $liveStreamObject = new LiveStreamObject($data['key'], $data['live_servers_id']);
+            $latest = LiveTransmitionHistory::getLatest($data['key']);
+            if(!empty($latest)){
+                if(!isset($data['live_servers_id'])){
+                    $data['live_servers_id'] = Live::getLiveServersIdRequest();
+                }
+                $liveStreamObject = new LiveStreamObject($latest['key'], $latest['live_servers_id']);
+            }else{
+                $data['live_servers_id'] = Live::getLiveServersIdRequest();
+                $liveStreamObject = new LiveStreamObject($data['key'], $data['live_servers_id']);
+            }
             $data['key_with_index'] = $liveStreamObject->getKeyWithIndex(true);
             $data['live_index'] = $liveStreamObject->getIndex();
 
@@ -161,8 +169,10 @@ class LiveTransmition extends ObjectYPT {
             $l->setCategories_id(1);
             $l->setUsers_id($user_id);
             $l->save();
-            $row = static::getFromDbByUser($user_id);
-            $row['just_created'] = true;
+            $row = static::getFromDbByUser($user_id, true);
+            if(!empty($row)){
+                $row['just_created'] = true;
+            }
         }
         return $row;
     }
@@ -241,6 +251,7 @@ class LiveTransmition extends ObjectYPT {
         if ($res != false) {
             $user = $data;
             $user['live_schedule'] = $live_schedule_id;
+            $user['json'] = object_to_array(_json_decode($user['json']));
         } else {
             $user = false;
         }
@@ -278,6 +289,19 @@ class LiveTransmition extends ObjectYPT {
                 if (!isset($row['live_servers_id'])) {
                     $row['live_servers_id'] = Live::getLiveServersIdRequest();
                 }
+                if(AVideoPlugin::isEnabledByName('PlayLists')){
+                    $ps = Playlists_schedules::iskeyPlayListScheduled($key);
+                    if(!empty($ps)){
+                        $row['title'] = Playlists_schedules::getDynamicTitle($row['title']);
+                    }
+                }
+                if(AVideoPlugin::isEnabledByName('Rebroadcaster')){
+                    $rb = Rebroadcaster::isKeyARebroadcast($key);;
+                    if(!empty($rb) && !empty($rb['videos_id'])){
+                        $video = new Video('', '', $rb['videos_id']);
+                        $row['title'] = $video->getTitle();
+                    }
+                }
             }
         } else {
             $row = false;
@@ -310,7 +334,7 @@ class LiveTransmition extends ObjectYPT {
             $this->password = '';
         }
         $id = parent::save();
-        Category::clearCacheCount();
+        //Category::clearCacheCount();
         deleteStatsNotifications(true);
 
         $socketObj = sendSocketMessageToAll(['stats' => getStatsNotifications(false, false)], "socketLiveONCallback");
@@ -362,16 +386,10 @@ class LiveTransmition extends ObjectYPT {
         if (User::isAdmin()) {
             return true;
         }
-        /*
-          $password = $this->getPassword();
-          if(!empty($password) && !Live::passwordIsGood($this->getKey())){
-          return false;
-          }
-         *
-         */
 
         $transmitionGroups = $this->getGroups();
         if (!empty($transmitionGroups)) {
+            _error_log('LiveTransmition::userCanSeeTransmition usergroup not empty '.json_encode($transmitionGroups));
             if (empty($this->id)) {
                 return false;
             }

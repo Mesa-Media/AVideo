@@ -49,6 +49,8 @@ if (!User::canWatchVideo($json->videos_id)) {
 
 set_time_limit(7200); // 2 hours
 ini_set('max_execution_time', 7200);
+$resp->videos_id = $json->videos_id;
+$resp->format = $json->format;
 $progress = CDNStorage::convertCDNHLSVideoToDownlaodProgress($json->videos_id, $json->format);
 
 if(empty($progress)){
@@ -59,6 +61,7 @@ $resp->error = false;
 //var_dump($url);exit;
 _error_log('download from CDN ' . json_encode($progress));
 
-$resp->progress = $progress;
+$resp->progress = $progress['progress'];
+$resp->file = $progress['file'];
 
 die(json_encode($resp));

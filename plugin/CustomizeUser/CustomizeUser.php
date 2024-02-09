@@ -45,7 +45,6 @@ class CustomizeUser extends PluginAbstract
                 'placeholder' => __("Instagram URL"),
                 'isActive' => true,
             ],
-            /*
             'whatsapp' => [
                 'class' => 'icoWhatsapp',
                 'icon' => 'fab fa-whatsapp',
@@ -53,7 +52,13 @@ class CustomizeUser extends PluginAbstract
                 'placeholder' => __("Whatsapp URL"),
                 'isActive' => true,
             ],
-            */
+            'threads' => [
+                'class' => 'icoThreads ',
+                'icon' => 'fa-brands fa-square-threads',
+                'label' => __("Threads"),
+                'placeholder' => __("Threads URL"),
+                'isActive' => true,
+            ],
             'twitter' => [
                 'class' => 'icoTwitter',
                 'icon' => 'fa-brands fa-x-twitter',
@@ -283,6 +288,7 @@ class CustomizeUser extends PluginAbstract
         $obj->verificationMailTextLine2 = "Cheers, %s Team.";
         $obj->verificationMailTextLine3 = "You are just one click away from starting your journey with %s!";
         $obj->verificationMailTextLine4 = "All you need to do is to verify your e-mail by clicking the link below";
+        $obj->verificationMailButtonLabel = "Verify";
 
         $obj->unverifiedEmailsCanNOTLogin = !isset($advancedCustom->unverifiedEmailsCanNOTLogin) ? false : $advancedCustom->unverifiedEmailsCanNOTLogin;
         $obj->unverifiedEmailsCanNOTComment = false;
@@ -977,5 +983,16 @@ class CustomizeUser extends PluginAbstract
         global $global;
         include $global['systemRootPath'] . 'plugin/CustomizeUser/View/footer.php';
         return '';
+    }
+    
+    public function getMobileInfo() {
+        $obj = $this->getDataObject();
+        $return = new stdClass();        
+        $return->userCanChangeVideoOwner = $obj->userCanChangeVideoOwner;
+        $return->usersCanCreateNewCategories = $obj->usersCanCreateNewCategories;
+        $return->userCanNotChangeCategory = $obj->userCanNotChangeCategory;
+        $return->userCanNotChangeUserGroup = $obj->userCanNotChangeUserGroup;
+
+        return $return;
     }
 }

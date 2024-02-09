@@ -371,6 +371,11 @@ abstract class ObjectYPT implements ObjectInterface
                     $formats .= 'i';
                     $values[] = $this->$value;
                     $fields[] = " ? ";
+                } elseif (strtolower($value) == 'modified_php_time') {
+                    $this->$value = time();
+                    $formats .= 'i';
+                    $values[] = $this->$value;
+                    $fields[] = " ? ";
                 } elseif (!isset($this->$value) || (is_string($this->$value) && strtolower($this->$value) == 'null')) {
                     $fields[] = " NULL ";
                 } elseif (is_string($this->$value) || is_numeric($this->$value)) {
@@ -383,6 +388,7 @@ abstract class ObjectYPT implements ObjectInterface
             }
             $sql .= " VALUES (" . implode(", ", $fields) . ")";
         }
+        //error_log("save: $sql [$formats]".json_encode($values));
         //var_dump(static::getTableName(), $sql, $values);
         //if(static::getTableName() == 'videos'){ echo $sql;var_dump($values); var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));}//return false;
         //echo $sql;var_dump($this, $values);exit;
@@ -402,6 +408,7 @@ abstract class ObjectYPT implements ObjectInterface
             return $id;
         } else {
             _error_log("ObjectYPT::Error on save 1: " . $sql . ' Error : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error . ' ' . json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)), AVideoLog::$ERROR);
+            _error_log("ObjectYPT::Error on save 2: " .json_encode($values), AVideoLog::$ERROR);
             return false;
         }
     }
@@ -454,13 +461,15 @@ abstract class ObjectYPT implements ObjectInterface
             'audit',
             'wallet_log',
             'live_restreams_logs',
+            'live_transmitions',
             'clone_SitesAllowed',
             'user_notifications',
             'email_to_user',
             'emails_messages',
             'ai_responses',
             'ai_metatags_responses',
-            'ai_transcribe_responses'
+            'ai_transcribe_responses',
+            'playlists_schedules'
         ];
         return in_array(static::getTableName(), $ignoreArray);
     }
@@ -496,7 +505,7 @@ abstract class ObjectYPT implements ObjectInterface
                 return false;
             }
             if (class_exists('CachesInDB')) {
-                $content = CachesInDB::encodeContent($json);
+                $content = CacheDB::encodeContent($json);
             } else {
                 $content = base64_encode($json);
             }
@@ -1060,7 +1069,7 @@ abstract class CacheHandler {
         if (!is_string($suffix)) {
             $suffix = json_encode($suffix);
         }
-        $suffix = md5($suffix);
+        $suffix = md5($suffix).'_'.getRequestUniqueString();
         return $this->getCacheSubdir() . "{$suffix}.cache";
     }
 
@@ -1076,7 +1085,16 @@ abstract class CacheHandler {
     }
 
     public function getCache($suffix, $lifetime = 60) {
-        $this->setSuffix($suffix);
+        global $_getCache;
+        if(!isset($_getCache)){
+            $_getCache = array();
+        }
+        $this->setSuffix($suffix);        
+        $name = $this->getCacheName( $this->suffix);
+        if(isset($_getCache[$name])){
+            return $_getCache[$name];
+        }
+
         if(!empty($lifetime) && !$this->canRefreshCache()){
             //_error_log("{$suffix} lifetime={$lifetime} cache will not be refreshed now");
             $lifetime = 0;
@@ -1086,20 +1104,32 @@ abstract class CacheHandler {
         if(!empty($cache)){
             self::$cachedResults++;
         }
+        $_getCache[$name] = $cache;
         return $cache;
     }
 
-    public function deleteCache() {
+    public function deleteCache($clearFirstPageCache = false) {
+        $timeLog = __FILE__ . "::deleteCache ";
+        TimeLogStart($timeLog);
         $prefix = $this->getCacheSubdir();
         if (class_exists('CachesInDB')) {           
-            CachesInDB::_deleteCacheStartingWith($prefix);
+            CacheDB::deleteCacheStartingWith($prefix);
         } 
+        TimeLogEnd($timeLog, __LINE__);
         _session_start();     
-        clearCache(true);
+        TimeLogEnd($timeLog, __LINE__);
         unset($_SESSION['user']['sessionCache']);
-        _session_write_close();   
+        TimeLogEnd($timeLog, __LINE__);
+        if($clearFirstPageCache){
+            clearCache(true);
+        }
+        TimeLogEnd($timeLog, __LINE__);
         $dir = ObjectYPT::getTmpCacheDir() . $prefix;
-        return exec("rm -R {$dir}");
+
+        $resp = exec("rm -R {$dir}");
+        TimeLogEnd($timeLog, __LINE__);
+
+        return $resp;
     }
     
     public function setSuffix($suffix) {        
@@ -1110,6 +1140,71 @@ abstract class CacheHandler {
     
     abstract protected function canRefreshCache();
     
+    public function hasCache($suffix, $lifetime = 60) {
+        $cache = $this->getCache($suffix, $lifetime);
+        return $cache!==null;
+    }
+}
+
+class VideosListCacheHandler extends CacheHandler {
+    private static $cacheRefreshCount = 0;
+
+    private function getCacheSufix()
+    {        
+        $cacheParameters = array(
+            'noRelated', 
+            'APIName', 
+            'catName', 
+            'rowCount', 
+            'APISecret', 
+            'sort', 
+            'search',
+            'searchPhrase', 
+            'current', 
+            'tags_id', 
+            'channelName', 
+            'videoType', 
+            'is_serie', 
+            'user', 
+            'videos_id', 
+            'playlist', 
+            'created', 
+            'minViews', 
+            'id', 
+            'doNotShowCatChilds', 
+            'doNotShowCats');
+        $cacheVars = array(
+            'users_id' => User::getId(), 
+            'requestUniqueString'=>getRequestUniqueString()
+        );
+        foreach ($cacheParameters as $value) {
+            $cacheVars[$value] = @$_REQUEST[$value];
+        }
+        $cacheName = md5(json_encode($cacheVars));
+        return $cacheName;
+    }
+
+    public function setAutoSuffix() {        
+        $this->suffix = $this->getCacheSufix();
+    }
+
+    public function getCacheWithAutoSuffix($lifetime = 60) {
+        $suffix = $this->getCacheSufix();
+        return parent::getCache($suffix, $lifetime);
+    }
+
+    protected function getCacheSubdir() {
+        return "videosQueries/";
+    }
+    
+    protected function canRefreshCache() {
+        if(self::$cacheRefreshCount < $this->maxCacheRefresh) {  // assuming 10 is the limit
+            self::$cacheRefreshCount++;
+            return true;
+        }
+        return false;
+    }
+
 }
 
 class VideoCacheHandler extends CacheHandler {
@@ -1217,6 +1312,47 @@ class PlayListCacheHandler extends CacheHandler {
 
     protected function getCacheSubdir() {
         return "playlists/{$this->id}/";
+    }
+
+    protected function canRefreshCache() {
+        if(self::$cacheRefreshCount < $this->maxCacheRefresh) {  // assuming 10 is the limit
+            self::$cacheRefreshCount++;
+            return true;
+        }
+        return false;
+    }
+
+}
+
+class PlayListUserCacheHandler extends CacheHandler {
+
+    private $id;
+    private static $cacheRefreshCount = 0;
+    
+    public function __construct($id) {
+        $this->id = intval($id);
+    }
+
+    protected function getCacheSubdir() {
+        return "playlistsUser/{$this->id}/";
+    }
+
+    protected function canRefreshCache() {
+        if(self::$cacheRefreshCount < $this->maxCacheRefresh) {  // assuming 10 is the limit
+            self::$cacheRefreshCount++;
+            return true;
+        }
+        return false;
+    }
+
+}
+
+class LiveCacheHandler extends CacheHandler {
+    private static $cacheRefreshCount = 0;
+    static $cacheTypeNotificationSuffix = 'getStatsNotifications';
+    
+    protected function getCacheSubdir() {
+        return "live/";
     }
 
     protected function canRefreshCache() {

@@ -35,10 +35,10 @@ if(empty($rows[$userGroup])){
 if (!empty($userGroup)) {
     
     $videos = Video::getAllVideosLight('', false, true);
-    
+    mysqlBeginTransaction();
     foreach ($videos as $value) {
         if($remove){
-            if(UserGroups::deleteVideoGroups($value['id'], $userGroup)){
+            if(UserGroups::deleteVideoGroups($value['id'], $userGroup, false)){
                 echo "Success: removed video [{$value['id']}] {$value['title']} :".PHP_EOL;
             }else{
                 echo "**ERROR: removing video [{$value['id']}] {$value['title']} :".PHP_EOL;
@@ -51,7 +51,9 @@ if (!empty($userGroup)) {
             }
         }
     }
+    mysqlCommit();
 }
+clearCache();
 echo "Bye";
 echo "\n";
 die();

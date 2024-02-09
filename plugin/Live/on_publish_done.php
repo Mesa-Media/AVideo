@@ -62,14 +62,23 @@ $live_servers_id = Live::getLiveServersIdRequest();
 $row = LiveTransmitionHistory::getLatest($_POST['name'], $live_servers_id, 10);
 $insert_row = LiveTransmitionHistory::finishFromTransmitionHistoryId($row['id']);
 _error_log("NGINX ON Publish Done finishFromTransmitionHistoryId {$_POST['name']} id={$row['id']} key={$row['key']} live_servers_id={$row['live_servers_id']} insert_row={$insert_row}");
-Live::killIfIsRunning($row['key']);
+//Live::killIfIsRunning($row['key']);
 $array = setLiveKey($row['key'], $row['live_servers_id']);
 $parameters = Live::getLiveParametersFromKey($array['key']);
 $array['cleanKey'] = $parameters['cleanKey'];
 $array['stats'] = LiveTransmitionHistory::getStatsAndRemoveApplication($row['id']);
 $socketObj = Live::notifySocketStats("socketLiveOFFCallback", $array);
 if(empty($row)){
-    _error_log("NGINX ON Publish Done error LiveTransmitionHistory::getLatest({$_POST['name']}, $live_servers_id, true); ".$getLatestSQL);
-}else{
-    AVideoPlugin::on_publish_done($row['id'], $row['users_id'], $row['key'], $row['live_servers_id']);
+    $sql = $getLatestSQL;
+    _error_log("NGINX ON Publish Done error LiveTransmitionHistory::getLatest({$_POST['name']}, $live_servers_id, true); time=".time().' '.json_encode(array($whatIFound, $sql)));
+    $row = LiveTransmitionHistory::getLatest($_POST['name'], $live_servers_id);
 }
+if(!empty($row)){
+    _error_log("NGINX ON Publish Done success ({$row['id']}, {$row['users_id']}, {$row['key']}, {$row['live_servers_id']})");
+    AVideoPlugin::on_publish_done($row['id'], $row['users_id'], $row['key'], $row['live_servers_id']);
+}else{
+    _error_log("NGINX ON Publish Done error, nothing found LiveTransmitionHistory::getLatest({$_POST['name']}, $live_servers_id, true); ");    
+}
+$cacheHandler = new LiveCacheHandler();
+$cacheHandler->deleteCache();
+Live::checkAllFromStats();

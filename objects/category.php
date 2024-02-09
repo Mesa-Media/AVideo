@@ -373,6 +373,18 @@ class Category
         if ($onlySuggested) {
             $sql .= "AND suggested = 1 ";
         }
+
+        if (!empty($_REQUEST['doNotShowCats'])) {
+            $doNotShowCats = $_REQUEST['doNotShowCats'];
+            if(!is_array($_REQUEST['doNotShowCats'])){
+                $doNotShowCats = array($_REQUEST['doNotShowCats']);
+            }
+            foreach ($doNotShowCats as $key => $value) {
+                $doNotShowCats[$key] = str_replace("'", '', $value);
+            }
+            $sql .= " AND (c.clean_name NOT IN ('".implode("', '", $doNotShowCats)."') )";
+        }
+
         if ($filterCanAddVideoOnly && !User::isAdmin()) {
             if (is_int($filterCanAddVideoOnly)) {
                 $users_id = $filterCanAddVideoOnly;
@@ -386,7 +398,11 @@ class Category
         }
 
         if ($onlyWithVideos) {
-            $sql .= " AND ((SELECT count(*) FROM videos v where v.categories_id = c.id OR categories_id IN (SELECT id from categories where parentId = c.id AND id != c.id)) > 0  ";
+            $sql .= " AND ((SELECT count(*) FROM videos v where 1=1 ";            
+            if(isForKidsSet()){
+                $sql .= " AND v.made_for_kids = 1 ";
+            }
+            $sql .= " AND v.categories_id = c.id OR categories_id IN (SELECT id from categories where parentId = c.id AND id != c.id)) > 0  ";
             if (AVideoPlugin::isEnabledByName("Live")) {
                 $sql .= " OR "
                     . " ("
@@ -404,6 +420,7 @@ class Category
             }
             $sql .= ")";
         }
+        
         if ($sameUserGroupAsMe) {
             //_error_log('getAllCategories getUserGroups');
             $users_groups = UserGroups::getUserGroups($sameUserGroupAsMe);
@@ -431,25 +448,36 @@ class Category
         }
 
         $sql .= BootGrid::getSqlFromPost(['name'], "", " ORDER BY `order`, name ASC ");
-        //echo $sql;exit;        
+        if(!empty($_GET['debug'])){
+            echo $sql;exit;   
+        }  
+
+        $timeLogName = TimeLogStart("getAllCategories");
         $cacheSuffix = md5($sql);
         $cacheHandler = new CategoryCacheHandler(0);
         $cacheObj = $cacheHandler->getCache($cacheSuffix, 36000);
+        TimeLogEnd($timeLogName, __LINE__);
         $category = object_to_array($cacheObj);
+        TimeLogEnd($timeLogName, __LINE__);
         //var_dump(!empty($cacheObj), !empty($category), debug_backtrace());
         if (empty($category)) {
+            TimeLogEnd($timeLogName, __LINE__);
             $res = sqlDAL::readSql($sql);
+            TimeLogEnd($timeLogName, __LINE__);
             $fullResult = sqlDAL::fetchAllAssoc($res);
+            TimeLogEnd($timeLogName, __LINE__);
             sqlDAL::close($res);
             $category = [];
             if ($res) {
                 foreach ($fullResult as $row) {
 
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
+                    TimeLogEnd($timeLogName, __LINE__);
                     $totals = self::getTotalFromCategory($row['id']);
                     if ($onlyWithVideos && empty($totals['total'])) {
                         continue;
                     }
+                    TimeLogEnd($timeLogName, __LINE__);
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
                     $fullTotals = self::getTotalFromCategory($row['id'], false, true, true);
 
@@ -460,22 +488,30 @@ class Category
                     $row['fullTotal_videos'] = $fullTotals['videos'];
                     $row['fullTotal_lives'] = $fullTotals['lives'];
                     $row['fullTotal_livelinks'] = $fullTotals['livelinks'];
+                    TimeLogEnd($timeLogName, __LINE__);
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
                     $row['owner'] = User::getNameIdentificationById(@$row['users_id']);
+                    TimeLogEnd($timeLogName, __LINE__);
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
                     $row['canEdit'] = self::userCanEditCategory($row['id']);
+                    TimeLogEnd($timeLogName, __LINE__);
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
                     $row['canAddVideo'] = self::userCanAddInCategory($row['id']);
+                    TimeLogEnd($timeLogName, __LINE__);
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
                     $row['hierarchy'] = self::getHierarchyString($row['parentId']);
+                    TimeLogEnd($timeLogName, __LINE__);
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
                     $row['hierarchyAndName'] = $row['hierarchy'] . __($row['name']);
                     //_error_log("getAllCategories id={$row['id']} line=".__LINE__);
                     $row['description_html'] = textToLink(htmlentities("{$row['description']}"));
+                    TimeLogEnd($timeLogName, __LINE__);
                     $category[] = $row;
                     //break;
                 }
+                TimeLogEnd($timeLogName, __LINE__);
                 $result = $cacheHandler->setCache($category);
+                TimeLogEnd($timeLogName, __LINE__);
                 //var_dump($category, $result);exit;
 
             } else {
@@ -631,20 +667,32 @@ class Category
 
     public static function getTotalFromCategory($categories_id, $showUnlisted = false, $getAllVideos = false, $renew = false)
     {
-        $cacheSuffix = "getTotalFromCategory_{$categories_id}_".intval($showUnlisted).intval($getAllVideos);
+        global $global;
+        $cacheSuffix = "getTotalFromCategory_{$categories_id}_" . intval($showUnlisted) . intval($getAllVideos);
+        if(isset($global[$cacheSuffix])){
+            return $global[$cacheSuffix];
+        }
+        
+        $timeLogName = TimeLogStart($cacheSuffix);
         $cacheHandler = new CategoryCacheHandler(0);
-        $result = $cacheHandler->getCache($cacheSuffix, 0);
-        if(empty($result)){
+        TimeLogEnd($timeLogName, __LINE__);
+        if (!$cacheHandler->hasCache($cacheSuffix, 0)) {
             $videos = self::getTotalVideosFromCategory($categories_id, $showUnlisted, $getAllVideos, $renew);
+            TimeLogEnd($timeLogName, __LINE__);
             $lives = self::getTotalLivesFromCategory($categories_id, $showUnlisted, $renew);
+            TimeLogEnd($timeLogName, __LINE__);
             $livelinkss = self::getTotalLiveLinksFromCategory($categories_id, $showUnlisted, $renew);
+            TimeLogEnd($timeLogName, __LINE__);
             $total = $videos + $lives + $livelinkss;
-            $result = ['videos' => $videos, 'lives' => $lives, 'livelinks' => $livelinkss, 'total' => $total];            
+            $result = ['videos' => $videos, 'lives' => $lives, 'livelinks' => $livelinkss, 'total' => $total];
             $cacheHandler->setCache($result);
-        }else{
+            TimeLogEnd($timeLogName, __LINE__);
+        } else {
+            $result = $cacheHandler->getCache($cacheSuffix, 0);
             $result = object_to_array($result);
         }
-
+        TimeLogEnd($timeLogName, __LINE__);
+        $global[$cacheSuffix] = $result;
         return $result;
     }
 
@@ -732,9 +780,12 @@ class Category
         $cacheHandler = new CategoryCacheHandler($categories_id);
 
         $suffix = "totalVideos_" . intval($showUnlisted) . "_" . intval($getAllVideos);
+        
+        $timeLogName = TimeLogStart($suffix);
         $total = $cacheHandler->getCache($suffix);
+        TimeLogEnd($timeLogName, __LINE__);
 
-        if ($renew || empty($total)) {
+        if ($renew || (empty($total) && $total !== 0 && $total !== '0')) {
             $sql = "SELECT count(id) as total FROM videos v WHERE 1=1 AND categories_id = ? ";
 
             if (User::isLogged()) {
@@ -746,16 +797,23 @@ class Category
                 $sql .= Video::getUserGroupsCanSeeSQL();
             }
             //echo $categories_id, $sql;exit;
+            TimeLogEnd($timeLogName, __LINE__);
             $res = sqlDAL::readSql($sql, "i", [$categories_id]);
+            TimeLogEnd($timeLogName, __LINE__);
             $fullResult = sqlDAL::fetchAllAssoc($res);
+            TimeLogEnd($timeLogName, __LINE__);
             sqlDAL::close($res);
             $total = empty($fullResult[0]['total']) ? 0 : intval($fullResult[0]['total']);
+            TimeLogEnd($timeLogName, __LINE__);
             $rows = self::getChildCategories($categories_id);
+            TimeLogEnd($timeLogName, __LINE__);
             foreach ($rows as $value) {
                 $total += self::getTotalVideosFromCategory($value['id'], $showUnlisted, $getAllVideos, $renew);
             }
+            TimeLogEnd($timeLogName, __LINE__);
             $cacheHandler->setCache($total);
         }
+        TimeLogEnd($timeLogName, __LINE__);
         return intval($total);
     }
 
@@ -805,7 +863,7 @@ class Category
         $suffix = "totalLives_" . intval($showUnlisted);
         $total = $cacheHandler->getCache($suffix);
         //$renew = true;
-        if ($renew || (empty($total) && $total !==0 )) {
+        if ($renew || (empty($total) && $total !== 0)) {
             $sql = "SELECT count(id) as total FROM live_transmitions v WHERE 1=1 AND categories_id = ? ";
 
             if (empty($showUnlisted)) {
@@ -841,7 +899,6 @@ class Category
         // clear category count cache
         $cacheHandler = new CategoryCacheHandler($categories_id);
         $cacheHandler->deleteCache();
-        
     }
 
     public function delete()
@@ -903,7 +960,11 @@ class Category
             $sql .= "AND parentId = 0 OR parentId = -1 ";
         }
         if ($onlyWithVideos) {
-            $sql .= " AND ((SELECT count(*) FROM videos v where v.categories_id = c.id OR categories_id IN (SELECT id from categories where parentId = c.id AND id != c.id)) > 0  ";
+            $sql .= " AND ((SELECT count(*) FROM videos v where 1=1 ";            
+            if(isForKidsSet()){
+                $sql .= " AND v.made_for_kids = 1 ";
+            }
+            $sql .= " AND v.categories_id = c.id OR categories_id IN (SELECT id from categories where parentId = c.id AND id != c.id) ) > 0  ";
             if (AVideoPlugin::isEnabledByName("Live")) {
                 $sql .= " OR "
                     . " ("

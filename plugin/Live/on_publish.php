@@ -55,20 +55,24 @@ if (empty($_GET['p'])) {
         }
         $name = decryptString($_GET['s']);
         
-        $lt = LiveTransmition::getFromKey($name);
-
-        if(!empty($lt) && !empty($lt['users_id'])){
-            $name = Live::cleanUpKey($_POST['name']);
-            if($name == $lt['key']){
-                $user = new User($lt['users_id']);
-                $_GET['p'] = $user->getPassword();
-                _error_log("NGINX ON Publish encryption token found users_id: [{$lt['users_id']}] {$name} == {$lt['key']}");
+        if(!empty($name)){
+            $lt = LiveTransmition::getFromKey($name);
+            if(!empty($lt) && !empty($lt['users_id'])){
+                $name = Live::cleanUpKey($_POST['name']);
+                if($name == $lt['key']){
+                    $user = new User($lt['users_id']);
+                    $_GET['p'] = $user->getPassword();
+                    _error_log("NGINX ON Publish encryption token found users_id: [{$lt['users_id']}] {$name} == {$lt['key']}");
+                }else{
+                    _error_log("NGINX ON Publish encryption token keys doe not matchd: {$name} == {$lt['key']}");
+                }
             }else{
-                _error_log("NGINX ON Publish encryption token keys doe not matchd: {$name} == {$lt['key']}");
+                _error_log("NGINX ON Publish encryption token error livetransmition error: [{$name}] ".json_encode($lt));
             }
         }else{
-            _error_log("NGINX ON Publish encryption token error livetransmition error: [{$name}] ".json_encode($lt));
+            _error_log("NGINX ON Publish could not decrypt $_GET[s]: [{$_GET['s']}] ");
         }
+
     }
 }
 
@@ -108,7 +112,10 @@ if (!empty($_GET['p']) && strpos($_GET['p'], '/') !== false) {
 }
 
 $_POST['name'] = preg_replace("/[&=]/", '', $_POST['name']);
-
+$live_servers_id = Live_servers::getServerIdFromRTMPHost($url);
+$activeLive = LiveTransmitionHistory::getLatest($_POST['name'], $live_servers_id, LiveTransmitionHistory::$reconnectionTimeoutInMinutes);
+$isReconnection = !empty($activeLive);
+_error_log("isReconnection=".json_encode(array($isReconnection, $activeLive, $_POST['name'], $live_servers_id)));
 /*
     $code = 301;
     header("Location: {$_POST['name']}");
@@ -135,9 +142,10 @@ if (!empty($_GET['p'])) {
             $lth->setKey($_POST['name']);
             $lth->setDomain(@$_REQUEST['domain']);
             $lth->setUsers_id($user->getBdId());
-            $lth->setLive_servers_id(Live_servers::getServerIdFromRTMPHost($url));
+            $lth->setLive_servers_id($live_servers_id);
             _error_log("NGINX ON Publish saving LiveTransmitionHistory");
             $obj->liveTransmitionHistory_id = $lth->save();
+
             _error_log("NGINX ON Publish saved LiveTransmitionHistory");
             $obj->error = false;
         } elseif (empty($_GET['p'])) {
@@ -165,7 +173,7 @@ if (!empty($obj) && empty($obj->error)) {
      *
      */
 
-    _error_log("NGINX ON Publish success");
+    _error_log("NGINX ON Publish success ({$obj->liveTransmitionHistory_id}, {$obj->row['users_id']}, {$_POST['name']}, {$live_servers_id})");
     $code = 200;
     http_response_code($code);
     header("HTTP/1.1 {$code} OK");
@@ -173,7 +181,7 @@ if (!empty($obj) && empty($obj->error)) {
     outputAndContinueInBackground();
     deleteStatsNotifications(true);
     _error_log("NGINX Live::on_publish start");
-    Live::on_publish($obj->liveTransmitionHistory_id);
+    Live::_on_publish($obj->liveTransmitionHistory_id, $isReconnection);
     _error_log("NGINX Live::on_publish end");
     if (AVideoPlugin::isEnabledByName('YPTSocket')) {
         $array = setLiveKey($lth->getKey(), $lth->getLive_servers_id());
@@ -191,9 +199,12 @@ if (!empty($obj) && empty($obj->error)) {
             $pid = execAsync($command);
             _error_log("NGINX Live::on_publish YPTSocket end {$pid}");
         }
+        $cacheHandler = new LiveCacheHandler();
+        $cacheHandler->deleteCache();
     }
     //exit;
 } else {
+    AVideoPlugin::on_publish_denied($_POST['name']);
     _error_log("NGINX ON Publish denied ".User::getLastUserCanStreamReason().' '. json_encode($obj), AVideoLog::$SECURITY);
     http_response_code(401);
     header("HTTP/1.1 401 Unauthorized Error");

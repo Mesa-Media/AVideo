@@ -12,7 +12,7 @@ if (!empty($doNotIncludeConfig)) {
     return false;
 }
 
-if(!isset($global['skippPlugins'])){
+if (!isset($global['skippPlugins'])) {
     $global['skippPlugins'] = array();
 }
 /*
@@ -47,12 +47,13 @@ if (!empty($global['stopBotsList']) && is_array($global['stopBotsList'])) {
 
 $global['avideoStartMicrotime'] = microtime(true);
 
-function includeConfigLog($line, $desc=''){
-    if(empty($_REQUEST['debug'])){
+function includeConfigLog($line, $desc = '')
+{
+    if (empty($_REQUEST['debug'])) {
         return false;
     }
     global $global, $_includeConfigLogID, $_includeConfigLogLastCheck;
-    if(!isset($_includeConfigLogID)){
+    if (!isset($_includeConfigLogID)) {
         $_includeConfigLogID = date('H:i:s');
     }
     $_includeConfigLogLastCheck = microtime(true);
@@ -123,15 +124,21 @@ includeConfigLog(__LINE__);
 require_once $global['systemRootPath'] . 'objects/images.php';
 includeConfigLog(__LINE__);
 // for update config from old versions 2020-05-11
-if (empty($global['webSiteRootPath']) || $global['configurationVersion'] < 3.1) {
-    Configuration::rewriteConfigFile();
+if (empty($global['saltV2'])) {
+    $additions = [
+        '/\$global\[\'salt\'\].*/' => "\$global['saltV2'] = '"._uniqid()."';", // Add this line below the line that matches the pattern
+    ];
+
+    $replacements = [];
+
+    Configuration::updateConfigFile($additions, $replacements, 4.0);
 }
 
 includeConfigLog(__LINE__);
 $global['dont_show_us_flag'] = false;
 // this is for old versions
 
-if (empty($doNotStartSessionbaseIncludeConfig)) {
+if (empty($doNotStartSessionIncludeConfig)) {
     _session_start();
     // DDOS protection can be disabled in video/configuration.php
     if (!empty($global['enableDDOSprotection'])) {
@@ -224,6 +231,8 @@ $global['allowedExtension'] = ['gif', 'jpg', 'mp4', 'webm', 'mp3', 'm4a', 'ogg',
 if (empty($global['avideo_resolutions']) || !is_array($global['avideo_resolutions'])) {
     $global['avideo_resolutions'] = [240, 360, 480, 540, 720, 1080, 1440, 2160, 'offline'];
 }
+
+$global['avideo_possible_resolutions'] = array_merge($global['avideo_resolutions'],  ['HD', 'SD', 'Low']);
 
 includeConfigLog(__LINE__);
 sort($global['avideo_resolutions']);

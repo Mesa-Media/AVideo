@@ -232,6 +232,7 @@ async function lazyImage() {
                 afterLoad: function (element) {
 
                     element.addClass('gifNotLoaded');
+                    element.addClass('lazyloadLoaded');
                     element.removeClass('blur');
                     element.mouseover(function () {
 
@@ -470,7 +471,11 @@ async function mouseEffect() {
             var gif = $(this).find(".thumbsGIF");
             var jpg = $(this).find(".thumbsJPG");
             try {
-                gif.lazy({ effect: 'fadeIn' });
+                gif.lazy({ effect: 'fadeIn',
+                afterLoad: function (element) {
+                    element.removeClass('lazyload');
+                    element.addClass('lazyloadLoaded');
+                } });
                 setTimeout(function () {
                     gif.height(jpg.height());
                     gif.width(jpg.width());
@@ -507,15 +512,24 @@ function getPlayerButtonIndex(name) {
     return children.length;
 }
 
-async function copyToClipboard(text) {
-    $('body').append('<textarea id="elementToCopyAvideo" style="filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0; opacity: 0;position: absolute;z-index: -9999;top: 0;left: 0;pointer-events: none;"></textarea>');
-    $('#elementToCopyAvideo').css({ 'top': mouseY, 'left': 0 }).fadeIn('slow');
-    $('#elementToCopyAvideo').val(text);
-    $('#elementToCopyAvideo').focus();
-    $('#elementToCopyAvideo').select();
-    document.execCommand('copy');
-    $('#elementToCopyAvideo').remove();
-    $.toast("Copied to Clipboard");
+function copyToClipboard(text, mouseY) {
+    var $temp = $('<textarea>', {
+        id: "elementToCopyAvideo",
+        style: "opacity: 0; position: absolute; top: " + mouseY + "px; left: 0; pointer-events: none;"
+    }).appendTo('body').val(text).select();
+
+    try {
+        var successful = document.execCommand('copy');
+        if (successful) {
+            avideoToastSuccess("Copied to Clipboard");
+        } else {
+            avideoToastError("Copy failed");
+        }
+    } catch (err) {
+        avideoToastError("Unable to copy");
+    }
+
+    $temp.remove();
 }
 
 function nl2br(str, is_xhtml) {
@@ -1206,7 +1220,7 @@ function avideoAlertOnceADay(title, msg, type, uid) {
 
 async function avideoConfirm(msg) {
     var span = document.createElement("span");
-    span.innerHTML = msg;
+    span.innerHTML = __(msg);
     var response = await swal({
         title: 'Confrim',
         content: span,
@@ -1240,12 +1254,28 @@ function avideoAlertOnceForceConfirm(title, msg, type) {
 }
 
 function _avideoToast(msg, icon) {
-    var options = { text: msg, hideAfter: 7000 };
-    if (icon) {
-        options.icon = icon;
+    if(empty(msg)){
+        msg = '';
     }
-    $.toast(options);
+    try {
+        // Average reading speed: around 200 words per minute (or 3.3 words per second)
+        var wordsPerSecond = 2;
+        var words = msg.split(' ').length;
+        var readingTimeInSeconds = words / wordsPerSecond;
+
+        // Convert reading time to milliseconds and add a buffer time
+        var displayTime = Math.max(readingTimeInSeconds * 1000 + 2000, 7000); // Minimum display time of 7000ms
+
+        var options = { text: msg, hideAfter: displayTime };
+        if (icon) {
+            options.icon = icon;
+        }
+        $.toast(options);
+    } catch (error) {
+        
+    }
 }
+
 function avideoToast(msg) {
     _avideoToast(msg, null);
 }
@@ -1354,6 +1384,14 @@ function avideoModalIframeFullScreenClose() {
 function closeFullscreenVideo() {
     avideoModalIframeClose();
 }
+
+// Listen for messages from child frames
+window.addEventListener('message', function(event) {
+    if (event.data === 'closeFullscreen') {
+        // Call the function to close fullscreen video
+        closeFullscreenVideo();
+    }
+});
 
 function avideoModalIframeCloseToastSuccess(msg) {
     avideoModalIframeClose();
@@ -2163,18 +2201,6 @@ function readFileCroppie(input, crop) {
     }
 }
 
-function getCroppie(uploadCropObject, callback, width, height) {
-    //console.log('getCroppie 1', uploadCropObject);
-    var ret = uploadCropObject.croppie('result', { type: 'base64', size: { width: width, height: height }, format: 'png' }).then(function (resp) {
-        ////console.log('getCroppie 2 ' + callback, resp);
-        eval(callback + "(resp);");
-    }).catch(function (err) {
-        //console.log('cropieError getCroppie => ' + callback, err);
-        eval(callback + "(null);");
-    });
-    //console.log('getCroppie 3', ret);
-}
-
 let tooltipTimeout = null;
 let isExecutingTooltip = false;
 
@@ -2438,77 +2464,6 @@ function downloadURL(url, filename) {
         });
 }
 
-var downloadURLOrAlertErrorInterval;
-var downloadURLOrAlertModal = getPleaseWait();
-function downloadURLOrAlertError(jsonURL, data, filename, FFMpegProgress) {
-    if (empty(jsonURL)) {
-        console.log('downloadURLOrAlertError error empty jsonURL', jsonURL, data, filename, FFMpegProgress);
-        return false;
-    }
-    downloadURLOrAlertModal.showPleaseWait();
-    avideoToastInfo('Converting');
-    console.log('downloadURLOrAlertError 1', jsonURL, FFMpegProgress);
-    checkFFMPEGProgress(FFMpegProgress);
-    $.ajax({
-        url: jsonURL,
-        method: 'POST',
-        data: data,
-        success: function (response) {
-            clearInterval(downloadURLOrAlertErrorInterval);
-            if (response.error) {
-                avideoAlertError(response.msg);
-                downloadURLOrAlertModal.hidePleaseWait();
-            } else if (response.url) {
-                if (response.msg) {
-                    avideoAlertInfo(response.msg);
-                }
-                if (
-                    isMobile()
-                    //|| /cdn.ypt.me/.test(response.url)
-                ) {
-                    console.log('downloadURLOrAlertError 2', response.url);
-                    window.open(response.url, '_blank');
-                    avideoToastInfo('Opening file');
-                    //document.location = response.url
-                } else {
-                    console.log('downloadURLOrAlertError 3', response.url, filename);
-                    downloadURL(response.url, filename);
-                }
-            } else {
-                console.log('downloadURLOrAlertError 4', response);
-                avideoResponse(response);
-            }
-
-            downloadURLOrAlertModal.hidePleaseWait();
-        }
-    });
-}
-
-function checkFFMPEGProgress(FFMpegProgress) {
-    if (empty(FFMpegProgress)) {
-        return false;
-    }
-    $.ajax({
-        url: FFMpegProgress,
-        success: function (response) {
-            //console.log(response);
-            if (typeof response.progress.progress !== 'undefined') {
-                var text = 'Converting ...';
-                if (typeof response.progress.progress !== 'undefined') {
-                    text += response.progress.progress + '% ';
-                    modal.setProgress(response.progress.progress);
-                }
-                modal.setText(text);
-                if (response.progress.progress !== 100) {
-                    setTimeout(function () {
-                        checkFFMPEGProgress(FFMpegProgress);
-                    }, 1000);
-                }
-            }
-        }
-    });
-}
-
 function startGoogleAd(selector) {
     if (isVisibleAndInViewport(selector)) {
         //console.log('startGoogleAd', selector);
@@ -2609,6 +2564,7 @@ function empty(data) {
         if (data == 0) {
             return true;
         }
+        data = data.trim();
         return /^[\s]*$/.test(data);
     } else if (type !== 'undefined') {
         return Object.keys(data).length == 0;
@@ -2686,7 +2642,7 @@ function isUserOnline(users_id) {
 }
 
 function isReadyToCheckIfIsOnline() {
-    return !empty(users_id_online);
+    return typeof users_id_online !== 'undefined' && !empty(users_id_online);
 }
 
 var addAtMentionActive = false;
@@ -2872,10 +2828,12 @@ $(document).ready(function () {
     setInterval(function () {// check for the carousel
         checkDescriptionArea();
     }, 3000);
-    Cookies.set('timezone', timezone, {
-        path: '/',
-        expires: 365
-    });
+    if(typeof Cookies != 'undefined'){
+        Cookies.set('timezone', timezone, {
+            path: '/',
+            expires: 365
+        });
+    }
     tabsCategoryDocumentHeight = $(document).height();
     modal = getPleaseWait();
     try {
@@ -3935,7 +3893,7 @@ function openFullscreenVideo(url, urlBar) {
 function addCloseButtonInVideo() {
     try {
         // If either function exists, add a close button inside videojs
-        if (typeof window.parent.closeFullscreenVideo === "function") {
+        if (window.self !== window.top) {
             if (typeof player !== 'object') {
                 setTimeout(function () { addCloseButtonInVideo(); }, 2000);
                 return false;
@@ -3950,7 +3908,7 @@ function addCloseButtonInVideo() {
 function addCloseButtonInPage() {
     try {
         // If either function exists, add a close button inside videojs
-        if (typeof window.parent.closeFullscreenVideo === "function") {
+        if (window.self !== window.top) {
             addCloseButton($('body'));
         }
     } catch (error) {
@@ -3960,7 +3918,7 @@ function addCloseButtonInPage() {
 
 function addCloseButton(elementToAppend) {
     // If either function exists, add a close button inside videojs
-    if (typeof window.parent.closeFullscreenVideo === "function") {
+    if (window.self !== window.top) {
         var closeButton = $('<button>', {
             'id': 'CloseButtonInVideo',
         });
@@ -3972,7 +3930,8 @@ function addCloseButton(elementToAppend) {
         closeButton.on('click', function () {
             if (window.self !== window.top) {
                 console.log('close parent iframe');
-                window.parent.closeFullscreenVideo();
+                //window.parent.closeFullscreenVideo();
+                window.parent.postMessage('closeFullscreen', '*'); 
             } else {
                 console.log('close history.back');
                 window.history.back();
@@ -4087,4 +4046,13 @@ function preloadVmapAndUpdateAdTag(adTagUrl) {
         .catch(error => {
             console.error("Error preloading and updating adTagUrl:", error);
         });
+}
+
+function windowIsfXs() {
+    var screenWidth = $(window).width();
+    if (screenWidth < 768) {
+        return true;
+    } else {
+        return false;
+    }
 }

@@ -5,21 +5,28 @@ if (!isset($global['systemRootPath'])) {
     require_once '../videos/configuration.php';
 }
 require_once $global['systemRootPath'] . 'objects/user.php';
-if (!User::canUpload() || empty($_POST['id'])) {
-    die('{"error":"'.__("Permission denied").'"}');
+if (empty($_POST['id'])) {
+    forbiddenPage("Id is empty");
 }
 require_once 'video.php';
 if (!is_array($_POST['id'])) {
     $_POST['id'] = [$_POST['id']];
 }
 $id = 0;
+$obj = new stdClass();
+$obj->error = true;
+$obj->msg = '';
+$obj->users_id = User::getId();
 foreach ($_POST['id'] as $value) {
-    $obj = new Video("", "", $value);
-    if (!$obj->userCanManageVideo()) {
-        $obj->msg = __("You can not Manage This Video");
-        die(json_encode($obj));
+    $video = new Video("", "", $value);
+    if(empty($video->getUsers_id()) || $video->getUsers_id() != User::getId()){
+        if (!$video->userCanManageVideo()) {
+            $obj->msg = __('You can not Manage This Video');
+            die(_json_encode($obj));
+        }
     }
-    $id = $obj->delete();
+    $id = $video->delete();
+    $obj->error = empty($id);
 }
 
-echo '{"status":"'.$id.'"}';
+die(_json_encode($obj));

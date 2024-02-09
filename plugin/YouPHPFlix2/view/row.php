@@ -23,7 +23,7 @@ TimeLogStart($timeLog3);
     }
     foreach ($videos as $_index => $value) {
         
-        $timeLog4Limit = 0.1;
+        $timeLog4Limit = 0.2;
         $timeLog4 = "{$timeLog3} loop {$value['clean_title']}";
         TimeLogStart($timeLog4);
         $uid = "{$uidOriginal}_{$value['id']}";
@@ -66,7 +66,7 @@ TimeLogStart($timeLog3);
                      iframe="<?php echo $global['webSiteRootURL']; ?>videoEmbed/<?php echo $value['clean_title']; ?>"
                      ajaxLoad="<?php echo $ajaxLoad; ?>">
                     <div class="tile__media ">
-                        <img alt="<?php echo $value['title']; ?>" 
+                        <img alt="<?php echo str_replace('"', '', $value['title']); ?>" 
                         src="<?php echo ImagesPlaceHolders::getImageLandscape(ImagesPlaceHolders::$RETURN_URL); ?>" 
                         class="tile__img <?php echo $cssClass; ?> thumbsJPG img img-responsive carousel-cell-image" data-flickity-lazyload="<?php echo $img; ?>" />
                         <?php if (!empty($imgGif)) { ?>

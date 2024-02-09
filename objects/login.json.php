@@ -27,7 +27,7 @@ require_once $global['systemRootPath'] . 'videos/configuration.php';
 require_once $global['systemRootPath'] . 'objects/user.php';
 require_once $global['systemRootPath'] . 'objects/category.php';
 
-Category::clearCacheCount();
+//Category::clearCacheCount();
 TimeLogEnd($timeLog, __LINE__);
 
 if(!isSameDomain($global['webSiteRootURL'], $_POST['redirectUri'])){
@@ -196,9 +196,9 @@ if (empty($_POST['user']) || empty($_POST['pass'])) {
 }
 $user = new User(0, $_POST['user'], $_POST['pass']);
 if(!empty($user)){
-    _error_log("login.json.php user found");
+    _error_log("login.json.php user found [{$_POST['user']}]");
 }else{
-    _error_log("login.json.php user not found");
+    _error_log("login.json.php user not found [{$_POST['user']}]");
 }
 //_error_log("login.json.php trying to login");
 
@@ -210,6 +210,12 @@ $object->isCaptchaNeed = User::isCaptchaNeed();
 if ($resp === User::USER_NOT_VERIFIED) {
     _error_log("login.json.php User not verified");
     $object->error = __("Please verify your email address");
+    die(json_encode($object));
+}
+
+if ($resp === User::SYSTEM_ERROR) {
+    _error_log("login.json.php System error", AVideoLog::$ERROR);
+    $object->error = __("System error, check your logs");
     die(json_encode($object));
 }
 
@@ -250,6 +256,7 @@ $object->canStream = User::canStream();
 $object->redirectUri = @$_POST['redirectUri'];
 $object->embedChatUrl = '';
 $object->embedChatUrlMobile = '';
+$object->age = User::getAge();
 
 //_error_log("login.json.php check chat2");
 if (AVideoPlugin::isEnabledByName('Chat2') && method_exists('Chat2', 'getChatRoomLink')) {

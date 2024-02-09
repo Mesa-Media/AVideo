@@ -61,11 +61,11 @@ $metaDescription = __("Trending");
                                     $poster = $images->thumbsJpg;
                                     ?>
                                     <div class="aspectRatio16_9">
-                                        <img src="<?php echo $images->thumbsJpgSmall; ?>" data-src="<?php echo $poster; ?>" alt="<?php echo $value['title']; ?>" class="thumbsJPG img img-responsive <?php echo @$img_portrait; ?>  rotate<?php echo $value['rotation']; ?>  <?php echo ($poster != $images->thumbsJpgSmall) ? "blur" : ""; ?>" id="thumbsJPG<?php echo $value['id']; ?>" />
+                                        <img src="<?php echo $images->thumbsJpgSmall; ?>" data-src="<?php echo $poster; ?>" alt="<?php echo str_replace('"', '', $value['title']); ?>" class="thumbsJPG img img-responsive <?php echo @$img_portrait; ?>  rotate<?php echo $value['rotation']; ?>  <?php echo ($poster != $images->thumbsJpgSmall) ? "blur" : ""; ?>" id="thumbsJPG<?php echo $value['id']; ?>" />
                                         <?php
                                         if (!empty($imgGif)) {
                                             ?>
-                                            <img src="<?php echo ImagesPlaceHolders::getVideoPlaceholder(ImagesPlaceHolders::$RETURN_URL); ?>" data-src="<?php echo $imgGif; ?>" style="position: absolute; top: 0; display: none;" alt="<?php echo $value['title']; ?>" id="thumbsGIF<?php echo $value['id']; ?>" class="thumbsGIF img-responsive" height="196" />
+                                            <img src="<?php echo ImagesPlaceHolders::getVideoPlaceholder(ImagesPlaceHolders::$RETURN_URL); ?>" data-src="<?php echo $imgGif; ?>" style="position: absolute; top: 0; display: none;" alt="<?php echo str_replace('"', '', $value['title']); ?>" id="thumbsGIF<?php echo $value['id']; ?>" class="thumbsGIF img-responsive" height="196" />
                                         <?php }
                                         ?>
                                         <time class="duration"><?php echo Video::getCleanDuration($value['duration']); ?></time>
@@ -114,12 +114,18 @@ $metaDescription = __("Trending");
                                                     <?php echo number_format_short($value['views_count']); ?> <?php echo __("Views"); ?>
                                                 </span>
                                             </div>
-                                        <?php }
+                                        <?php 
+                                        }
+                                        if (!empty($advancedCustom->showCreationTimeOnVideoItem)) {
                                         ?>
                                         <div>
                                             <i class="far fa-clock"></i>
                                             <?php echo humanTiming(strtotime($value['videoCreation']), 0, true, true); ?>
                                         </div>
+                                        <?php 
+                                        }
+                                        if (!empty($advancedCustom->showChannelNameOnVideoItem)) {
+                                        ?>
                                         <div>
                                             <a href="<?php echo User::getChannelLink($value['users_id']); ?>">
                                                 <i class="fa fa-user"></i>
@@ -129,7 +135,9 @@ $metaDescription = __("Trending");
                                                 <button type="button" data-trigger="focus" class="label label-danger" data-toggle="popover" data-placement="top" data-html="true" title="<?php echo $value['title']; ?>" data-content="<div> <?php echo str_replace('"', '&quot;', $value['description']); ?> </div>" ><?php echo __("Description"); ?></button>
                                             <?php } ?>
                                         </div>
-                                        <?php if (Video::canEdit($value['id'])) { ?>
+                                        <?php 
+                                        }
+                                        if (Video::canEdit($value['id'])) { ?>
                                             <div>
                                                 <a href="<?php echo $global['webSiteRootURL']; ?>mvideos?video_id=<?php echo $value['id']; ?>">
                                                     <i class="fa fa-edit"></i> <?php echo __("Edit Video"); ?>

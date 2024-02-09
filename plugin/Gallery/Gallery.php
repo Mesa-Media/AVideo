@@ -6,6 +6,10 @@ require_once $global['systemRootPath'] . 'objects/Channel.php';
 
 class Gallery extends PluginAbstract
 {
+    const BigVideoLiveDisabled = 0;
+    const BigVideoLiveShowLiveAndVOD = 1;
+    const BigVideoLiveShowLiveOnly = 2;
+    const BigVideoLiveShowVODOnly = 3;
 
     public function getTags()
     {
@@ -69,6 +73,23 @@ class Gallery extends PluginAbstract
         $obj->MainContainerFluid = true;
         $obj->hidePrivateVideos = false;
         $obj->BigVideo = true;
+
+
+
+        $o = new stdClass();
+        $o->type = [
+            Gallery::BigVideoLiveDisabled => 'Disable', 
+            Gallery::BigVideoLiveShowLiveAndVOD => 'Show Live and VOD', 
+            Gallery::BigVideoLiveShowLiveOnly => 'Show Live Only'
+        ];
+        $o->value = Gallery::BigVideoLiveShowLiveAndVOD;
+        $obj->BigVideoLive = $o;
+        self::addDataObjectHelper('BigVideoLive', 'Big Video Live');
+        $obj->BigVideoLiveOnFirstPageOnly = true;
+        self::addDataObjectHelper('BigVideoLiveOnFirstPageOnly', 'Big Video Live on First Page Only');
+        $obj->BigVideoLiveForLoggedUsersOnly = false;
+        self::addDataObjectHelper('BigVideoLiveForLoggedUsersOnly', 'Big Video Live will appear only if the user is logged');
+       
         $obj->useSuggestedVideosAsCarouselInBigVideo = true;
         $obj->GifOnBigVideo = true;
         $obj->Description = false;

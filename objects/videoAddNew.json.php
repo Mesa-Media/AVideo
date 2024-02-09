@@ -5,6 +5,7 @@ if (empty($global['systemRootPath'])) {
     $global['systemRootPath'] = '../';
 }
 require_once $global['systemRootPath'] . 'videos/configuration.php';
+allowOrigin();
 require_once $global['systemRootPath'] . 'objects/user.php';
 if (!User::canUpload()) {
     die('{"error":"1 ' . __("Permission denied") . '"}');
@@ -33,7 +34,7 @@ $obj = new Video($_POST['title'], "", @$_POST['id'], true);
 
 TimeLogEnd(__FILE__, __LINE__);
 
-$obj->setClean_Title($_POST['clean_title']);
+$obj->setClean_Title(@$_POST['clean_title']);
 $audioLinks = ['mp3', 'ogg'];
 $videoLinks = ['mp4', 'webm', 'm3u8'];
 TimeLogEnd(__FILE__, __LINE__);
@@ -152,6 +153,7 @@ $obj->setOnly_for_paid(@$_POST['only_for_paid']);
 $obj->setVideo_password(@$_POST['video_password']);
 $obj->setTrailer1(@$_POST['trailer1']);
 $obj->setRrating(@$_POST['rrating']);
+$obj->setMade_for_kids(@$_POST['made_for_kids']);
 $obj->setExternalOptions($externalOptions);
 
 if (!empty($_REQUEST['users_id_company'])) {

@@ -4,12 +4,20 @@ global $t;
 // filter some security here
 if (!empty($_GET['lang'])) {
     $_GET['lang'] = str_replace(["'", '"', "&quot;", "&#039;"], ['', '', '', ''], xss_esc($_GET['lang']));
+    $_GET['lang'] = preg_replace('/[^a-z0-9\._-]/i', '', $_GET['lang']);
 }
 
 includeLangFile();
 
 function includeLangFile() {
     global $t, $global;
+    if(empty($_SESSION)){
+        _session_start();
+    }
+    if(empty($_SESSION['language'])){
+        $_SESSION['language'] = '';
+    }
+    $_SESSION['language'] = str_replace('../', '', $_SESSION['language']);
     setSiteLang();
     @include_once "{$global['systemRootPath']}locale/{$_SESSION['language']}.php";
 }
@@ -83,7 +91,8 @@ function getAllFlags() {
 }
 
 /**
- * Deprecated replaced by Layout::getAvilableFlags()
+ * Deprecated replaced by Layout::getAvailableFlags()
+ * @deprecated
  * @global array $global
  * @return array
  */
@@ -202,6 +211,8 @@ function setLanguage($lang) {
     if (empty($lang) || $lang === '-') {
         return false;
     }
+
+    $lang = str_replace('../', '', $lang);
 
     $file = "{$global['systemRootPath']}locale/{$lang}.php";
     _session_start();

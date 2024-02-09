@@ -4,10 +4,6 @@ require_once dirname(__FILE__) . '/../../../videos/configuration.php';
 
 class CachesInDB extends ObjectYPT
 {
-    public static $loggedType_NOT_LOGGED = 'n';
-    public static $loggedType_LOGGED = 'l';
-    public static $loggedType_ADMIN = 'a';
-    public static $prefix = 'ypt_cache_';
     protected $id;
     protected $content;
     protected $domain;
@@ -166,6 +162,18 @@ class CachesInDB extends ObjectYPT
             }
             $row = $data;
         } else {
+            if (empty($global['mysqli'])) {
+                $global['mysqli'] = new stdClass();
+            }
+            if($global['mysqli']->errno == 1146){
+                $error = array($global['mysqli']->error);
+                $file = $global['systemRootPath'] . 'plugin/Cache/install/install.sql';
+                sqlDal::executeFile($file);
+                if (!static::isTableInstalled()) {
+                    $error[] = $global['mysqli']->error;
+                    die("We could not create table ".static::getTableName().'<br> '.implode('<br>', $error));
+                }
+            }
             $row = false;
         }
         //var_dump($row);
@@ -198,51 +206,90 @@ class CachesInDB extends ObjectYPT
         $c->setExpires(date('Y-m-d H:i:s', strtotime('+ 1 month')));
         return $c->save();
     }
-
-    public static function setBulkCache($cacheArray, $metadata) {
+    private static function prepareCacheItem($name, $cache, $metadata, $tz, $time) {
+        $formattedCacheItem = [];
+        
+        $name = self::hashName($name);
+        $content = !is_string($cache) ? json_encode($cache) : $cache;
+        if (empty($content)) {
+            return null;
+        }
+    
+        $expires = date('Y-m-d H:i:s', strtotime('+1 month'));
+    
+        // Format for the prepared statement
+        $formattedCacheItem['format'] = "ssssssssi";
+        $formattedCacheItem['values'] = [
+            $name,
+            $content,
+            $metadata['domain'],
+            $metadata['ishttps'],
+            $metadata['user_location'],
+            $metadata['loggedType'],
+            $expires,
+            $tz,
+            $time
+        ];
+    
+        return $formattedCacheItem;
+    }
+    
+    public static function setBulkCache($cacheArray, $metadata, $batchSize = 50) {
         if (empty($cacheArray)) {
             return false;
         }
+    
         global $global;
-        
-        $placeholders = [];
-        $formats = [];
-        $values = [];
+        $cacheBatches = array_chunk($cacheArray, $batchSize, true);
         $tz = date_default_timezone_get();
         $time = time();
-        foreach ($cacheArray as $name => $cache) {
-            $name = self::hashName($name);
-            $content = !is_string($cache) ? _json_encode($cache) : $cache;
-            if (empty($content)) continue;
-
-            $formats[] = "ssssssssi";
-            $placeholders[] = "(?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
-            
-            $expires = date('Y-m-d H:i:s', strtotime('+ 1 month'));
-            /*
-            echo PHP_EOL.'--name=';
-            var_dump($name);
-            echo PHP_EOL.'--content=';
-            var_dump($content);
-            */
-            // Add values to the values array
-            //_error_log("setBulkCache [{$name}]");
-            array_push($values, $name, $content, $metadata['domain'], $metadata['ishttps'], $metadata['user_location'], $metadata['loggedType'], $expires, $tz, $time);
+        $result = true;
+    
+        foreach ($cacheBatches as $batch) {$placeholders = [];
+            $formats = [];
+            $values = [];
+    
+            foreach ($batch as $name => $cache) {
+                $cacheItem = self::prepareCacheItem($name, $cache, $metadata, $tz, $time);
+                if ($cacheItem === null) continue;
+    
+                $placeholders[] = "(?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+                $formats[] = $cacheItem['format'];
+                $values = array_merge($values, $cacheItem['values']);
+            }
+    
+            $sql = "INSERT INTO " . static::getTableName() . " (name, content, domain, ishttps, user_location, loggedType, expires, timezone, created_php_time, created, modified)
+             VALUES " . implode(", ", $placeholders) . " 
+             ON DUPLICATE KEY UPDATE 
+             content = VALUES(content),
+             expires = VALUES(expires),
+             created_php_time = VALUES(created_php_time),
+             modified = NOW()";
+    
+            // Start transaction
+            mysqlBeginTransaction();
+    
+            try {
+                $result &= sqlDAL::writeSql($sql, implode('', $formats), $values);
+                mysqlCommit();
+            } catch (\Throwable $th) {
+                mysqlRollback();
+                _error_log($th->getMessage() . ' '.$sql, AVideoLog::$ERROR);
+                //return false;
+            }
         }
-
-        $sql = "INSERT INTO CachesInDB (name, content, domain, ishttps, user_location, loggedType, expires, timezone, created_php_time, created, modified) 
-                VALUES " . implode(", ", $placeholders) . "
-                ON DUPLICATE KEY UPDATE 
-                content = VALUES(content),
-                expires = VALUES(expires),
-                created_php_time = VALUES(created_php_time),
-                modified = NOW()";
-
-        // Assuming you have a PDO connection $pdo
-        $result = sqlDAL::writeSql($sql, implode('', $formats), $values);
-        //_error_log("setBulkCache writeSql total= ".count($placeholders));
-        //var_dump($result, $sql, implode('', $formats), $values);exit;
+    
         return $result;
+    }
+
+    public static function readUncomited($uncomited=true)
+    {
+        if($uncomited){
+            $sql = "SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;";
+        }else{
+            $sql = "SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;";
+        }
+        return sqlDAL::writeSql($sql);
     }
 
     public static function _deleteCache($name)
@@ -256,11 +303,26 @@ class CachesInDB extends ObjectYPT
             return false;
         }
         $name = self::hashName($name);
+        self::set_innodb_lock_wait_timeout();
         $sql = "DELETE FROM " . static::getTableName() . " ";
         $sql .= " WHERE name = ?";
         $global['lastQuery'] = $sql;
         //_error_log("Delete Query: ".$sql);
-        return sqlDAL::writeSql($sql, "s", [$name]);
+        self::readUncomited();
+        $return = sqlDAL::writeSql($sql, "s", [$name]);
+        self::readUncomited(false);
+        return $return;
+    }
+    public static function set_innodb_lock_wait_timeout($timeout = 2)
+    {
+        global $global;
+        $sql = "SET SESSION innodb_lock_wait_timeout = {$timeout};";
+        /**
+        *
+        * @var array $global
+        * @var object $global['mysqli']
+        */
+       return $global['mysqli']->query($sql);
     }
 
     public static function _deleteCacheStartingWith($name)
@@ -273,13 +335,16 @@ class CachesInDB extends ObjectYPT
             return false;
         }
         $name = self::hashName($name);
-        //$sql = "DELETE FROM " . static::getTableName() . " ";
-        //$sql .= " WHERE name LIKE '{$name}%'";
-        $sql = "DELETE FROM CachesInDB WHERE MATCH(name) AGAINST('{$name}*' IN BOOLEAN MODE);";
+        self::set_innodb_lock_wait_timeout();
+        //$sql = "DELETE FROM " . static::getTableName() . " WHERE name LIKE '{$name}%'";
+        $sql = "DELETE FROM " . static::getTableName() . " WHERE MATCH(name) AGAINST('{$name}*' IN BOOLEAN MODE);";
         
         $global['lastQuery'] = $sql;
         //_error_log("Delete Query: ".$sql);
-        return sqlDAL::writeSql($sql);
+        self::readUncomited();
+        $return = sqlDAL::writeSql($sql);
+        self::readUncomited(false);
+        return $return;
     }
 
     
@@ -294,11 +359,15 @@ class CachesInDB extends ObjectYPT
         }
         $name = self::hashName($name);
         $name = str_replace('hashName_', '', $name);
+        self::set_innodb_lock_wait_timeout();
         $sql = "DELETE FROM " . static::getTableName() . " ";
         $sql .= " WHERE name LIKE '%{$name}%'";
         $global['lastQuery'] = $sql;
         //_error_log("Delete Query: ".$sql);
-        return sqlDAL::writeSql($sql);
+        self::readUncomited();
+        $return = sqlDAL::writeSql($sql);
+        self::readUncomited(false);
+        return $return;
     }
 
     public static function _deleteAllCache()
@@ -307,10 +376,16 @@ class CachesInDB extends ObjectYPT
         if (!static::isTableInstalled()) {
             return false;
         }
+        /*
         $sql = "TRUNCATE TABLE " . static::getTableName() . " ";
         $global['lastQuery'] = $sql;
         //_error_log("Delete Query: ".$sql);
         return sqlDAL::writeSql($sql);
+        */
+        $sql = 'DROP TABLE IF EXISTS `CachesInDB`';
+        sqlDal::writeSql($sql);
+        $file = $global['systemRootPath'] . 'plugin/Cache/install/install.sql';
+        return sqlDal::executeFile($file);
     }
 
     public static function encodeContent($content)
@@ -320,18 +395,18 @@ class CachesInDB extends ObjectYPT
             $content = _json_encode($content);
         }
         $prefix = substr($content, 0, 10);
-        if ($prefix!== CachesInDB::$prefix) {
+        if ($prefix!== CacheDB::$prefix) {
             //$content = base64_encode($content);
-            $content = CachesInDB::$prefix.$content;
+            $content = CacheDB::$prefix.$content;
         }
         return $content;
     }
 
     public static function decodeContent($content)
     {
-        $prefix = substr($content, 0, strlen(CachesInDB::$prefix));
-        if ($prefix === CachesInDB::$prefix) {
-            $content = str_replace(CachesInDB::$prefix, '', $content);
+        $prefix = substr($content, 0, strlen(CacheDB::$prefix));
+        if ($prefix === CacheDB::$prefix) {
+            $content = str_replace(CacheDB::$prefix, '', $content);
             //$content = base64_decode($content);
         }
         return $content;

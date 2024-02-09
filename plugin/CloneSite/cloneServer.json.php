@@ -8,7 +8,7 @@ require_once $global['systemRootPath'] . 'plugin/CloneSite/functions.php';
 header('Content-Type: application/json');
 
 $videosDir = Video::getStoragePath() . "";
-$clonesDir = "{$videosDir}cache/clones/";
+$clonesDir = "{$videosDir}clones/";
 $photosDir = "{$videosDir}userPhoto/";
 
 $resp = new stdClass();
@@ -47,9 +47,12 @@ if (!empty($_GET['deleteDump'])) {
     die(json_encode($resp));
 }
 
-if (!file_exists($clonesDir)) {
-    mkdir($clonesDir, 0777, true);
-    file_put_contents($clonesDir . "index.html", '');
+if (!is_dir($clonesDir)) {
+    $mkdir = mkdir($clonesDir, 0777, true);
+    $put = file_put_contents($clonesDir . "index.html", '');
+    _error_log("Clone: create dir {$clonesDir} ".json_encode(array(is_dir($clonesDir), $mkdir, $put)));
+}else{
+    _error_log("Clone: dir {$clonesDir} already exists");
 }
 
 $resp->sqlFile = uniqid('Clone_mysqlDump_') . ".sql";
@@ -68,12 +71,18 @@ foreach ($row as $value) {
     }
 }
 $tablesList = implode(" ", $tables);
+$sqlFile = "{$clonesDir}{$resp->sqlFile}";
 // Then use that list in the mysqldump command
 $cmd = "mysqldump -u {$mysqlUser} -p'{$mysqlPass}' --host {$mysqlHost} ".
-" --default-character-set=utf8mb4 {$mysqlDatabase} {$tablesList} > {$clonesDir}{$resp->sqlFile}";
+" --default-character-set=utf8mb4 {$mysqlDatabase} {$tablesList} > $sqlFile";
 //$cmd = "mysqldump -u {$mysqlUser} -p'{$mysqlPass}' --host {$mysqlHost} --skip-set-charset -N --routines --skip-triggers --databases {$mysqlDatabase} > {$clonesDir}{$resp->sqlFile}";
-_error_log("Clone: Dump to {$clonesDir}{$resp->sqlFile}");
+_error_log("Clone: Dump to $sqlFile");
 exec($cmd . " 2>&1", $output, $return_val);
+if (!file_exists($sqlFile)) {
+    _error_log("Clone: error {$sqlFile} does not exists" . json_encode($output));
+}else{
+    _error_log("Clone: {$sqlFile} exists ");
+}
 if ($return_val !== 0) {
     _error_log("Clone Error: " . print_r($output, true));
 }

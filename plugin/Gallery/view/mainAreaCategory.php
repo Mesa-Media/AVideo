@@ -1,5 +1,5 @@
 <?php
-
+require_once $global['systemRootPath'].'objects/functionInfiniteScroll.php';
 $post = $_POST;
 $request = $_REQUEST;
 // if there is no section display only the dateAdded row for the selected category
@@ -7,7 +7,11 @@ if (!empty($currentCat) && empty($_GET['showOnly'])) {
     $obj = AVideoPlugin::getObjectData("Gallery");
     setRowCount($obj->CategoriesRowCount * 3);
     if (empty($_GET['page'])) {
-        $_GET['page'] = 1;
+        unsetCurrentPage();
+    }
+    
+    if(!empty($_GET['catName'])){
+        resetCurrentPage();
     }
     $_REQUEST['current'] = $_GET['page'];
 
@@ -25,6 +29,8 @@ if (!empty($currentCat) && empty($_GET['showOnly'])) {
         $contentSearchFound = !empty($videos);
     }
     $currPage = getCurrentPage();
+    echo '<!-- currPage=' . $currPage . ' page='. (@$_GET['page']) .' line='.__LINE__.' -->';
+    //var_dump($currPage, $_GET);exit;
     global $categoryLiveVideos;
     if (empty($categoryLiveVideos) && $currPage < 2) {
         $categoryLiveVideos = getLiveVideosFromCategory($currentCat['id']);
@@ -86,19 +92,16 @@ function createCategorySection($videos)
         </div>
     </div>
     <!-- mainAreaCategory -->
-    <div class="col-sm-12" style="z-index: 1;">
+    <div class="col-sm-12 gallerySection" >
         <?php
         $_REQUEST['catName'] = $videos[0]['clean_category'];
         $total = Video::getTotalVideos("viewableNotUnlisted", false, !$obj->hidePrivateVideos);
         $totalPages = ceil($total / getRowCount());
-        $page = getCurrentPage();
-        if ($totalPages < $page) {
-            $page = $totalPages;
-        }
         //var_dump($totalPages, $page);
         $categoryURL = "{$global['webSiteRootURL']}cat/{$videos[0]['clean_category']}/page/";
         //getPagination($total, $page = 0, $link = "", $maxVisible = 10, $infinityScrollGetFromSelector="", $infinityScrollAppendIntoSelector="")
-        echo getPagination($totalPages, $page, "{$categoryURL}_pageNum_{$args}", 10, ".Div{$videos[0]['clean_category']}Section", ".Div{$videos[0]['clean_category']}Section");
+        echo getPagination($totalPages, "{$categoryURL}_pageNum_{$args}", 10, ".Div{$videos[0]['clean_category']}Section", ".Div{$videos[0]['clean_category']}Section");
+        echo getPagination($totalPages, "{$categoryURL}_pageNum_{$args}");
         ?>
     </div>
 <?php

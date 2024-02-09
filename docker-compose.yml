@@ -25,6 +25,8 @@ services:
         WEBSITE_TITLE: ${WEBSITE_TITLE}
         MAIN_LANGUAGE: ${MAIN_LANGUAGE}
     restart: "unless-stopped"
+    # tmpfs:
+    #  - /var/www/memfolder:rw,size=512M
     environment:
       SOCKET_PORT: ${SOCKET_PORT:-2053}
       HTTP_PORT: ${HTTP_PORT:-80}
@@ -48,6 +50,7 @@ services:
       NGINX_RTMP_PORT: "${NGINX_RTMP_PORT:-1935}"
       NGINX_HTTP_PORT: "${NGINX_HTTP_PORT:-8080}"
       NGINX_HTTPS_PORT: "${NGINX_HTTPS_PORT:-8443}"
+      MEMCACHED_HOST: memcached
     env_file:
       - .env
     ports:
@@ -55,7 +58,7 @@ services:
       - "${HTTP_PORT:-80}:80"
       - "${HTTPS_PORT:-443}:443"
     volumes:
-      - "./.compose/tmp:/var/www/tmp"
+      # - "./.compose/tmp:/var/www/tmp"
       - "./.compose/HLS:/HLS"
       - "./:/var/www/html/AVideo"
       - "./.compose/videos:/var/www/html/AVideo/videos"
@@ -66,6 +69,8 @@ services:
         condition: service_healthy
       database_encoder:
         condition: service_healthy
+      memcached:
+        condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail http://localhost || exit 1"]
       interval: 30s
@@ -75,12 +80,12 @@ services:
       - app_net
 
   live:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.live
     restart: "unless-stopped"
     volumes:
-      - "./.compose/tmp:/var/www/tmp"
+      # - "./.compose/tmp:/var/www/tmp"
       - "./.compose/HLS:/HLS"
       - "./.compose/letsencrypt:/etc/letsencrypt/"
     environment:
@@ -91,6 +96,7 @@ services:
       NGINX_RTMP_PORT: "${NGINX_RTMP_PORT:-1935}"
       NGINX_HTTP_PORT: "${NGINX_HTTP_PORT:-8080}"
       NGINX_HTTPS_PORT: "${NGINX_HTTPS_PORT:-8443}"
+      MEMCACHED_HOST: memcached
     env_file:
       - .env
     ports:
@@ -102,6 +108,8 @@ services:
         condition: service_healthy
       database:
         condition: service_healthy
+      memcached:
+        condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail http://localhost:8080 || exit 1"]
       interval: 30s
@@ -152,6 +160,7 @@ services:
 
   #http://localhost:8081
   phpmyadmin:
+    platform: linux/amd64
     image: "phpmyadmin/phpmyadmin"
     restart: "unless-stopped"
     environment:
@@ -169,6 +178,7 @@ services:
 
   #http://localhost:8082
   phpmyadmin_encoder:
+    platform: linux/amd64
     image: "phpmyadmin/phpmyadmin"
     restart: "unless-stopped"
     environment:
@@ -181,6 +191,15 @@ services:
       - "${PHPMYADMIN_ENCODER_PORT:-8082}:80"
     depends_on:
       - database_encoder
+    networks:
+      - app_net
+
+  memcached:
+    image: memcached:alpine
+    restart: "unless-stopped"
+    command: memcached -m 64 -p 11211 -u memcache
+    ports:
+      - "11211:11211"
     networks:
       - app_net
 

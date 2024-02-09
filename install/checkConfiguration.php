@@ -4,7 +4,10 @@ if (file_exists("../videos/configuration.php")) {
     exit;
 }
 
-$installationVersion = "14.0";
+
+$installationVersion = "14.2";
+
+require_once '../objects/functionSecurity.php';
 
 error_log("Installation: ".__LINE__." ". json_encode($_POST));
 header('Content-Type: application/json');
@@ -198,6 +201,7 @@ if(!empty(\$_SERVER['SERVER_NAME']) && \$_SERVER['SERVER_NAME']!=='localhost' &&
 }
 \$global['systemRootPath'] = '{$_POST['systemRootPath']}';
 \$global['salt'] = '{$_POST['salt']}';
+\$global['saltV2'] = '"._uniqid()."';
 \$global['disableTimeFix'] = 0;
 \$global['enableDDOSprotection'] = 1;
 \$global['ddosMaxConnections'] = 40;

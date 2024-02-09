@@ -40,9 +40,16 @@ if (isset($_REQUEST['image'])) {
     $obj->path = $path;
     $obj->image = saveCroppieImage($path, "image");
 }
+if(!empty($_REQUEST['users_id'])){
+    $userCanChangeVideoOwner = !empty($advancedCustomUser->userCanChangeVideoOwner) || Permissions::canAdminVideos();
+    if($userCanChangeVideoOwner){
+        $video->setUsers_id($_REQUEST['users_id']);
+    }
+}
 $obj->save = $video->save();
 $obj->error = empty($obj->save);
 if (empty($obj->error)) {
+    AVideoPlugin::saveVideosAddNew($_POST, $obj->videos_id);
     Video::clearCache($obj->videos_id, true);
 }
 die(json_encode($obj));

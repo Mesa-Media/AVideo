@@ -7,6 +7,7 @@ if (empty($global['systemRootPath'])) {
 
 require_once $global['systemRootPath'] . 'videos/configuration.php';
 require_once $global['systemRootPath'] . 'plugin/Gallery/functions.php';
+require_once $global['systemRootPath'].'objects/functionInfiniteScroll.php';
 
 $users_id = User::getId();
 
@@ -24,11 +25,6 @@ if (empty($tags)) {
 }
 $total = count($tags);
 $itemsPerPage = 4;
-$page = getCurrentPage();
-$totalPages = ceil($total / $itemsPerPage);
-if ($totalPages < $page) {
-    $page = $totalPages;
-}
 ?>
 <!-- mainAreaChannel start -->
 <div class="mainAreaTags">  
@@ -52,7 +48,7 @@ if ($totalPages < $page) {
                 $countCols = 0;
                 unset($_POST['sort']);
                 $_POST['sort']['created'] = "DESC";
-                $_REQUEST['current'] = 1;
+                unsetCurrentPage();
                 setRowCount($obj->SubscribedTagsRowCount);
                 $old_tags_id = @$_GET['tags_id'];
                 $_GET['tags_id'] = $value['tags_id'];
@@ -66,10 +62,11 @@ if ($totalPages < $page) {
     }
     ?>
 </div>
-<div class="col-sm-12" style="z-index: 1;">
+<div class="col-sm-12 gallerySection" >
     <?php
 //getPagination($total, $page = 0, $link = "", $maxVisible = 10, $infinityScrollGetFromSelector="", $infinityScrollAppendIntoSelector="")
-    echo getPagination($totalPages, $page, "{$global['webSiteRootURL']}plugin/Gallery/view/mainAreaTags.php", 10, ".mainAreaTags", ".mainAreaTags");
+    echo getPagination($totalPages, "{$global['webSiteRootURL']}plugin/Gallery/view/mainAreaTags.php", 10, ".mainAreaTags", ".mainAreaTags");
+    echo getPagination($totalPages, "{$global['webSiteRootURL']}plugin/Gallery/view/mainAreaTags.php");
     ?>
 </div>
 <!-- mainAreaChannel end -->

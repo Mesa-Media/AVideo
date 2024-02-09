@@ -58,6 +58,7 @@ class User
     private $extra_info;
     private $phone;
     private $is_company;
+    private $birth_date;
     public static $DOCUMENT_IMAGE_TYPE = "Document Image";
     public static $channel_artTV = 'tv';
     public static $channel_artDesktopMax = 'desktop_max';
@@ -123,6 +124,21 @@ class User
         $this->phone = $phone;
     }
 
+    function getBirth_date()
+    {
+        return $this->birth_date;
+    }
+
+    function setBirth_date($birth_date): void
+    {
+        if (_empty($birth_date)) {
+            $this->birth_date = 'NULL';
+        } else {
+            $time = strtotime($birth_date);
+            $this->birth_date = date('Y/m/d', $time);
+        }
+    }
+
     public function getEmail()
     {
         return $this->email;
@@ -175,7 +191,7 @@ class User
 
     public function setCanCreateMeet($canCreateMeet)
     {
-        $this->canCreateMeet = (empty($canCreateMeet) || strtolower($canCreateMeet) === 'false') ? 0 : 1;
+        $this->canCreateMeet = _empty($canCreateMeet) ? 0 : 1;
     }
 
     public function getCanUpload()
@@ -282,7 +298,10 @@ if (typeof gtag !== \"function\") {
     {
         $userLoaded = self::getUserDbFromUser($user);
         if (empty($userLoaded)) {
+            _error_log("User::loadFromUser($user) error");
             return false;
+        }else{
+            _error_log("User::loadFromUser($user) user found [{$userLoaded['id']}]{$userLoaded['user']}");
         }
         //_error_log("User::loadFromUser($user) ");
         //_error_log("User::loadFromUser json " . json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)));
@@ -476,16 +495,16 @@ if (typeof gtag !== \"function\") {
     {
         global $advancedCustomUser;
         if (!empty($this->name) && empty($advancedCustomUser->doNotIdentifyByName)) {
-            return $this->name;
+            return str_replace('"', '', $this->name);
         }
         if (!empty($this->email) && empty($advancedCustomUser->doNotIdentifyByEmail)) {
-            return $this->email;
+            return str_replace('"', '', $this->email);
         }
         if (!empty($this->user) && empty($advancedCustomUser->doNotIdentifyByUserName)) {
-            return $this->user;
+            return str_replace('"', '', $this->user);
         }
         if (!empty($this->channelName)) {
-            return $this->channelName;
+            return str_replace('"', '', $this->channelName);
         }
         return __("Unknown User");
     }
@@ -530,7 +549,7 @@ if (typeof gtag !== \"function\") {
 
     public function _getName()
     {
-        return $this->name;
+        return str_replace('"', '', $this->name);
     }
 
     public function getBdName()
@@ -624,6 +643,24 @@ if (typeof gtag !== \"function\") {
         return getURL(self::_getOGImage($users_id));
     }
 
+    public static function getOGImagePath($users_id = "")
+    {
+        global $global;
+        $photo = self::_getPhoto($users_id);
+        if ($photo == ImagesPlaceHolders::getUserIcon()) {
+            return $global['systemRootPath'] . ($photo);
+        }
+        if (empty($photo)) {
+            return false;
+        }
+        $source = $global['systemRootPath'] . $photo;
+        $destination = $global['systemRootPath'] . self::_getOGImage($users_id);
+
+        convertImageToOG($source, $destination);
+
+        return $destination;
+    }
+
     public static function getEmailVerifiedIcon($id = "")
     {
         global $advancedCustomUser;
@@ -709,7 +746,7 @@ if (typeof gtag !== \"function\") {
             //echo "u:" . $this->user . "|p:" . strlen($this->password);
             if (empty($this->user)) {
                 //echo "u:" . $this->user . "|p:" . strlen($this->password);
-                _error_log('Error : 1 You need a user to register '.json_encode(debug_backtrace()));
+                _error_log('Error : 1 You need a user to register ' . json_encode(debug_backtrace()));
                 return false;
             }
             if (empty($this->password)) {
@@ -781,6 +818,14 @@ if (typeof gtag !== \"function\") {
                 $values[] = $this->canViewChart;
                 $sql .= "canViewChart = ?, ";
             }
+            if (!_empty($this->birth_date)) {
+                $values[] = $this->birth_date;
+            } else {
+                $values[] = null;
+            }
+            $formats .= "s";
+            $sql .= " birth_date = ?, ";
+
             $formats .= "ssssssisssssssssssi";
             $values[] = $this->status;
             $values[] = $this->photoURL;
@@ -1032,7 +1077,7 @@ if (typeof gtag !== \"function\") {
                 WHERE users_id = ?
             )";
             sqlDAL::writeSql($sql, "i", [$this->id]);
-            
+
             $arrayTables = [
                 //'live_transmition_history_log',
                 'live_transmitions',
@@ -1057,7 +1102,7 @@ if (typeof gtag !== \"function\") {
                     _error_log("Delete usertable not found {$value}");
                     $tableExists = false;
                 }
-            
+
                 if ($tableExists) {
                     $sql = "DELETE FROM {$value} WHERE users_id = ?";
                     try {
@@ -1083,20 +1128,26 @@ if (typeof gtag !== \"function\") {
     public const USER_NOT_FOUND = 2;
     public const CAPTCHA_ERROR = 3;
     public const REQUIRE2FA = 4;
+    public const SYSTEM_ERROR = 5;
 
     public function login($noPass = false, $encodedPass = false, $ignoreEmailVerification = false)
     {
+        if (!class_exists('AVideoPlugin')) {
+            _error_log("ERROR login($noPass, $encodedPass, $ignoreEmailVerification) " . json_encode(debug_backtrace()));
+            return self::SYSTEM_ERROR;
+        }
         if (User::isLogged()) {
             //_error_log('User:login is already logged '.json_encode($_SESSION['user']['id']));
             return self::USER_LOGGED;
         }
         global $global, $advancedCustom, $advancedCustomUser, $config;
-
-        if (empty($advancedCustomUser)) {
-            $advancedCustomUser = AVideoPlugin::getObjectData("CustomizeUser");
-        }
-        if (empty($advancedCustom)) {
-            $advancedCustom = AVideoPlugin::getObjectData("CustomizeAdvanced");
+        if (class_exists('AVideoPlugin')) {
+            if (empty($advancedCustomUser)) {
+                $advancedCustomUser = AVideoPlugin::getObjectData("CustomizeUser");
+            }
+            if (empty($advancedCustom)) {
+                $advancedCustom = AVideoPlugin::getObjectData("CustomizeAdvanced");
+            }
         }
 
         if (strtolower($encodedPass) === 'false') {
@@ -1146,7 +1197,7 @@ if (typeof gtag !== \"function\") {
             _session_regenerate_id();
             _session_write_close();
 
-            _error_log('User:login finish users_id=' . json_encode($_SESSION['user']['id']));
+            _error_log('User:login finish with success users_id=' . json_encode($_SESSION['user']['id']));
             return self::USER_LOGGED;
         } else {
             unset($_SESSION['user']);
@@ -1173,28 +1224,28 @@ if (typeof gtag !== \"function\") {
     {
         global $advancedCustomUser, $global, $_checkLoginAttempts;
         if (isset($_checkLoginAttempts)) {
-            return true;
+            return $_checkLoginAttempts;
         }
-        $_checkLoginAttempts = 1;
         // check for multiple logins attempts to prevent hacking
         if (empty($_SESSION['loginAttempts'])) {
             _session_start();
             $_SESSION['loginAttempts'] = 0;
         }
+        $_checkLoginAttempts = true;
         if (!empty($advancedCustomUser->requestCaptchaAfterLoginsAttempts)) {
             _session_start();
             $_SESSION['loginAttempts']++;
             if ($_SESSION['loginAttempts'] > $advancedCustomUser->requestCaptchaAfterLoginsAttempts) {
                 if (empty($_POST['captcha'])) {
-                    return false;
+                    $_checkLoginAttempts = false;
                 }
                 require_once $global['systemRootPath'] . 'objects/captcha.php';
                 if (!Captcha::validation($_POST['captcha'])) {
-                    return false;
+                    $_checkLoginAttempts = false;
                 }
             }
         }
-        return true;
+        return $_checkLoginAttempts;
     }
 
     public static function getCaptchaFormIfNeed()
@@ -1261,7 +1312,7 @@ if (typeof gtag !== \"function\") {
             $justTryToRecreateLoginFromCookie = 1;
 
             // first check if the LoginControl::singleDeviceLogin is enabled, if it is only recreate login if the device is the last device
-            if ($obj = AVideoPlugin::getDataObjectIfEnabled("LoginControl")) {
+            if (class_exists('AVideoPlugin') && $obj = AVideoPlugin::getDataObjectIfEnabled("LoginControl")) {
                 if (!empty($obj->singleDeviceLogin)) {
                     if (!LoginControl::isLoggedFromSameDevice()) {
                         //_error_log("user::recreateLoginFromCookie: LoginControl and the last logged device is different: " . $_COOKIE['user'] . "");
@@ -1319,6 +1370,46 @@ if (typeof gtag !== \"function\") {
 
         self::recreateLoginFromCookie();
         return !empty($_SESSION['user']['isAdmin']);
+    }
+
+    public static function getBirthIfIsSet($users_id = 0)
+    {
+        $birth_date = '';
+        if (!empty($users_id)) {
+            $user = new User($users_id);
+            $birth_date = $user->getBirth_date();
+        } else {
+            if (empty($_SESSION['user']['birth_date'])) {
+                self::recreateLoginFromCookie();
+            }
+            if (!empty($_SESSION['user']['birth_date'])) {
+                $birth_date = $_SESSION['user']['birth_date'];
+            } else {
+                $user = new User(User::getId());
+                $birth_date = $_SESSION['user']['birth_date'] = $user->getBirth_date();
+            }
+        }
+        return $birth_date;
+    }
+
+    public static function getAge($users_id = 0)
+    {
+        $birth_date = self::getBirthIfIsSet($users_id);
+        if (empty($birth_date)) {
+            return 0;
+        }
+        $birth_date = new DateTime($birth_date);
+        $current_date = new DateTime('now');
+        $age = $current_date->diff($birth_date)->y;
+        if ($age < 0) {
+            return 0;
+        }
+        return $age;
+    }
+
+    public static function isOver18($users_id = 0): bool
+    {
+        return self::getAge($users_id) > 18;
     }
 
     public static function isACompany($users_id = 0)
@@ -1452,9 +1543,12 @@ if (typeof gtag !== \"function\") {
             $sql .= " OR user = ? ";
         }
 
+        if (empty($advancedCustomUser)) {
+            $advancedCustomUser = AVideoPlugin::getObjectData("CustomizeUser");
+        }
         if (
-            $advancedCustomUser->forceLoginToBeTheEmail &&
-            $advancedCustomUser->emailMustBeUnique &&
+            !empty($advancedCustomUser) &&
+            ($advancedCustomUser->forceLoginToBeTheEmail || $advancedCustomUser->emailMustBeUnique) &&
             filter_var($user, FILTER_VALIDATE_EMAIL)
         ) {
             $formats .= "s";
@@ -1466,9 +1560,9 @@ if (typeof gtag !== \"function\") {
             $sql .= " AND status = 'a' ";
         }
 
-        $sql .= " LIMIT 1";
+        $sql .= " ORDER BY id DESC LIMIT 1";
 
-        //_error_log("User::find ".$sql);
+        //_error_log("User::find {$sql} ".json_encode($values));
         //_error_log("User::find values ".json_encode($values));
         $res = sqlDAL::readSql($sql, $formats, $values, true);
         $result = sqlDAL::fetchAssoc($res);
@@ -1487,11 +1581,13 @@ if (typeof gtag !== \"function\") {
             $user = $result;
             $user['passhash'] = self::getUserHash($user['id']);
         } else {
+            _error_log("User::find line= ".__LINE__);
             //_error_log("Password check new hash user not found");
             //check if is the old password style
             $user = false;
             //$user = false;
         }
+        _error_log("User::find line= ".__LINE__);
         return $user;
     }
 
@@ -1519,11 +1615,13 @@ if (typeof gtag !== \"function\") {
         }
         if ($pass !== false) {
             if (!$encodedPass || $encodedPass === 'false') {
-                _error_log("Password check Old not encoded pass");
                 $passEncoded = md5($pass);
+                _error_log("Password check Old not encoded pass");
+                //_error_log("Password check Old not encoded pass passEncoded={$passEncoded}");
             } else {
-                _error_log("Password check Old encoded pass");
                 $passEncoded = $pass;
+                _error_log("Password check Old encoded pass");
+                //_error_log("Password check Old encoded pass passEncoded={$passEncoded}");
             }
             $sql .= " AND password = ? ";
             $formats .= "s";
@@ -1664,10 +1762,8 @@ if (typeof gtag !== \"function\") {
     {
         global $global, $advancedCustomUser;
         if (empty($user)) {
+            _error_log("getUserDbFromUser empty user ");
             return false;
-        }
-        if (empty($advancedCustomUser)) {
-            $advancedCustomUser = AVideoPlugin::getObjectData("CustomizeUser");
         }
         $formats = "";
         $values = [];
@@ -1675,18 +1771,35 @@ if (typeof gtag !== \"function\") {
         $formats .= 's';
         $values[] = $user;
 
+        if (class_exists('AVideoPlugin') && empty($advancedCustomUser)) {
+            $advancedCustomUser = AVideoPlugin::getObjectData("CustomizeUser");
+        }
         if (
-            $advancedCustomUser->forceLoginToBeTheEmail &&
-            $advancedCustomUser->emailMustBeUnique &&
+            !empty($advancedCustomUser) &&
+            ($advancedCustomUser->forceLoginToBeTheEmail || $advancedCustomUser->emailMustBeUnique) &&
             filter_var($user, FILTER_VALIDATE_EMAIL)
         ) {
             _error_log("getUserDbFromUser will also check the email {$user} ");
             $sql .= " OR email = ? ";
             $formats .= 's';
             $values[] = $user;
+        } else {
+            if (empty($advancedCustomUser)) {
+                _error_log("getUserDbFromUser advancedCustomUser is empty ");
+            } else {
+                _error_log("getUserDbFromUser [{$user}] " . json_encode(
+                    array(
+                        $advancedCustomUser->forceLoginToBeTheEmail,
+                        $advancedCustomUser->emailMustBeUnique,
+                        filter_var($user, FILTER_VALIDATE_EMAIL)
+                    )
+                ));
+            }
         }
 
         $sql .= " LIMIT 1";
+
+        _error_log("getUserDbFromUser {$sql} " . json_encode(array($formats, $values)));
         $res = sqlDAL::readSql($sql, $formats, $values);
         $user = sqlDAL::fetchAssoc($res);
         sqlDAL::close($res);
@@ -1956,12 +2069,12 @@ if (typeof gtag !== \"function\") {
         //current=1&rowCount=10&sort[sender]=asc&searchPhrase=
         global $global;
         $sql = "SELECT * ";
-        
-        if(!empty($_REQUEST['getUsage'])){
-            $sql .=", (SELECT sum(filesize) as total FROM videos WHERE filesize > 0 AND (users_id = u.id)) as usageInBytes";
+
+        if (!empty($_REQUEST['getUsage'])) {
+            $sql .= ", (SELECT sum(filesize) as total FROM videos WHERE filesize > 0 AND (users_id = u.id)) as usageInBytes";
         }
 
-        $sql .=" FROM users u WHERE 1=1 ";
+        $sql .= " FROM users u WHERE 1=1 ";
         if (!empty($status)) {
             if (strtolower($status) === 'i') {
                 $sql .= " AND status = 'i' ";
@@ -2234,16 +2347,18 @@ if (typeof gtag !== \"function\") {
     public function setRecoverPass($forceChange = false)
     {
         // let the same recover pass if it was 10 minutes ago
-        if (!$this->isRecoverPassExpired($this->recoverPass) && empty($forceChange) && !empty($this->recoverPass) && !empty($recoverPass) && !empty($this->modified) && strtotime($this->modified) > strtotime("-10 minutes")) {
+        if ($this->isRecoverPassValid($this->recoverPass) && empty($forceChange) && !empty($this->recoverPass) && !empty($recoverPass) && !empty($this->modified) && strtotime($this->modified) > strtotime("-10 minutes")) {
             return $this->recoverPass;
         }
-        $this->recoverPass = $this->createRecoverPass();
+        $this->recoverPass = $this->createRecoverPass($this->id);
         return $this->recoverPass;
     }
 
-    private function createRecoverPass($secondsValid = 600)
+    private function createRecoverPass($id, $secondsValid = 600)
     {
         $json = new stdClass();
+        $json->id = $id;
+        $json->uniqid = uniqid();
         $json->valid = strtotime("+{$secondsValid} seconds");
         return encryptString(json_encode($json));
     }
@@ -2251,7 +2366,7 @@ if (typeof gtag !== \"function\") {
     public function checkRecoverPass($recoverPass)
     {
         if ($this->recoverPass === $recoverPass) {
-            if (!$this->isRecoverPassExpired($recoverPass)) {
+            if ($this->isRecoverPassValid($recoverPass)) {
                 _error_log('checkRecoverPass success: ' . $this->user . ' ' . getRealIpAddr());
                 return true;
             }
@@ -2259,18 +2374,20 @@ if (typeof gtag !== \"function\") {
         return false;
     }
 
-    public function isRecoverPassExpired($recoverPass)
+    public function isRecoverPassValid($recoverPass)
     {
         $string = decryptString($recoverPass);
         if ($string) {
             $json = _json_decode($string);
             if (is_object($json)) {
                 if (time() < $json->valid) {
-                    return false;
+                    if ($this->id < $json->id) {
+                        return true;
+                    }
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public static function canNotUploadReason($doNotCheckPlugins = false)
@@ -2278,17 +2395,17 @@ if (typeof gtag !== \"function\") {
         global $global, $config, $advancedCustomUser;
         $reason = [];
         if (empty($doNotCheckPlugins) && !AVideoPlugin::userCanUpload(User::getId())) {
-            $reason[] = 'A plugin said users_id=['.User::getId().'] cannot upload';
+            $reason[] = 'A plugin said users_id=[' . User::getId() . '] cannot upload';
         }
 
         if ((isset($advancedCustomUser->onlyVerifiedEmailCanUpload) && $advancedCustomUser->onlyVerifiedEmailCanUpload && !User::isVerified())) {
             $reason[] = 'The email is not verified';
         }
 
-        if ($config->getAuthCanUploadVideos() && !self::isLogged()) {            
+        if ($config->getAuthCanUploadVideos() && !self::isLogged()) {
             $reason[] = 'The user is not logged';
         }
-        if (self::isLogged() && !empty($_SESSION['user']['canUpload'])) {    
+        if (self::isLogged() && !empty($_SESSION['user']['canUpload'])) {
             $reason[] = 'You do not have upload rights';
         }
         return $reason;
@@ -2645,14 +2762,17 @@ if (typeof gtag !== \"function\") {
             $email = '';
             $email = $user->getEmail();
 
-            $msg = sprintf(__("Hi %s"), $user->getName());
+            $msg = $user->getName();
             $msg .= "<br><br>" . __($advancedCustomUser->verificationMailTextLine1);
             $msg .= "<br><br>" . sprintf(__($advancedCustomUser->verificationMailTextLine2), $webSiteTitle);
             $msg .= "<br><br>" . sprintf(__($advancedCustomUser->verificationMailTextLine3), $webSiteTitle);
             $msg .= "<br><br>" . __($advancedCustomUser->verificationMailTextLine4);
-            $msg .= "<br><br>" . " <a href='{$global['webSiteRootURL']}objects/userVerifyEmail.php?code={$code}'>" . __("Verify") . "</a>";
+            $msg .= "<br><br>";
+            $msg .= "<a href='{$global['webSiteRootURL']}objects/userVerifyEmail.php?code={$code}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px;'>" . __($advancedCustomUser->verificationMailButtonLabel);
+            $msg .= "</a>";
 
-            $resp = sendSiteEmail($user->getEmail(), __('Please Verify Your E-mail '). ' ' . $webSiteTitle, $msg);
+
+            $resp = sendSiteEmail($user->getEmail(), __('Please Verify Your E-mail ') . ' ' . $webSiteTitle, $msg);
 
             if (!$resp) {
                 _error_log("sendVerificationLink Error Info: {$mail->ErrorInfo}");
@@ -2936,6 +3056,9 @@ if (typeof gtag !== \"function\") {
                         break;
                     case self::REQUIRE2FA:
                         _error_log("loginFromRequest REQUIRE2FA {$_REQUEST['user']}");
+                        break;
+                    case self::SYSTEM_ERROR:
+                        _error_log("loginFromRequest SYSTEM_ERROR {$_REQUEST['user']}");
                         break;
                     default:
                         _error_log("loginFromRequest UNDEFINED {$_REQUEST['user']}");

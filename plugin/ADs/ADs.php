@@ -115,6 +115,7 @@ class ADs extends PluginAbstract
 
         $obj->tags3rdParty = "<script> window.abkw = '{ChannelName},{Category}'; </script>";
         $obj->doNotShowAdsForPaidUsers = true;
+        $obj->bannerIntervalInSeconds = 5;
 
 
         return $obj;
@@ -129,7 +130,7 @@ class ADs extends PluginAbstract
 
     public function getHeadCode()
     {
-        if(isInfiniteScroll()){
+        if (isInfiniteScroll()) {
             return '';
         }
         $head = "";
@@ -280,9 +281,9 @@ class ADs extends PluginAbstract
 
         // Sort the array based on txt.order
         usort($return, function ($a, $b) {
-            if(empty($a['txt']['order'])){
+            if (empty($a['txt']['order'])) {
                 return 1;
-            }else if(empty($b['txt']['order'])){
+            } else if (empty($b['txt']['order'])) {
                 return -1;
             }
             return $a['txt']['order'] - $b['txt']['order'];
@@ -305,7 +306,7 @@ class ADs extends PluginAbstract
         $json = json_decode($content);
         if (empty($json)) {
             return array(
-                'url' => isValidURL($content)?$content:'',
+                'url' => isValidURL($content) ? $content : '',
                 'title' => '',
                 'order' => 0,
             );
@@ -380,17 +381,18 @@ class ADs extends PluginAbstract
         return ['adCode' => $adCode, 'label' => $label, 'paths' => $array['paths']];
     }
 
-    private static function debug($line, $desc=''){
-        if(empty($_REQUEST['debug'])){
+    private static function debug($line, $desc = '')
+    {
+        if (empty($_REQUEST['debug'])) {
             return '';
         }
-        var_dump('ADs debug line='.$line, $desc);
+        var_dump('ADs debug line=' . $line, $desc);
     }
 
     public static function getAdsCode($type)
     {
         global $global;
-        if(isInfiniteScroll()){
+        if (isInfiniteScroll()) {
             return false;
         }
         if (isBot()) {
@@ -414,10 +416,10 @@ class ADs extends PluginAbstract
             if (_empty($adC['adCode'])) {
                 self::debug(__LINE__);
                 $adC = self::getAdsHTML($type);
-                if(!_empty($adC['html'])){
+                if (!_empty($adC['html'])) {
                     return $adC['html'];
                 }
-            }else{
+            } else {
                 self::debug(__LINE__);
             }
             $adCode = ADs::giveGoogleATimeout($adC['adCode']);
@@ -489,7 +491,7 @@ class ADs extends PluginAbstract
             return $label;
         }
     }
-
+    
     public static function getAdsHTML($type, $is_regular_user = false)
     {
         global $global;
@@ -513,8 +515,10 @@ class ADs extends PluginAbstract
             //$style = "width: {$width}px; height: {$height}px;";
         }
 
+        $obj = AVideoPlugin::getDataObject('ADs');
+        $interval = $obj->bannerIntervalInSeconds * 1000;
 
-        $html = "<div id=\"{$id}\" class=\"carousel slide\" data-ride=\"carousel{$id}\" style=\"{$style}\">"
+        $html = "<div id=\"{$id}\" class=\"carousel slide\" data-ride=\"carousel{$id}\" style=\"{$style}\" data-interval=\"{$interval}\">"
             . "<div class=\"carousel-inner\">";
 
         $active = 'active';
@@ -553,7 +557,7 @@ class ADs extends PluginAbstract
             $html .= "<div class='alert alert-warning'>{$type} ADs Area</div>";
         }
         $html .= "</div></div>";
-        
+
         self::debug(__LINE__, $html);
         return array('html' => $html, 'paths' => $paths);
     }
@@ -561,18 +565,20 @@ class ADs extends PluginAbstract
     public function getFooterCode()
     {
         global $global;
-        
-        if(isInfiniteScroll()){
+
+        if (isInfiniteScroll()) {
             return '';
         }
+
+        $obj = $this->getDataObject();
+        $interval = $obj->bannerIntervalInSeconds * 1000;
         $js = "<script>$(function(){
             $('.carousel').carousel({
-              interval: 5000
+              interval: {$interval}
             });
         });</script>";
         return $js;
     }
-
     public static function saveAdsHTML($type)
     {
         $p = new ADs();

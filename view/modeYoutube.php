@@ -28,6 +28,7 @@ if (!empty($_GET['evideo'])) {
     $evideo = $v['evideo'];
 }
 
+$videos_id = getVideos_id();
 TimeLogEnd($timeLogNameMY, __LINE__, $TimeLogLimitMY);
 $playlist_index = 0;
 if (!empty($evideo)) {
@@ -78,18 +79,24 @@ if (!empty($evideo)) {
         $isSerie = 1;
 
         $plp = new PlayListPlayer(@$_GET['playlist_id'], @$_GET['playlists_tags_id']);
-
+        if (!$plp->canSee()) {
+            forbiddenPage(_('You cannot see this playlist').' '.basename(__FILE__));
+        }
         $playListData = $plp->getPlayListData();
+        if (empty($playListData)) {
+            if(empty($messagesFromPlayList)){
+                $messagesFromPlayList = array();
+            }
+            _error_log(implode(PHP_EOL."Playlist error: playlist_id={$_GET['playlist_id']}, playlists_tags_id={$_GET['playlists_tags_id']} - ", $messagesFromPlayList));
+            
+            $notFoundMessage = PlayLists::getPlaylistNotFoundMessage($_GET['playlist_id']);
+            videoNotFound($notFoundMessage);
+        }
 
         $video = $plp->getCurrentVideo();
         if(!empty($video)){
             $_getVideos_id = intval($video['id']);
-            $playlist_index = $plp->getIndex();
-    
-            if (empty($playListData)) {
-                videoNotFound("Line code ".__LINE__);
-            }
-    
+            $playlist_index = $plp->getIndex(); 
             $videosPlayList = $plp->getVideos();
             $autoPlayVideo = $plp->getNextVideo();
             $playlist_id = $plp->getPlaylists_id();
@@ -109,7 +116,6 @@ if (!empty($evideo)) {
             $_REQUEST['catName'] = '';
         }
 
-        $videos_id = getVideos_id();
         if (empty($video) && !empty($videos_id)) {
             $video = Video::getVideo($videos_id, "viewable", false, false, false, true);
             //var_dump($_GET, $video);exit;
@@ -262,21 +268,19 @@ if (!empty($evideo)) {
             $url = addQueryStringParameter($global['webSiteRootURL'], 'msg', $msg);
             header("location: {$url}");
             exit;
-        }else {
+        }else if(!empty($video['id'])){
             $response = Video::whyUserCannotWatchVideo(User::getId(), @$video['id']);
             $html = "<ul><li>".implode('</li><li>', $response->why)."</li></ul>";
             videoNotFound($html);
+        }else{            
+            AVideoPlugin::getModeYouTube($videos_id);
+            forbiddenPage('We could not load the video');
         }
-    } else {
-        $modeYouTubeTimeLog['Code part 4'] = microtime(true) - $modeYouTubeTime;
-        $modeYouTubeTime = microtime(true);
-        AVideoPlugin::getModeYouTube($v['id']);
-        $modeYouTubeTimeLog['Code part 5'] = microtime(true) - $modeYouTubeTime;
-        $modeYouTubeTime = microtime(true);
-    }
+    } 
     TimeLogEnd($timeLogNameMY, __LINE__, $TimeLogLimitMY);
 }
 
+AVideoPlugin::getModeYouTube($videos_id);
 
 TimeLogEnd($timeLogNameMY, __LINE__, $TimeLogLimitMY);
 
@@ -290,12 +294,26 @@ if (empty($video)) {
                 $vid->save();
                 _error_log('Missing files recovered ' . $_GET['v']);
             } else {
-                videoNotFound('ERROR 1: The video ID [' . $_GET['v'] . '] is not available: status=' . Video::$statusDesc[$vid->getStatus()]);
+                if(!User::isLogged()){
+                    gotToLoginAndComeBackHere();
+                }else{
+                    $msg = 'ERROR 1: The video ID [' . $_GET['v'] . '] is not available: status=' . Video::$statusDesc[$vid->getStatus()];
+                    videoNotFound($msg);
+                }
+                exit;
             }
         } else if ($vid->getStatus() === Video::$statusUnpublished) {
-            videoNotFound('This video is currently unpublished. Please contact an administrator to review and approve it for publication. Thank you for your patience and understanding.');
+            $msg = 'This video is currently unpublished. Please contact an administrator to review and approve it for publication. Thank you for your patience and understanding.';
+            videoNotFound($msg);
+            exit;
         } else {
-            videoNotFound('ERROR 2: The video ID [' . $_GET['v'] . '] is not available: status=' . Video::$statusDesc[$vid->getStatus()]);
+            if(!User::isLogged()){
+                gotToLoginAndComeBackHere();
+            }else{
+                $msg = 'ERROR 2: The video ID [' . $_GET['v'] . '] is not available: status=' . Video::$statusDesc[$vid->getStatus()];
+                videoNotFound($msg);
+            }
+            exit;
         }
     } else {
         videoNotFound('ERROR 3: The video is not available video ID is empty');
@@ -337,16 +355,6 @@ global $nonCriticalCSS;
         <?php
         TimeLogEnd($timeLogNameMY, __LINE__, $TimeLogLimitMY);
         include $global['systemRootPath'] . 'view/include/head.php';
-
-        TimeLogEnd($timeLogNameMY, __LINE__, $TimeLogLimitMY);
-        if (!empty($_GET['v'])) {
-            getOpenGraph($_GET['v']);
-            getLdJson($_GET['v']);
-        } else {
-            getOpenGraph(0);
-            getLdJson(0);
-        }
-        TimeLogEnd($timeLogNameMY, __LINE__, $TimeLogLimitMY);
         ?>
     </head>
 

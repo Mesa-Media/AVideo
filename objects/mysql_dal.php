@@ -105,7 +105,7 @@ class sqlDAL
         // make sure it does not store autid transactions
         if(strpos($preparedStatement, 'CachesInDB')===false){
             $debug = debug_backtrace();
-            if (empty($debug[2]['class']) || $debug[2]['class'] !== "AuditTable") {
+            if (empty($debug[2]['class']) || $debug[2]['class'] !== "AuditTable" && class_exists('AVideoPlugin')) {
                 $audit = AVideoPlugin::loadPluginIfEnabled('Audit');
                 if (!empty($audit)) {
                     try {
@@ -204,6 +204,13 @@ class sqlDAL
              */
 
              _error_log("writeSql [{$stmt->errno}] {$stmt->error} ".' '.json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)));
+             if($stmt->errno == 1205 && preg_match('/CachesInDB/', $preparedStatement)){//Lock wait timeout exceeded; try restarting transaction
+                _error_log("writeSql Recreate CachesInDB ");
+                $sql = 'DROP TABLE IF EXISTS `CachesInDB`';
+                $global['mysqli']->query($sql);
+                $file = $global['systemRootPath'] . 'plugin/Cache/install/install.sql';
+                sqlDal::executeFile($file);
+             }
              if(preg_match('/Data truncated for column/i', $stmt->error)){
                 _error_log("writeSql values = ".' '.json_encode($values));
              }
@@ -266,7 +273,7 @@ class sqlDAL
      * @return Object                    Depend if mysqlnd is active or not, a object, but always false on fail
      */
 
-    public static function readSql($preparedStatement, $formats = "", $values = [], $refreshCache = false)
+    public static function readSql($preparedStatement, $formats = '', $values = [], $refreshCache = false)
     {
         // $refreshCache = true;
         global $global, $disableMysqlNdMethods, $readSqlCached, $crc, $wasSTMTError;

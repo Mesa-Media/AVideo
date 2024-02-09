@@ -48,26 +48,19 @@ class VideosVR360 extends ObjectYPT {
         if (!static::isTableInstalled()) {
             return false;
         }
+        /**
+         *
+         * @var array $global
+         * @var object $global['mysqli']
+         */
         $videos_id = intval($videos_id);
-        $sql = "SELECT * FROM ".static::getTableName()." WHERE  videos_id = $videos_id LIMIT 1";
-        $res = $global['mysqli']->query($sql);
-        if ($res) {
-            $row = $res->fetch_assoc();
-        } else {
-            $row = false;
-        }
-        return $row;
+        return Video::getVideoLight($videos_id);
     }
     
     static function isVR360Enabled($videos_id){
         $vr = new VideosVR360(0);
         $vr->loadFromVideo($videos_id);
         return !empty($vr->getActive());
-    }
-    
-    static function isVR360EnabledByVideoCleanTitle($clean_title){
-        $video = Video::getVideoFromCleanTitle($clean_title);
-        return self::isVR360Enabled($video['id']); 
     }
     
     static function toogleVR360($videos_id){

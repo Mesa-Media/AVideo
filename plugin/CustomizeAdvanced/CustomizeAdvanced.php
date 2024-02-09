@@ -33,7 +33,6 @@ class CustomizeAdvanced extends PluginAbstract {
     
     public static function getDataObjectDeprecated() {
         return array(
-            'useVideoIDOnSEOLinks',
             'EnableMinifyJS',
             'usePreloadLowResolutionImages',
             'useFFMPEGToGenerateThumbs',
@@ -168,6 +167,7 @@ class CustomizeAdvanced extends PluginAbstract {
             'showCreationTimeOnVideoItem',
             'showChannelPhotoOnVideoItem',
             'showChannelNameOnVideoItem',
+            'canonicalURLType',
             );
     }
     
@@ -258,7 +258,12 @@ class CustomizeAdvanced extends PluginAbstract {
         
         $obj->usePermalinks = false;
         self::addDataObjectHelper('usePermalinks', 'Do not show video title on URL', 'This option is not good for SEO, but makes the URL clear');
-        $obj->useVideoIDOnSEOLinks = true;
+              
+        $o = new stdClass();  
+        $o->type = array(0 => 'Short URL', 1 => 'URL+Channel Name', 2 => 'URL+Channel+Title');
+        $o->value = 1;
+        $obj->canonicalURLType = $o;
+        
         $obj->disableAnimatedGif = false;
         $obj->removeBrowserChannelLinkFromMenu = false;
         $obj->EnableMinifyJS = false;
@@ -476,6 +481,7 @@ Disallow: *action=tagsearch*
         $obj->showVideoDownloadedLink = false;
         self::addDataObjectHelper('showVideoDownloadedLink', 'Show video Downloaded Link', 'Show the video source URL above the video description');
         
+        $obj->videosForKids = true;
         
         return $obj;
     }
@@ -734,6 +740,9 @@ Disallow: *action=tagsearch*
         }
         $video = new Video('', '', $videos_id, true);
         $externalOptions = _json_decode($video->getExternalOptions());
+        if(!is_object($externalOptions)){
+            $externalOptions = new stdClass();
+        }
         $externalOptions->redirectVideo = array('code'=>$code, 'url'=>$url);
         $video->setExternalOptions(json_encode($externalOptions));
         return $video->save();
@@ -751,6 +760,9 @@ Disallow: *action=tagsearch*
         }
         $video = new Video('', '', $videos_id, true);
         $externalOptions = _json_decode($video->getExternalOptions());
+        if(empty($externalOptions)){
+            $externalOptions = new stdClass();
+        }
         $externalOptions->SEO = array('ShortSummary'=>$ShortSummary, 'MetaDescription'=>$MetaDescription);
         $video->setExternalOptions(json_encode($externalOptions));
         return $video->save();

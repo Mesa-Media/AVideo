@@ -7,8 +7,11 @@ $resp = new stdClass();
 $resp->error = true;
 $resp->msg = '';
 $resp->url = '';
+$resp->lines = array();
 
-if (!AVideoPlugin::isEnabledByName('CDN')) {
+$cdnObj = AVideoPlugin::getDataObjectIfEnabled('CDN');
+
+if (empty($cdnObj)) {
     $resp->msg = ('CDN Plugin is disabled');
     die(json_encode($resp));
 }
@@ -47,18 +50,50 @@ if (!User::canWatchVideo($json->videos_id)) {
     die(json_encode($resp));
 }
 
-set_time_limit(7200); // 2 hours
-ini_set('max_execution_time', 7200);
-$url = CDNStorage::convertCDNHLSVideoToDownlaod($json->videos_id, $json->format);
+$resp->deleteRemotely = false;
+$resp->deleteLocally = false;
 
-if(empty($url)){
-    $resp->msg = ("CDN/download.json.php Error on get download URL for videos_id={$json->videos_id}, format={$json->format}");
-    die(json_encode($resp));
+$video = Video::getVideoLight($json->videos_id);
+$convertedFile = "{$global['systemRootPath']}videos/{$video['filename']}/index.mp4";
+
+$progressFile = getVideosDir() . "{$video['filename']}/index.{$json->format}.log";
+//$resp->progressFile = $progressFile;
+$resp->logModified = checkFileModified($progressFile);
+
+$resp->lines[] = __LINE__;
+if ($resp->logModified !== false && $resp->logModified < 30) {
+    $resp->lines[] = __LINE__;
+    $resp->msg = ("We are still processing the video, please wait");
+    $resp->error = false;
+} else if (!empty($_REQUEST['delete']) && file_exists($convertedFile)) {
+    $resp->lines[] = __LINE__;
+    if ($cdnObj->enable_storage) {
+        $resp->lines[] = __LINE__;
+        $remote_path = "{$video['filename']}/index.mp4";
+        $client = CDNStorage::getStorageClient();
+        $resp->deleteRemotely = $client->delete($remote_path);
+    }
+    $resp->deleteLocally = unlink($convertedFile);
+
+    $resp->error = $resp->deleteRemotely || $resp->deleteLocally;
+} else {
+    $resp->lines[] = __LINE__;
+    set_time_limit(7200); // 2 hours
+    ini_set('max_execution_time', 7200);
+    $url = CDNStorage::convertCDNHLSVideoToDownlaod($json->videos_id, $json->format);
+
+    //$resp->convertedFile = $convertedFile;
+    if (empty($url)) {
+        $resp->lines[] = __LINE__;
+        $resp->msg = ("CDN/download.json.php Error on get download URL for videos_id={$json->videos_id}, format={$json->format}");
+        die(json_encode($resp));
+    }
+    $resp->error = false;
+    //var_dump($url);exit;
+    _error_log('download from CDN ' . $url);
+    $resp->url = $url;
 }
-$resp->error = false;
-//var_dump($url);exit;
-_error_log('download from CDN ' . $url);
 
-$resp->url = $url;
+$resp->lines[] = __LINE__;
 
 die(json_encode($resp));
