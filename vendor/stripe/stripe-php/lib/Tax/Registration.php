@@ -27,7 +27,10 @@ class Registration extends \Stripe\ApiResource
 
     use \Stripe\ApiOperations\All;
     use \Stripe\ApiOperations\Create;
+<<<<<<< Updated upstream
     use \Stripe\ApiOperations\Retrieve;
+=======
+>>>>>>> Stashed changes
     use \Stripe\ApiOperations\Update;
 
     const STATUS_ACTIVE = 'active';

@@ -71,6 +71,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise describeReservationAsync(array $args = [])
  * @method \Aws\Result describeSchedule(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeScheduleAsync(array $args = [])
+<<<<<<< Updated upstream
+=======
+ * @method \Aws\Result describeAccountConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise describeAccountConfigurationAsync(array $args = [])
+>>>>>>> Stashed changes
  * @method \Aws\Result describeThumbnails(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeThumbnailsAsync(array $args = [])
  * @method \Aws\Result listChannels(array $args = [])
@@ -99,6 +104,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise rebootInputDeviceAsync(array $args = [])
  * @method \Aws\Result rejectInputDeviceTransfer(array $args = [])
  * @method \GuzzleHttp\Promise\Promise rejectInputDeviceTransferAsync(array $args = [])
+ * @method \Aws\Result updateAccountConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateAccountConfigurationAsync(array $args = [])
  * @method \Aws\Result startChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise startChannelAsync(array $args = [])
  * @method \Aws\Result startInputDevice(array $args = [])

@@ -31,9 +31,12 @@ class ObjectTypes
             \Stripe\CashBalance::OBJECT_NAME => \Stripe\CashBalance::class,
             \Stripe\Charge::OBJECT_NAME => \Stripe\Charge::class,
             \Stripe\Checkout\Session::OBJECT_NAME => \Stripe\Checkout\Session::class,
+<<<<<<< Updated upstream
             \Stripe\Climate\Order::OBJECT_NAME => \Stripe\Climate\Order::class,
             \Stripe\Climate\Product::OBJECT_NAME => \Stripe\Climate\Product::class,
             \Stripe\Climate\Supplier::OBJECT_NAME => \Stripe\Climate\Supplier::class,
+=======
+>>>>>>> Stashed changes
             \Stripe\CountrySpec::OBJECT_NAME => \Stripe\CountrySpec::class,
             \Stripe\Coupon::OBJECT_NAME => \Stripe\Coupon::class,
             \Stripe\CreditNote::OBJECT_NAME => \Stripe\CreditNote::class,
@@ -52,7 +55,10 @@ class ObjectTypes
             \Stripe\FinancialConnections\AccountOwner::OBJECT_NAME => \Stripe\FinancialConnections\AccountOwner::class,
             \Stripe\FinancialConnections\AccountOwnership::OBJECT_NAME => \Stripe\FinancialConnections\AccountOwnership::class,
             \Stripe\FinancialConnections\Session::OBJECT_NAME => \Stripe\FinancialConnections\Session::class,
+<<<<<<< Updated upstream
             \Stripe\FinancialConnections\Transaction::OBJECT_NAME => \Stripe\FinancialConnections\Transaction::class,
+=======
+>>>>>>> Stashed changes
             \Stripe\FundingInstructions::OBJECT_NAME => \Stripe\FundingInstructions::class,
             \Stripe\Identity\VerificationReport::OBJECT_NAME => \Stripe\Identity\VerificationReport::class,
             \Stripe\Identity\VerificationSession::OBJECT_NAME => \Stripe\Identity\VerificationSession::class,

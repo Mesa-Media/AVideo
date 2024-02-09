@@ -285,8 +285,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise setIpAddressTypeAsync(array $args = [])
  * @method \Aws\Result setResourceAccessForBucket(array $args = [])
  * @method \GuzzleHttp\Promise\Promise setResourceAccessForBucketAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result setupInstanceHttps(array $args = [])
  * @method \GuzzleHttp\Promise\Promise setupInstanceHttpsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result startGUISession(array $args = [])
  * @method \GuzzleHttp\Promise\Promise startGUISessionAsync(array $args = [])
  * @method \Aws\Result startInstance(array $args = [])

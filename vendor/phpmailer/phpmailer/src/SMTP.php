@@ -35,7 +35,11 @@ class SMTP
      *
      * @var string
      */
+<<<<<<< Updated upstream
     const VERSION = '6.9.1';
+=======
+    const VERSION = '6.8.1';
+>>>>>>> Stashed changes
 
     /**
      * SMTP line break constant.

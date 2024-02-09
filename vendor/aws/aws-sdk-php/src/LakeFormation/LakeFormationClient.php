@@ -21,16 +21,22 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createDataCellsFilterAsync(array $args = [])
  * @method \Aws\Result createLFTag(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createLFTagAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result createLakeFormationIdentityCenterConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createLakeFormationIdentityCenterConfigurationAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result createLakeFormationOptIn(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createLakeFormationOptInAsync(array $args = [])
  * @method \Aws\Result deleteDataCellsFilter(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteDataCellsFilterAsync(array $args = [])
  * @method \Aws\Result deleteLFTag(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteLFTagAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result deleteLakeFormationIdentityCenterConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteLakeFormationIdentityCenterConfigurationAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result deleteLakeFormationOptIn(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteLakeFormationOptInAsync(array $args = [])
  * @method \Aws\Result deleteObjectsOnCancel(array $args = [])

@@ -71,8 +71,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise dissociatePackageAsync(array $args = [])
  * @method \Aws\Result getCompatibleVersions(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getCompatibleVersionsAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result getDataSource(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getDataSourceAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result getDomainMaintenanceStatus(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getDomainMaintenanceStatusAsync(array $args = [])
  * @method \Aws\Result getPackageVersionHistory(array $args = [])
@@ -81,8 +84,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getUpgradeHistoryAsync(array $args = [])
  * @method \Aws\Result getUpgradeStatus(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getUpgradeStatusAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listDataSources(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listDataSourcesAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listDomainMaintenances(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listDomainMaintenancesAsync(array $args = [])
  * @method \Aws\Result listDomainNames(array $args = [])

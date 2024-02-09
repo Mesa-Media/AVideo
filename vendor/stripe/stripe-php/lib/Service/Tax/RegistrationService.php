@@ -37,6 +37,7 @@ class RegistrationService extends \Stripe\Service\AbstractService
     }
 
     /**
+<<<<<<< Updated upstream
      * Returns a Tax <code>Registration</code> object.
      *
      * @param string $id
@@ -53,6 +54,8 @@ class RegistrationService extends \Stripe\Service\AbstractService
     }
 
     /**
+=======
+>>>>>>> Stashed changes
      * Updates an existing Tax <code>Registration</code> object.
      *
      * A registration cannot be deleted after it has been created. If you wish to end a

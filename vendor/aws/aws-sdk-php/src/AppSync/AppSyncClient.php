@@ -101,8 +101,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listTypesAsync(array $args = [])
  * @method \Aws\Result listTypesByAssociation(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listTypesByAssociationAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result startDataSourceIntrospection(array $args = [])
  * @method \GuzzleHttp\Promise\Promise startDataSourceIntrospectionAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result startSchemaCreation(array $args = [])
  * @method \GuzzleHttp\Promise\Promise startSchemaCreationAsync(array $args = [])
  * @method \Aws\Result startSchemaMerge(array $args = [])

@@ -263,7 +263,11 @@ class Integer extends Base
         $r = $this->value->powMod($temp, static::$modulo[$this->instanceID]);
 
         while (!$t->equals($one)) {
+<<<<<<< Updated upstream
             for ($i = clone $one; $i->compare($m) < 0; $i = $i->add($one)) {
+=======
+            for ($i == clone $one; $i->compare($m) < 0; $i = $i->add($one)) {
+>>>>>>> Stashed changes
                 if ($t->powMod($two->pow($i), static::$modulo[$this->instanceID])->equals($one)) {
                     break;
                 }

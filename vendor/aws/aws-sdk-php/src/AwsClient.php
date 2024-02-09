@@ -6,7 +6,10 @@ use Aws\Api\DocModel;
 use Aws\Api\Service;
 use Aws\EndpointDiscovery\EndpointDiscoveryMiddleware;
 use Aws\EndpointV2\EndpointProviderV2;
+<<<<<<< Updated upstream
 use Aws\EndpointV2\EndpointV2Middleware;
+=======
+>>>>>>> Stashed changes
 use Aws\Exception\AwsException;
 use Aws\Signature\SignatureProvider;
 use GuzzleHttp\Psr7\Uri;
@@ -468,6 +471,7 @@ class AwsClient implements AwsClientInterface
         }
     }
 
+<<<<<<< Updated upstream
     private function addQueryCompatibleInputMiddleware(Service $api)
     {
             $list = $this->getHandlerList();
@@ -477,6 +481,8 @@ class AwsClient implements AwsClientInterface
             );
     }
 
+=======
+>>>>>>> Stashed changes
     private function addInvocationId()
     {
         // Add invocation id to each request

@@ -35,8 +35,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise describeBridgeAsync(array $args = [])
  * @method \Aws\Result describeFlow(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeFlowAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result describeFlowSourceMetadata(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeFlowSourceMetadataAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result describeGateway(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeGatewayAsync(array $args = [])
  * @method \Aws\Result describeGatewayInstance(array $args = [])

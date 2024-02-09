@@ -15,6 +15,7 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise createKxClusterAsync(array $args = [])
  * @method \Aws\Result createKxDatabase(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createKxDatabaseAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result createKxDataview(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createKxDataviewAsync(array $args = [])
  * @method \Aws\Result createKxEnvironment(array $args = [])
@@ -25,12 +26,19 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise createKxUserAsync(array $args = [])
  * @method \Aws\Result createKxVolume(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createKxVolumeAsync(array $args = [])
+=======
+ * @method \Aws\Result createKxEnvironment(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createKxEnvironmentAsync(array $args = [])
+ * @method \Aws\Result createKxUser(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createKxUserAsync(array $args = [])
+>>>>>>> Stashed changes
  * @method \Aws\Result deleteEnvironment(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteEnvironmentAsync(array $args = [])
  * @method \Aws\Result deleteKxCluster(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteKxClusterAsync(array $args = [])
  * @method \Aws\Result deleteKxDatabase(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteKxDatabaseAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result deleteKxDataview(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteKxDataviewAsync(array $args = [])
  * @method \Aws\Result deleteKxEnvironment(array $args = [])
@@ -41,6 +49,12 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise deleteKxUserAsync(array $args = [])
  * @method \Aws\Result deleteKxVolume(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteKxVolumeAsync(array $args = [])
+=======
+ * @method \Aws\Result deleteKxEnvironment(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteKxEnvironmentAsync(array $args = [])
+ * @method \Aws\Result deleteKxUser(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteKxUserAsync(array $args = [])
+>>>>>>> Stashed changes
  * @method \Aws\Result getEnvironment(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getEnvironmentAsync(array $args = [])
  * @method \Aws\Result getKxChangeset(array $args = [])
@@ -51,6 +65,7 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise getKxConnectionStringAsync(array $args = [])
  * @method \Aws\Result getKxDatabase(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getKxDatabaseAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result getKxDataview(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getKxDataviewAsync(array $args = [])
  * @method \Aws\Result getKxEnvironment(array $args = [])
@@ -61,6 +76,12 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise getKxUserAsync(array $args = [])
  * @method \Aws\Result getKxVolume(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getKxVolumeAsync(array $args = [])
+=======
+ * @method \Aws\Result getKxEnvironment(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getKxEnvironmentAsync(array $args = [])
+ * @method \Aws\Result getKxUser(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getKxUserAsync(array $args = [])
+>>>>>>> Stashed changes
  * @method \Aws\Result listEnvironments(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listEnvironmentsAsync(array $args = [])
  * @method \Aws\Result listKxChangesets(array $args = [])
@@ -71,6 +92,7 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise listKxClustersAsync(array $args = [])
  * @method \Aws\Result listKxDatabases(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listKxDatabasesAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listKxDataviews(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listKxDataviewsAsync(array $args = [])
  * @method \Aws\Result listKxEnvironments(array $args = [])
@@ -81,6 +103,12 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise listKxUsersAsync(array $args = [])
  * @method \Aws\Result listKxVolumes(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listKxVolumesAsync(array $args = [])
+=======
+ * @method \Aws\Result listKxEnvironments(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listKxEnvironmentsAsync(array $args = [])
+ * @method \Aws\Result listKxUsers(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listKxUsersAsync(array $args = [])
+>>>>>>> Stashed changes
  * @method \Aws\Result listTagsForResource(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listTagsForResourceAsync(array $args = [])
  * @method \Aws\Result tagResource(array $args = [])
@@ -95,15 +123,21 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise updateKxClusterDatabasesAsync(array $args = [])
  * @method \Aws\Result updateKxDatabase(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateKxDatabaseAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result updateKxDataview(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateKxDataviewAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result updateKxEnvironment(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateKxEnvironmentAsync(array $args = [])
  * @method \Aws\Result updateKxEnvironmentNetwork(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateKxEnvironmentNetworkAsync(array $args = [])
  * @method \Aws\Result updateKxUser(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateKxUserAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result updateKxVolume(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateKxVolumeAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  */
 class finspaceClient extends AwsClient {}

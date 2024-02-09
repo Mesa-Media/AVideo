@@ -23,8 +23,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createConfiguredTableAssociationAsync(array $args = [])
  * @method \Aws\Result createMembership(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createMembershipAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result createPrivacyBudgetTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createPrivacyBudgetTemplateAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result deleteAnalysisTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteAnalysisTemplateAsync(array $args = [])
  * @method \Aws\Result deleteCollaboration(array $args = [])
@@ -41,20 +44,26 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteMemberAsync(array $args = [])
  * @method \Aws\Result deleteMembership(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteMembershipAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result deletePrivacyBudgetTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deletePrivacyBudgetTemplateAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result getAnalysisTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getAnalysisTemplateAsync(array $args = [])
  * @method \Aws\Result getCollaboration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getCollaborationAsync(array $args = [])
  * @method \Aws\Result getCollaborationAnalysisTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getCollaborationAnalysisTemplateAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result getCollaborationConfiguredAudienceModelAssociation(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getCollaborationConfiguredAudienceModelAssociationAsync(array $args = [])
  * @method \Aws\Result getCollaborationPrivacyBudgetTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getCollaborationPrivacyBudgetTemplateAsync(array $args = [])
  * @method \Aws\Result getConfiguredAudienceModelAssociation(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getConfiguredAudienceModelAssociationAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result getConfiguredTable(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getConfiguredTableAsync(array $args = [])
  * @method \Aws\Result getConfiguredTableAnalysisRule(array $args = [])
@@ -75,12 +84,15 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listAnalysisTemplatesAsync(array $args = [])
  * @method \Aws\Result listCollaborationAnalysisTemplates(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listCollaborationAnalysisTemplatesAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listCollaborationConfiguredAudienceModelAssociations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listCollaborationConfiguredAudienceModelAssociationsAsync(array $args = [])
  * @method \Aws\Result listCollaborationPrivacyBudgetTemplates(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listCollaborationPrivacyBudgetTemplatesAsync(array $args = [])
  * @method \Aws\Result listCollaborationPrivacyBudgets(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listCollaborationPrivacyBudgetsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listCollaborations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listCollaborationsAsync(array $args = [])
  * @method \Aws\Result listConfiguredAudienceModelAssociations(array $args = [])
@@ -103,8 +115,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listSchemasAsync(array $args = [])
  * @method \Aws\Result listTagsForResource(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listTagsForResourceAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result previewPrivacyImpact(array $args = [])
  * @method \GuzzleHttp\Promise\Promise previewPrivacyImpactAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result startProtectedQuery(array $args = [])
  * @method \GuzzleHttp\Promise\Promise startProtectedQueryAsync(array $args = [])
  * @method \Aws\Result tagResource(array $args = [])

@@ -67,12 +67,15 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getImageRecipePolicyAsync(array $args = [])
  * @method \Aws\Result getInfrastructureConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getInfrastructureConfigurationAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result getLifecycleExecution(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getLifecycleExecutionAsync(array $args = [])
  * @method \Aws\Result getLifecyclePolicy(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getLifecyclePolicyAsync(array $args = [])
  * @method \Aws\Result getWorkflow(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getWorkflowAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result getWorkflowExecution(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getWorkflowExecutionAsync(array $args = [])
  * @method \Aws\Result getWorkflowStepExecution(array $args = [])
@@ -115,16 +118,22 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listLifecyclePoliciesAsync(array $args = [])
  * @method \Aws\Result listTagsForResource(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listTagsForResourceAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listWaitingWorkflowSteps(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listWaitingWorkflowStepsAsync(array $args = [])
  * @method \Aws\Result listWorkflowBuildVersions(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listWorkflowBuildVersionsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listWorkflowExecutions(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listWorkflowExecutionsAsync(array $args = [])
  * @method \Aws\Result listWorkflowStepExecutions(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listWorkflowStepExecutionsAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listWorkflows(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listWorkflowsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result putComponentPolicy(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putComponentPolicyAsync(array $args = [])
  * @method \Aws\Result putContainerRecipePolicy(array $args = [])

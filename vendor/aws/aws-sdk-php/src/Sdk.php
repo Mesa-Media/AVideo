@@ -80,10 +80,13 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionBatch(array $args = [])
  * @method \Aws\Bedrock\BedrockClient createBedrock(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionBedrock(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\BedrockAgent\BedrockAgentClient createBedrockAgent(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionBedrockAgent(array $args = [])
  * @method \Aws\BedrockAgentRuntime\BedrockAgentRuntimeClient createBedrockAgentRuntime(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionBedrockAgentRuntime(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\BedrockRuntime\BedrockRuntimeClient createBedrockRuntime(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionBedrockRuntime(array $args = [])
  * @method \Aws\BillingConductor\BillingConductorClient createBillingConductor(array $args = [])
@@ -332,8 +335,11 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionInspector(array $args = [])
  * @method \Aws\Inspector2\Inspector2Client createInspector2(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionInspector2(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\InspectorScan\InspectorScanClient createInspectorScan(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionInspectorScan(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\InternetMonitor\InternetMonitorClient createInternetMonitor(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionInternetMonitor(array $args = [])
  * @method \Aws\IoT1ClickDevicesService\IoT1ClickDevicesServiceClient createIoT1ClickDevicesService(array $args = [])
@@ -492,8 +498,11 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionMobile(array $args = [])
  * @method \Aws\Neptune\NeptuneClient createNeptune(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionNeptune(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\NeptuneGraph\NeptuneGraphClient createNeptuneGraph(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionNeptuneGraph(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Neptunedata\NeptunedataClient createNeptunedata(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionNeptunedata(array $args = [])
  * @method \Aws\NetworkFirewall\NetworkFirewallClient createNetworkFirewall(array $args = [])
@@ -708,8 +717,11 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionTransfer(array $args = [])
  * @method \Aws\Translate\TranslateClient createTranslate(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionTranslate(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\TrustedAdvisor\TrustedAdvisorClient createTrustedAdvisor(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionTrustedAdvisor(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\VPCLattice\VPCLatticeClient createVPCLattice(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionVPCLattice(array $args = [])
  * @method \Aws\VerifiedPermissions\VerifiedPermissionsClient createVerifiedPermissions(array $args = [])
@@ -757,7 +769,11 @@ namespace Aws;
  */
 class Sdk
 {
+<<<<<<< Updated upstream
     const VERSION = '3.295.7';
+=======
+    const VERSION = '3.284.0';
+>>>>>>> Stashed changes
 
     /** @var array Arguments for creating clients */
     private $args;

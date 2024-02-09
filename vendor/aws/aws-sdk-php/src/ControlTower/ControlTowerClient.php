@@ -17,10 +17,13 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getControlOperationAsync(array $args = [])
  * @method \Aws\Result getEnabledControl(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getEnabledControlAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result getLandingZone(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getLandingZoneAsync(array $args = [])
  * @method \Aws\Result getLandingZoneOperation(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getLandingZoneOperationAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listEnabledControls(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listEnabledControlsAsync(array $args = [])
  * @method \Aws\Result listLandingZones(array $args = [])

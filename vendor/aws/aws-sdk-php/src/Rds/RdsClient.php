@@ -152,8 +152,11 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise createGlobalClusterAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result createIntegration(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise createIntegrationAsync(array $args = []) (supported in versions 2014-10-31)
+<<<<<<< Updated upstream
  * @method \Aws\Result createTenantDatabase(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise createTenantDatabaseAsync(array $args = []) (supported in versions 2014-10-31)
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result deleteBlueGreenDeployment(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise deleteBlueGreenDeploymentAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result deleteCustomDBEngineVersion(array $args = []) (supported in versions 2014-10-31)
@@ -178,8 +181,11 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise deleteGlobalClusterAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result deleteIntegration(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise deleteIntegrationAsync(array $args = []) (supported in versions 2014-10-31)
+<<<<<<< Updated upstream
  * @method \Aws\Result deleteTenantDatabase(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise deleteTenantDatabaseAsync(array $args = []) (supported in versions 2014-10-31)
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result deregisterDBProxyTargets(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise deregisterDBProxyTargetsAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result describeAccountAttributes(array $args = []) (supported in versions 2014-10-31)

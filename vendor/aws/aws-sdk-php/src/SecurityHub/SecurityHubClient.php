@@ -17,8 +17,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise batchEnableStandardsAsync(array $args = [])
  * @method \Aws\Result batchGetAutomationRules(array $args = [])
  * @method \GuzzleHttp\Promise\Promise batchGetAutomationRulesAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result batchGetConfigurationPolicyAssociations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise batchGetConfigurationPolicyAssociationsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result batchGetSecurityControls(array $args = [])
  * @method \GuzzleHttp\Promise\Promise batchGetSecurityControlsAsync(array $args = [])
  * @method \Aws\Result batchGetStandardsControlAssociations(array $args = [])
@@ -35,8 +38,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createActionTargetAsync(array $args = [])
  * @method \Aws\Result createAutomationRule(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createAutomationRuleAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result createConfigurationPolicy(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createConfigurationPolicyAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result createFindingAggregator(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createFindingAggregatorAsync(array $args = [])
  * @method \Aws\Result createInsight(array $args = [])
@@ -117,10 +123,13 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise inviteMembersAsync(array $args = [])
  * @method \Aws\Result listAutomationRules(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listAutomationRulesAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listConfigurationPolicies(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listConfigurationPoliciesAsync(array $args = [])
  * @method \Aws\Result listConfigurationPolicyAssociations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listConfigurationPolicyAssociationsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listEnabledProductsForImport(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listEnabledProductsForImportAsync(array $args = [])
  * @method \Aws\Result listFindingAggregators(array $args = [])

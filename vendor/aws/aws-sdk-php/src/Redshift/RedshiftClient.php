@@ -88,8 +88,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteHsmConfigurationAsync(array $args = [])
  * @method \Aws\Result deletePartner(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deletePartnerAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result deleteRedshiftIdcApplication(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteRedshiftIdcApplicationAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result deleteResourcePolicy(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteResourcePolicyAsync(array $args = [])
  * @method \Aws\Result deleteScheduledAction(array $args = [])

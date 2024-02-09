@@ -52,12 +52,15 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteSubscriptionFilterAsync(array $args = [])
  * @method \Aws\Result describeAccountPolicies(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeAccountPoliciesAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result describeDeliveries(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeDeliveriesAsync(array $args = [])
  * @method \Aws\Result describeDeliveryDestinations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeDeliveryDestinationsAsync(array $args = [])
  * @method \Aws\Result describeDeliverySources(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeDeliverySourcesAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result describeDestinations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeDestinationsAsync(array $args = [])
  * @method \Aws\Result describeExportTasks(array $args = [])

@@ -11,14 +11,22 @@ use Psr\Http\Message\UriInterface;
  *
  * @author Tobias Schultze
  *
+<<<<<<< Updated upstream
  * @see https://datatracker.ietf.org/doc/html/rfc3986#section-5
+=======
+ * @see https://tools.ietf.org/html/rfc3986#section-5
+>>>>>>> Stashed changes
  */
 final class UriResolver
 {
     /**
      * Removes dot segments from a path and returns the new path.
      *
+<<<<<<< Updated upstream
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-5.2.4
+=======
+     * @see http://tools.ietf.org/html/rfc3986#section-5.2.4
+>>>>>>> Stashed changes
      */
     public static function removeDotSegments(string $path): string
     {
@@ -53,7 +61,11 @@ final class UriResolver
     /**
      * Converts the relative URI into a new URI that is resolved against the base URI.
      *
+<<<<<<< Updated upstream
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-5.2
+=======
+     * @see http://tools.ietf.org/html/rfc3986#section-5.2
+>>>>>>> Stashed changes
      */
     public static function resolve(UriInterface $base, UriInterface $rel): UriInterface
     {

@@ -447,7 +447,11 @@ class SignatureV4 implements SignatureInterface
         );
     }
 
+<<<<<<< Updated upstream
     protected function verifyCRTLoaded()
+=======
+    private function verifyCRTLoaded()
+>>>>>>> Stashed changes
     {
         if (!extension_loaded('awscrt')) {
             throw new CommonRuntimeException(
@@ -458,7 +462,11 @@ class SignatureV4 implements SignatureInterface
         }
     }
 
+<<<<<<< Updated upstream
     protected function createCRTStaticCredentialsProvider($credentials)
+=======
+    private function createCRTStaticCredentialsProvider($credentials)
+>>>>>>> Stashed changes
     {
         return new StaticCredentialsProvider([
             'access_key_id' => $credentials->getAccessKeyId(),
@@ -473,7 +481,11 @@ class SignatureV4 implements SignatureInterface
             self::AMZ_CONTENT_SHA256_HEADER,
             "aws-sdk-invocation-id",
             "aws-sdk-retry",
+<<<<<<< Updated upstream
             'x-amz-region-set',
+=======
+            'x-amz-region-set'
+>>>>>>> Stashed changes
         ];
         $storedHeaders = [];
 
@@ -501,6 +513,7 @@ class SignatureV4 implements SignatureInterface
      * @param CredentialsInterface $credentials
      * @param RequestInterface $request
      * @param $signingService
+<<<<<<< Updated upstream
      * @param SigningConfigAWS|null $signingConfig
      * @return RequestInterface
      */
@@ -518,6 +531,19 @@ class SignatureV4 implements SignatureInterface
             'signed_body_value' => $this->getPayload($request),
             'should_normalize_uri_path' => true,
             'use_double_uri_encode' => true,
+=======
+     * @return RequestInterface
+     */
+    protected function signWithV4a(CredentialsInterface $credentials, RequestInterface $request, $signingService)
+    {
+        $this->verifyCRTLoaded();
+        $credentials_provider = $this->createCRTStaticCredentialsProvider($credentials);
+        $signingConfig = new SigningConfigAWS([
+            'algorithm' => SigningAlgorithm::SIGv4_ASYMMETRIC,
+            'signature_type' => SignatureType::HTTP_REQUEST_HEADERS,
+            'credentials_provider' => $credentials_provider,
+            'signed_body_value' => $this->getPayload($request),
+>>>>>>> Stashed changes
             'region' => "*",
             'service' => $signingService,
             'date' => time(),

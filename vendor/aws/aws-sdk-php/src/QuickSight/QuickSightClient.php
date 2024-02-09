@@ -35,8 +35,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createNamespaceAsync(array $args = [])
  * @method \Aws\Result createRefreshSchedule(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createRefreshScheduleAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result createRoleMembership(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createRoleMembershipAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result createTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createTemplateAsync(array $args = [])
  * @method \Aws\Result createTemplateAlias(array $args = [])
@@ -81,10 +84,13 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteNamespaceAsync(array $args = [])
  * @method \Aws\Result deleteRefreshSchedule(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteRefreshScheduleAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result deleteRoleCustomPermission(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteRoleCustomPermissionAsync(array $args = [])
  * @method \Aws\Result deleteRoleMembership(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteRoleMembershipAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result deleteTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteTemplateAsync(array $args = [])
  * @method \Aws\Result deleteTemplateAlias(array $args = [])
@@ -159,8 +165,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise describeNamespaceAsync(array $args = [])
  * @method \Aws\Result describeRefreshSchedule(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeRefreshScheduleAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result describeRoleCustomPermission(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeRoleCustomPermissionAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result describeTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeTemplateAsync(array $args = [])
  * @method \Aws\Result describeTemplateAlias(array $args = [])
@@ -229,8 +238,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listNamespacesAsync(array $args = [])
  * @method \Aws\Result listRefreshSchedules(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listRefreshSchedulesAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listRoleMemberships(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listRoleMembershipsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listTagsForResource(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listTagsForResourceAsync(array $args = [])
  * @method \Aws\Result listTemplateAliases(array $args = [])
@@ -323,8 +335,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise updatePublicSharingSettingsAsync(array $args = [])
  * @method \Aws\Result updateRefreshSchedule(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateRefreshScheduleAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result updateRoleCustomPermission(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateRoleCustomPermissionAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result updateTemplate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateTemplateAsync(array $args = [])
  * @method \Aws\Result updateTemplateAlias(array $args = [])

@@ -195,7 +195,10 @@ class ErrorObject extends StripeObject
     const CODE_TAXES_CALCULATION_FAILED = 'taxes_calculation_failed';
     const CODE_TERMINAL_LOCATION_COUNTRY_UNSUPPORTED = 'terminal_location_country_unsupported';
     const CODE_TERMINAL_READER_BUSY = 'terminal_reader_busy';
+<<<<<<< Updated upstream
     const CODE_TERMINAL_READER_HARDWARE_FAULT = 'terminal_reader_hardware_fault';
+=======
+>>>>>>> Stashed changes
     const CODE_TERMINAL_READER_OFFLINE = 'terminal_reader_offline';
     const CODE_TERMINAL_READER_TIMEOUT = 'terminal_reader_timeout';
     const CODE_TESTMODE_CHARGES_ONLY = 'testmode_charges_only';

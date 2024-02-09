@@ -230,6 +230,7 @@
         },
         {
             "name": "aws/aws-crt-php",
+<<<<<<< Updated upstream
             "version": "v1.2.4",
             "version_normalized": "1.2.4.0",
             "source": {
@@ -241,6 +242,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/eb0c6e4e142224a10b08f49ebf87f32611d162b2",
                 "reference": "eb0c6e4e142224a10b08f49ebf87f32611d162b2",
+=======
+            "version": "v1.2.3",
+            "version_normalized": "1.2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/awslabs/aws-crt-php.git",
+                "reference": "5545a4fa310aec39f54279fdacebcce33b3ff382"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/5545a4fa310aec39f54279fdacebcce33b3ff382",
+                "reference": "5545a4fa310aec39f54279fdacebcce33b3ff382",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -253,7 +267,11 @@
             "suggest": {
                 "ext-awscrt": "Make sure you install awscrt native extension to use any of the functionality."
             },
+<<<<<<< Updated upstream
             "time": "2023-11-08T00:42:13+00:00",
+=======
+            "time": "2023-10-16T20:10:06+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -281,12 +299,17 @@
             ],
             "support": {
                 "issues": "https://github.com/awslabs/aws-crt-php/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/awslabs/aws-crt-php/tree/v1.2.4"
+=======
+                "source": "https://github.com/awslabs/aws-crt-php/tree/v1.2.3"
+>>>>>>> Stashed changes
             },
             "install-path": "../aws/aws-crt-php"
         },
         {
             "name": "aws/aws-sdk-php",
+<<<<<<< Updated upstream
             "version": "3.295.7",
             "version_normalized": "3.295.7.0",
             "source": {
@@ -298,6 +321,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e3ba36c6e52dce373064fbb1741547828235425f",
                 "reference": "e3ba36c6e52dce373064fbb1741547828235425f",
+=======
+            "version": "3.284.0",
+            "version_normalized": "3.284.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "1b7e926acc990509e3d13fa708cdede686b40d90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1b7e926acc990509e3d13fa708cdede686b40d90",
+                "reference": "1b7e926acc990509e3d13fa708cdede686b40d90",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -338,7 +374,11 @@
                 "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
                 "ext-sockets": "To use client-side monitoring"
             },
+<<<<<<< Updated upstream
             "time": "2024-01-05T19:10:48+00:00",
+=======
+            "time": "2023-11-03T18:13:48+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -379,7 +419,11 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/aws/aws-sdk-php/tree/3.295.7"
+=======
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.284.0"
+>>>>>>> Stashed changes
             },
             "install-path": "../aws/aws-sdk-php"
         },
@@ -1212,6 +1256,7 @@
         },
         {
             "name": "guzzlehttp/guzzle",
+<<<<<<< Updated upstream
             "version": "7.8.1",
             "version_normalized": "7.8.1.0",
             "source": {
@@ -1223,6 +1268,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/guzzle/zipball/41042bc7ab002487b876a0683fc8dce04ddce104",
                 "reference": "41042bc7ab002487b876a0683fc8dce04ddce104",
+=======
+            "version": "7.8.0",
+            "version_normalized": "7.8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "1110f66a6530a40fe7aea0378fe608ee2b2248f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/1110f66a6530a40fe7aea0378fe608ee2b2248f9",
+                "reference": "1110f66a6530a40fe7aea0378fe608ee2b2248f9",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -1241,7 +1299,11 @@
                 "ext-curl": "*",
                 "php-http/client-integration-tests": "dev-master#2c025848417c1135031fdf9c728ee53d0a7ceaee as 3.0.999",
                 "php-http/message-factory": "^1.1",
+<<<<<<< Updated upstream
                 "phpunit/phpunit": "^8.5.36 || ^9.6.15",
+=======
+                "phpunit/phpunit": "^8.5.29 || ^9.5.23",
+>>>>>>> Stashed changes
                 "psr/log": "^1.1 || ^2.0 || ^3.0"
             },
             "suggest": {
@@ -1249,7 +1311,11 @@
                 "ext-intl": "Required for Internationalized Domain Name (IDN) support",
                 "psr/log": "Required for using the Log middleware"
             },
+<<<<<<< Updated upstream
             "time": "2023-12-03T20:35:24+00:00",
+=======
+            "time": "2023-08-27T10:20:53+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -1321,7 +1387,11 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/guzzle/guzzle/tree/7.8.1"
+=======
+                "source": "https://github.com/guzzle/guzzle/tree/7.8.0"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -1341,6 +1411,7 @@
         },
         {
             "name": "guzzlehttp/promises",
+<<<<<<< Updated upstream
             "version": "2.0.2",
             "version_normalized": "2.0.2.0",
             "source": {
@@ -1352,16 +1423,36 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/promises/zipball/bbff78d96034045e58e13dedd6ad91b5d1253223",
                 "reference": "bbff78d96034045e58e13dedd6ad91b5d1253223",
+=======
+            "version": "2.0.1",
+            "version_normalized": "2.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/promises.git",
+                "reference": "111166291a0f8130081195ac4556a5587d7f1b5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/111166291a0f8130081195ac4556a5587d7f1b5d",
+                "reference": "111166291a0f8130081195ac4556a5587d7f1b5d",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2.5 || ^8.0"
             },
             "require-dev": {
+<<<<<<< Updated upstream
                 "bamarni/composer-bin-plugin": "^1.8.2",
                 "phpunit/phpunit": "^8.5.36 || ^9.6.15"
             },
             "time": "2023-12-03T20:19:20+00:00",
+=======
+                "bamarni/composer-bin-plugin": "^1.8.1",
+                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
+            },
+            "time": "2023-08-03T15:11:55+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -1407,7 +1498,11 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/guzzle/promises/tree/2.0.2"
+=======
+                "source": "https://github.com/guzzle/promises/tree/2.0.1"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -1427,6 +1522,7 @@
         },
         {
             "name": "guzzlehttp/psr7",
+<<<<<<< Updated upstream
             "version": "2.6.2",
             "version_normalized": "2.6.2.0",
             "source": {
@@ -1438,6 +1534,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/psr7/zipball/45b30f99ac27b5ca93cb4831afe16285f57b8221",
                 "reference": "45b30f99ac27b5ca93cb4831afe16285f57b8221",
+=======
+            "version": "2.6.1",
+            "version_normalized": "2.6.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/psr7.git",
+                "reference": "be45764272e8873c72dbe3d2edcfdfcc3bc9f727"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/be45764272e8873c72dbe3d2edcfdfcc3bc9f727",
+                "reference": "be45764272e8873c72dbe3d2edcfdfcc3bc9f727",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -1458,7 +1567,11 @@
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
             },
+<<<<<<< Updated upstream
             "time": "2023-12-03T20:05:35+00:00",
+=======
+            "time": "2023-08-27T10:13:57+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -1526,7 +1639,11 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/guzzle/psr7/tree/2.6.2"
+=======
+                "source": "https://github.com/guzzle/psr7/tree/2.6.1"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -1546,6 +1663,7 @@
         },
         {
             "name": "hybridauth/hybridauth",
+<<<<<<< Updated upstream
             "version": "v3.11.0",
             "version_normalized": "3.11.0.0",
             "source": {
@@ -1557,6 +1675,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/b70b9cbe1c7fa99b5847c5868610a8f024cc7d38",
                 "reference": "b70b9cbe1c7fa99b5847c5868610a8f024cc7d38",
+=======
+            "version": "v3.10.0",
+            "version_normalized": "3.10.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hybridauth/hybridauth.git",
+                "reference": "9b5e8a7782b630d5b1151003999d6db91a863ffe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/9b5e8a7782b630d5b1151003999d6db91a863ffe",
+                "reference": "9b5e8a7782b630d5b1151003999d6db91a863ffe",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -1570,7 +1701,11 @@
                 "firebase/php-jwt": "Needed to support Apple provider",
                 "phpseclib/phpseclib": "Needed to support Apple provider"
             },
+<<<<<<< Updated upstream
             "time": "2024-01-02T23:09:56+00:00",
+=======
+            "time": "2023-07-25T15:02:07+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1605,7 +1740,11 @@
             "support": {
                 "gitter": "https://gitter.im/hybridauth/hybridauth",
                 "issues": "https://github.com/hybridauth/hybridauth/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/hybridauth/hybridauth/tree/v3.11.0"
+=======
+                "source": "https://github.com/hybridauth/hybridauth/tree/v3.10.0"
+>>>>>>> Stashed changes
             },
             "install-path": "../hybridauth/hybridauth"
         },
@@ -1678,6 +1817,68 @@
                 "source": "https://github.com/JamesHeinrich/getID3/tree/v1.9.22"
             },
             "install-path": "../james-heinrich/getid3"
+        },
+        {
+            "name": "jean85/pretty-package-versions",
+            "version": "2.0.5",
+            "version_normalized": "2.0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Jean85/pretty-package-versions.git",
+                "reference": "ae547e455a3d8babd07b96966b17d7fd21d9c6af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/ae547e455a3d8babd07b96966b17d7fd21d9c6af",
+                "reference": "ae547e455a3d8babd07b96966b17d7fd21d9c6af",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.0.0",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "jean85/composer-provided-replaced-stub-package": "^1.0",
+                "phpstan/phpstan": "^0.12.66",
+                "phpunit/phpunit": "^7.5|^8.5|^9.4",
+                "vimeo/psalm": "^4.3"
+            },
+            "time": "2021-10-08T21:21:46+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Jean85\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alessandro Lai",
+                    "email": "alessandro.lai85@gmail.com"
+                }
+            ],
+            "description": "A library to get pretty versions strings of installed dependencies",
+            "keywords": [
+                "composer",
+                "package",
+                "release",
+                "versions"
+            ],
+            "support": {
+                "issues": "https://github.com/Jean85/pretty-package-versions/issues",
+                "source": "https://github.com/Jean85/pretty-package-versions/tree/2.0.5"
+            },
+            "install-path": "../jean85/pretty-package-versions"
         },
         {
             "name": "mervick/emojionearea",
@@ -2009,6 +2210,7 @@
         },
         {
             "name": "norkunas/onesignal-php-api",
+<<<<<<< Updated upstream
             "version": "v2.14.0",
             "version_normalized": "2.14.0.0",
             "source": {
@@ -2020,6 +2222,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/norkunas/onesignal-php-api/zipball/a26825ead9603133a5aa2fa38303d3096aa5d8a1",
                 "reference": "a26825ead9603133a5aa2fa38303d3096aa5d8a1",
+=======
+            "version": "v2.12.0",
+            "version_normalized": "2.12.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/norkunas/onesignal-php-api.git",
+                "reference": "f7298c5c8f9babd4561101e65809b0efe6bec167"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/norkunas/onesignal-php-api/zipball/f7298c5c8f9babd4561101e65809b0efe6bec167",
+                "reference": "f7298c5c8f9babd4561101e65809b0efe6bec167",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -2033,6 +2248,7 @@
                 "symfony/options-resolver": "^4.4|^5.0|^6.0|^7.0"
             },
             "require-dev": {
+<<<<<<< Updated upstream
                 "nyholm/psr7": "^1.8.1",
                 "php-cs-fixer/shim": "^v3.40.0",
                 "phpstan/phpstan": "^1.10.46",
@@ -2041,6 +2257,16 @@
                 "symfony/phpunit-bridge": "^5.3|^6.2|^7.0"
             },
             "time": "2023-11-30T04:38:36+00:00",
+=======
+                "nyholm/psr7": "^1.5.1",
+                "php-cs-fixer/shim": "^3.13.2",
+                "phpstan/phpstan": "^1.9.3",
+                "phpstan/phpstan-phpunit": "^1.3.2",
+                "symfony/http-client": "^5.0|^6.2",
+                "symfony/phpunit-bridge": "^5.3|^6.2"
+            },
+            "time": "2023-10-03T04:00:41+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2074,12 +2300,17 @@
             ],
             "support": {
                 "issues": "https://github.com/norkunas/onesignal-php-api/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/norkunas/onesignal-php-api/tree/v2.14.0"
+=======
+                "source": "https://github.com/norkunas/onesignal-php-api/tree/v2.12.0"
+>>>>>>> Stashed changes
             },
             "install-path": "../norkunas/onesignal-php-api"
         },
         {
             "name": "nyholm/psr7",
+<<<<<<< Updated upstream
             "version": "1.8.1",
             "version_normalized": "1.8.1.0",
             "source": {
@@ -2091,6 +2322,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Nyholm/psr7/zipball/aa5fc277a4f5508013d571341ade0c3886d4d00e",
                 "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e",
+=======
+            "version": "1.8.0",
+            "version_normalized": "1.8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nyholm/psr7.git",
+                "reference": "3cb4d163b58589e47b35103e8e5e6a6a475b47be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/3cb4d163b58589e47b35103e8e5e6a6a475b47be",
+                "reference": "3cb4d163b58589e47b35103e8e5e6a6a475b47be",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -2110,7 +2354,11 @@
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.4",
                 "symfony/error-handler": "^4.4"
             },
+<<<<<<< Updated upstream
             "time": "2023-11-13T09:31:12+00:00",
+=======
+            "time": "2023-05-02T11:26:24+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2145,7 +2393,11 @@
             ],
             "support": {
                 "issues": "https://github.com/Nyholm/psr7/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/Nyholm/psr7/tree/1.8.1"
+=======
+                "source": "https://github.com/Nyholm/psr7/tree/1.8.0"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -2496,6 +2748,7 @@
         },
         {
             "name": "phpmailer/phpmailer",
+<<<<<<< Updated upstream
             "version": "v6.9.1",
             "version_normalized": "6.9.1.0",
             "source": {
@@ -2507,6 +2760,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/039de174cd9c17a8389754d3b877a2ed22743e18",
                 "reference": "039de174cd9c17a8389754d3b877a2ed22743e18",
+=======
+            "version": "v6.8.1",
+            "version_normalized": "6.8.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPMailer/PHPMailer.git",
+                "reference": "e88da8d679acc3824ff231fdc553565b802ac016"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e88da8d679acc3824ff231fdc553565b802ac016",
+                "reference": "e88da8d679acc3824ff231fdc553565b802ac016",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -2536,7 +2802,11 @@
                 "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
                 "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication"
             },
+<<<<<<< Updated upstream
             "time": "2023-11-25T22:23:28+00:00",
+=======
+            "time": "2023-08-29T08:26:30+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2568,7 +2838,11 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.9.1"
+=======
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.8.1"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -2580,6 +2854,7 @@
         },
         {
             "name": "phpseclib/phpseclib",
+<<<<<<< Updated upstream
             "version": "3.0.35",
             "version_normalized": "3.0.35.0",
             "source": {
@@ -2591,6 +2866,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/4b1827beabce71953ca479485c0ae9c51287f2fe",
                 "reference": "4b1827beabce71953ca479485c0ae9c51287f2fe",
+=======
+            "version": "3.0.33",
+            "version_normalized": "3.0.33.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "33fa69b2514a61138dd48e7a49f99445711e0ad0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/33fa69b2514a61138dd48e7a49f99445711e0ad0",
+                "reference": "33fa69b2514a61138dd48e7a49f99445711e0ad0",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -2608,7 +2896,11 @@
                 "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
                 "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
             },
+<<<<<<< Updated upstream
             "time": "2023-12-29T01:59:53+00:00",
+=======
+            "time": "2023-10-21T14:00:39+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2673,7 +2965,11 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/phpseclib/phpseclib/tree/3.0.35"
+=======
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.33"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -4067,6 +4363,7 @@
         },
         {
             "name": "scssphp/scssphp",
+<<<<<<< Updated upstream
             "version": "v1.12.0",
             "version_normalized": "1.12.0.0",
             "source": {
@@ -4078,6 +4375,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/scssphp/scssphp/zipball/a6b20c170ddb95f116b3d148a466a7bed1e85c35",
                 "reference": "a6b20c170ddb95f116b3d148a466a7bed1e85c35",
+=======
+            "version": "v1.11.1",
+            "version_normalized": "1.11.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scssphp/scssphp.git",
+                "reference": "ace2503684bab0dcc817d7614c8a54b865122414"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scssphp/scssphp/zipball/ace2503684bab0dcc817d7614c8a54b865122414",
+                "reference": "ace2503684bab0dcc817d7614c8a54b865122414",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -4100,7 +4410,11 @@
                 "ext-iconv": "Can be used as fallback when ext-mbstring is not available",
                 "ext-mbstring": "For best performance, mbstring should be installed as it is faster than ext-iconv"
             },
+<<<<<<< Updated upstream
             "time": "2023-11-14T14:56:09+00:00",
+=======
+            "time": "2023-09-24T13:38:17+00:00",
+>>>>>>> Stashed changes
             "bin": [
                 "bin/pscss"
             ],
@@ -4144,9 +4458,160 @@
             ],
             "support": {
                 "issues": "https://github.com/scssphp/scssphp/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/scssphp/scssphp/tree/v1.12.0"
+=======
+                "source": "https://github.com/scssphp/scssphp/tree/v1.11.1"
+>>>>>>> Stashed changes
             },
             "install-path": "../scssphp/scssphp"
+        },
+        {
+            "name": "sentry/sdk",
+            "version": "4.0.0",
+            "version_normalized": "4.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getsentry/sentry-php-sdk.git",
+                "reference": "fcbca864e8d1dc712f3ecfaa95ea89d024fb2e53"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/getsentry/sentry-php-sdk/zipball/fcbca864e8d1dc712f3ecfaa95ea89d024fb2e53",
+                "reference": "fcbca864e8d1dc712f3ecfaa95ea89d024fb2e53",
+                "shasum": ""
+            },
+            "require": {
+                "sentry/sentry": "^4.0"
+            },
+            "time": "2023-11-06T10:23:19+00:00",
+            "type": "metapackage",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sentry",
+                    "email": "accounts@sentry.io"
+                }
+            ],
+            "description": "This is a meta package of sentry/sentry. We recommend using sentry/sentry directly.",
+            "homepage": "http://sentry.io",
+            "keywords": [
+                "crash-reporting",
+                "crash-reports",
+                "error-handler",
+                "error-monitoring",
+                "log",
+                "logging",
+                "sentry"
+            ],
+            "support": {
+                "issues": "https://github.com/getsentry/sentry-php-sdk/issues",
+                "source": "https://github.com/getsentry/sentry-php-sdk/tree/4.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://sentry.io/",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://sentry.io/pricing/",
+                    "type": "custom"
+                }
+            ],
+            "install-path": null
+        },
+        {
+            "name": "sentry/sentry",
+            "version": "4.0.1",
+            "version_normalized": "4.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getsentry/sentry-php.git",
+                "reference": "fa41522f1fe5ff77a33a9db749c0ca7ec332f50a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/fa41522f1fe5ff77a33a9db749c0ca7ec332f50a",
+                "reference": "fa41522f1fe5ff77a33a9db749c0ca7ec332f50a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/psr7": "^1.8.4|^2.1.1",
+                "jean85/pretty-package-versions": "^1.5|^2.0.4",
+                "php": "^7.2|^8.0",
+                "psr/log": "^1.0|^2.0|^3.0",
+                "symfony/options-resolver": "^4.4.30|^5.0.11|^6.0|^7.0"
+            },
+            "conflict": {
+                "raven/raven": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.4",
+                "guzzlehttp/promises": "^1.0|^2.0",
+                "guzzlehttp/psr7": "^1.8.4|^2.1.1",
+                "monolog/monolog": "^1.6|^2.0|^3.0",
+                "phpbench/phpbench": "^1.0",
+                "phpstan/phpstan": "^1.3",
+                "phpunit/phpunit": "^8.5.14|^9.4",
+                "symfony/phpunit-bridge": "^5.2|^6.0",
+                "vimeo/psalm": "^4.17"
+            },
+            "suggest": {
+                "monolog/monolog": "Allow sending log messages to Sentry by using the included Monolog handler."
+            },
+            "time": "2023-11-13T13:00:41+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Sentry\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sentry",
+                    "email": "accounts@sentry.io"
+                }
+            ],
+            "description": "A PHP SDK for Sentry (http://sentry.io)",
+            "homepage": "http://sentry.io",
+            "keywords": [
+                "crash-reporting",
+                "crash-reports",
+                "error-handler",
+                "error-monitoring",
+                "log",
+                "logging",
+                "sentry"
+            ],
+            "support": {
+                "issues": "https://github.com/getsentry/sentry-php/issues",
+                "source": "https://github.com/getsentry/sentry-php/tree/4.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://sentry.io/",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://sentry.io/pricing/",
+                    "type": "custom"
+                }
+            ],
+            "install-path": "../sentry/sentry"
         },
         {
             "name": "singpolyma/openpgp-php",
@@ -4219,6 +4684,7 @@
         },
         {
             "name": "stripe/stripe-php",
+<<<<<<< Updated upstream
             "version": "v13.8.0",
             "version_normalized": "13.8.0.0",
             "source": {
@@ -4230,6 +4696,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/stripe/stripe-php/zipball/577d64a3fdc92ba2915263299a69136a2813f4a3",
                 "reference": "577d64a3fdc92ba2915263299a69136a2813f4a3",
+=======
+            "version": "v13.2.0",
+            "version_normalized": "13.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stripe/stripe-php.git",
+                "reference": "e0a960c8655b21b21c3ba2e5927f432eeda9105f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/e0a960c8655b21b21c3ba2e5927f432eeda9105f",
+                "reference": "e0a960c8655b21b21c3ba2e5927f432eeda9105f",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -4243,7 +4722,11 @@
                 "phpstan/phpstan": "^1.2",
                 "phpunit/phpunit": "^5.7 || ^9.0"
             },
+<<<<<<< Updated upstream
             "time": "2024-01-04T19:52:48+00:00",
+=======
+            "time": "2023-11-02T22:32:22+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -4275,7 +4758,11 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/stripe/stripe-php/tree/v13.8.0"
+=======
+                "source": "https://github.com/stripe/stripe-php/tree/v13.2.0"
+>>>>>>> Stashed changes
             },
             "install-path": "../stripe/stripe-php"
         },
@@ -4623,6 +5110,7 @@
         },
         {
             "name": "symfony/http-client",
+<<<<<<< Updated upstream
             "version": "v5.4.34",
             "version_normalized": "5.4.34.0",
             "source": {
@@ -4634,6 +5122,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-client/zipball/8fe833b758bc5b325e9d96a913376d6d57a90fb0",
                 "reference": "8fe833b758bc5b325e9d96a913376d6d57a90fb0",
+=======
+            "version": "v5.4.29",
+            "version_normalized": "5.4.29.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-client.git",
+                "reference": "04784c66cbee613a827363ee1e65db65392893c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/04784c66cbee613a827363ee1e65db65392893c1",
+                "reference": "04784c66cbee613a827363ee1e65db65392893c1",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -4666,7 +5167,11 @@
                 "symfony/process": "^4.4|^5.0|^6.0",
                 "symfony/stopwatch": "^4.4|^5.0|^6.0"
             },
+<<<<<<< Updated upstream
             "time": "2023-12-02T08:41:43+00:00",
+=======
+            "time": "2023-09-14T20:49:15+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -4697,7 +5202,11 @@
                 "http"
             ],
             "support": {
+<<<<<<< Updated upstream
                 "source": "https://github.com/symfony/http-client/tree/v5.4.34"
+=======
+                "source": "https://github.com/symfony/http-client/tree/v5.4.29"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -6065,6 +6574,7 @@
         },
         {
             "name": "symfony/translation",
+<<<<<<< Updated upstream
             "version": "v5.4.31",
             "version_normalized": "5.4.31.0",
             "source": {
@@ -6076,6 +6586,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/translation/zipball/ba72f72fceddf36f00bd495966b5873f2d17ad8f",
                 "reference": "ba72f72fceddf36f00bd495966b5873f2d17ad8f",
+=======
+            "version": "v5.4.30",
+            "version_normalized": "5.4.30.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation.git",
+                "reference": "8560dc532e4e48d331937532a7cbfd2a9f9f53ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/8560dc532e4e48d331937532a7cbfd2a9f9f53ce",
+                "reference": "8560dc532e4e48d331937532a7cbfd2a9f9f53ce",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -6114,7 +6637,11 @@
                 "symfony/config": "",
                 "symfony/yaml": ""
             },
+<<<<<<< Updated upstream
             "time": "2023-11-03T16:16:43+00:00",
+=======
+            "time": "2023-10-28T09:19:54+00:00",
+>>>>>>> Stashed changes
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -6145,7 +6672,11 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< Updated upstream
                 "source": "https://github.com/symfony/translation/tree/v5.4.31"
+=======
+                "source": "https://github.com/symfony/translation/tree/v5.4.30"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {

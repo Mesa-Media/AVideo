@@ -101,8 +101,11 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise describeTestSetDiscrepancyReportAsync(array $args = [])
  * @method \Aws\Result describeTestSetGeneration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeTestSetGenerationAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result generateBotElement(array $args = [])
  * @method \GuzzleHttp\Promise\Promise generateBotElementAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result getTestExecutionArtifactsUrl(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getTestExecutionArtifactsUrlAsync(array $args = [])
  * @method \Aws\Result listAggregatedUtterances(array $args = [])

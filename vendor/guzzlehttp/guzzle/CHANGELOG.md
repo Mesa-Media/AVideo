@@ -3,6 +3,7 @@
 Please refer to [UPGRADING](UPGRADING.md) guide for upgrading to a major version.
 
 
+<<<<<<< Updated upstream
 ## 7.8.1 - 2023-12-03
 
 ### Changed
@@ -11,6 +12,8 @@ Please refer to [UPGRADING](UPGRADING.md) guide for upgrading to a major version
 - Replaced `call_user_func*` with native calls
 
 
+=======
+>>>>>>> Stashed changes
 ## 7.8.0 - 2023-08-27
 
 ### Added
@@ -653,6 +656,7 @@ object).
     string on a URL: Now allowing many more characters to be present in the
     query string without being percent encoded. See
     https://datatracker.ietf.org/doc/html/rfc3986#appendix-A
+
 
 
 ## 5.0.1 - 2014-10-16

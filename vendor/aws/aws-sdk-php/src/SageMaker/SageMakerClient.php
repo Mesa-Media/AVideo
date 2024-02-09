@@ -27,8 +27,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createAutoMLJobAsync(array $args = [])
  * @method \Aws\Result createAutoMLJobV2(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createAutoMLJobV2Async(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result createCluster(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createClusterAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result createCodeRepository(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createCodeRepositoryAsync(array $args = [])
  * @method \Aws\Result createCompilationJob(array $args = [])
@@ -237,10 +240,13 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise describeAutoMLJobAsync(array $args = [])
  * @method \Aws\Result describeAutoMLJobV2(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeAutoMLJobV2Async(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result describeCluster(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeClusterAsync(array $args = [])
  * @method \Aws\Result describeClusterNode(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeClusterNodeAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result describeCodeRepository(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeCodeRepositoryAsync(array $args = [])
  * @method \Aws\Result describeCompilationJob(array $args = [])

@@ -108,6 +108,7 @@ if (PHP_VERSION_ID < 80000) {
         }
     }
 
+<<<<<<< Updated upstream
     if (function_exists('stream_wrapper_register') && stream_wrapper_register('phpvfscomposer', 'Composer\BinProxyWrapper')) {
         include("phpvfscomposer://" . __DIR__ . '/..'.'/mtdowling/jmespath.php/bin/jp.php');
         exit(0);
@@ -115,3 +116,14 @@ if (PHP_VERSION_ID < 80000) {
 }
 
 include __DIR__ . '/..'.'/mtdowling/jmespath.php/bin/jp.php';
+=======
+    if (
+        (function_exists('stream_get_wrappers') && in_array('phpvfscomposer', stream_get_wrappers(), true))
+        || (function_exists('stream_wrapper_register') && stream_wrapper_register('phpvfscomposer', 'Composer\BinProxyWrapper'))
+    ) {
+        return include("phpvfscomposer://" . __DIR__ . '/..'.'/mtdowling/jmespath.php/bin/jp.php');
+    }
+}
+
+return include __DIR__ . '/..'.'/mtdowling/jmespath.php/bin/jp.php';
+>>>>>>> Stashed changes

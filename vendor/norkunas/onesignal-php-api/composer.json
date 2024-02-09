@@ -20,12 +20,21 @@
         "symfony/options-resolver": "^4.4|^5.0|^6.0|^7.0"
     },
     "require-dev": {
+<<<<<<< Updated upstream
         "nyholm/psr7": "^1.8.1",
         "php-cs-fixer/shim": "^v3.40.0",
         "phpstan/phpstan": "^1.10.46",
         "phpstan/phpstan-phpunit": "^1.3.15",
         "symfony/http-client": "^5.0|^6.2|^7.0",
         "symfony/phpunit-bridge": "^5.3|^6.2|^7.0"
+=======
+        "nyholm/psr7": "^1.5.1",
+        "php-cs-fixer/shim": "^3.13.2",
+        "phpstan/phpstan": "^1.9.3",
+        "phpstan/phpstan-phpunit": "^1.3.2",
+        "symfony/http-client": "^5.0|^6.2",
+        "symfony/phpunit-bridge": "^5.3|^6.2"
+>>>>>>> Stashed changes
     },
     "autoload": {
         "psr-4": { "OneSignal\\": "src/" }

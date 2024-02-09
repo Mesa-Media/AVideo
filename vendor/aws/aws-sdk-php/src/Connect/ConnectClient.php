@@ -7,8 +7,11 @@ use Aws\AwsClient;
  * This client is used to interact with the **Amazon Connect Service** service.
  * @method \Aws\Result activateEvaluationForm(array $args = [])
  * @method \GuzzleHttp\Promise\Promise activateEvaluationFormAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result associateAnalyticsDataSet(array $args = [])
  * @method \GuzzleHttp\Promise\Promise associateAnalyticsDataSetAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result associateApprovedOrigin(array $args = [])
  * @method \GuzzleHttp\Promise\Promise associateApprovedOriginAsync(array $args = [])
  * @method \Aws\Result associateBot(array $args = [])
@@ -33,6 +36,7 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise associateSecurityKeyAsync(array $args = [])
  * @method \Aws\Result associateTrafficDistributionGroupUser(array $args = [])
  * @method \GuzzleHttp\Promise\Promise associateTrafficDistributionGroupUserAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result associateUserProficiencies(array $args = [])
  * @method \GuzzleHttp\Promise\Promise associateUserProficienciesAsync(array $args = [])
  * @method \Aws\Result batchAssociateAnalyticsDataSet(array $args = [])
@@ -43,6 +47,10 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise batchGetFlowAssociationAsync(array $args = [])
  * @method \Aws\Result batchPutContact(array $args = [])
  * @method \GuzzleHttp\Promise\Promise batchPutContactAsync(array $args = [])
+=======
+ * @method \Aws\Result batchGetFlowAssociation(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise batchGetFlowAssociationAsync(array $args = [])
+>>>>>>> Stashed changes
  * @method \Aws\Result claimPhoneNumber(array $args = [])
  * @method \GuzzleHttp\Promise\Promise claimPhoneNumberAsync(array $args = [])
  * @method \Aws\Result createAgentStatus(array $args = [])
@@ -63,8 +71,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createParticipantAsync(array $args = [])
  * @method \Aws\Result createPersistentContactAssociation(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createPersistentContactAssociationAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result createPredefinedAttribute(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createPredefinedAttributeAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result createPrompt(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createPromptAsync(array $args = [])
  * @method \Aws\Result createQueue(array $args = [])
@@ -109,8 +120,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteInstanceAsync(array $args = [])
  * @method \Aws\Result deleteIntegrationAssociation(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteIntegrationAssociationAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result deletePredefinedAttribute(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deletePredefinedAttributeAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result deletePrompt(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deletePromptAsync(array $args = [])
  * @method \Aws\Result deleteQueue(array $args = [])
@@ -161,8 +175,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise describeInstanceStorageConfigAsync(array $args = [])
  * @method \Aws\Result describePhoneNumber(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describePhoneNumberAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result describePredefinedAttribute(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describePredefinedAttributeAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result describePrompt(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describePromptAsync(array $args = [])
  * @method \Aws\Result describeQueue(array $args = [])
@@ -211,8 +228,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise disassociateSecurityKeyAsync(array $args = [])
  * @method \Aws\Result disassociateTrafficDistributionGroupUser(array $args = [])
  * @method \GuzzleHttp\Promise\Promise disassociateTrafficDistributionGroupUserAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result disassociateUserProficiencies(array $args = [])
  * @method \GuzzleHttp\Promise\Promise disassociateUserProficienciesAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result dismissUserContact(array $args = [])
  * @method \GuzzleHttp\Promise\Promise dismissUserContactAsync(array $args = [])
  * @method \Aws\Result getContactAttributes(array $args = [])
@@ -259,8 +279,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listEvaluationFormVersionsAsync(array $args = [])
  * @method \Aws\Result listEvaluationForms(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listEvaluationFormsAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listFlowAssociations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listFlowAssociationsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listHoursOfOperations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listHoursOfOperationsAsync(array $args = [])
  * @method \Aws\Result listInstanceAttributes(array $args = [])
@@ -341,12 +364,17 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise resumeContactRecordingAsync(array $args = [])
  * @method \Aws\Result searchAvailablePhoneNumbers(array $args = [])
  * @method \GuzzleHttp\Promise\Promise searchAvailablePhoneNumbersAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result searchContacts(array $args = [])
  * @method \GuzzleHttp\Promise\Promise searchContactsAsync(array $args = [])
  * @method \Aws\Result searchHoursOfOperations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise searchHoursOfOperationsAsync(array $args = [])
  * @method \Aws\Result searchPredefinedAttributes(array $args = [])
  * @method \GuzzleHttp\Promise\Promise searchPredefinedAttributesAsync(array $args = [])
+=======
+ * @method \Aws\Result searchHoursOfOperations(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise searchHoursOfOperationsAsync(array $args = [])
+>>>>>>> Stashed changes
  * @method \Aws\Result searchPrompts(array $args = [])
  * @method \GuzzleHttp\Promise\Promise searchPromptsAsync(array $args = [])
  * @method \Aws\Result searchQueues(array $args = [])
@@ -435,8 +463,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise updatePhoneNumberAsync(array $args = [])
  * @method \Aws\Result updatePhoneNumberMetadata(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updatePhoneNumberMetadataAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result updatePredefinedAttribute(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updatePredefinedAttributeAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result updatePrompt(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updatePromptAsync(array $args = [])
  * @method \Aws\Result updateQueueHoursOfOperation(array $args = [])

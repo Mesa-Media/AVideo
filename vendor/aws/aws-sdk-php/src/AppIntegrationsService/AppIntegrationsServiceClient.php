@@ -23,8 +23,11 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getDataIntegrationAsync(array $args = [])
  * @method \Aws\Result getEventIntegration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getEventIntegrationAsync(array $args = [])
+<<<<<<< Updated upstream
  * @method \Aws\Result listApplicationAssociations(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listApplicationAssociationsAsync(array $args = [])
+=======
+>>>>>>> Stashed changes
  * @method \Aws\Result listApplications(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listApplicationsAsync(array $args = [])
  * @method \Aws\Result listDataIntegrationAssociations(array $args = [])

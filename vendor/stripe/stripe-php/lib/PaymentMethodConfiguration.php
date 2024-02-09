@@ -60,7 +60,10 @@ namespace Stripe;
  * @property null|\Stripe\StripeObject $paynow
  * @property null|\Stripe\StripeObject $paypal
  * @property null|\Stripe\StripeObject $promptpay
+<<<<<<< Updated upstream
  * @property null|\Stripe\StripeObject $revolut_pay
+=======
+>>>>>>> Stashed changes
  * @property null|\Stripe\StripeObject $sepa_debit
  * @property null|\Stripe\StripeObject $sofort
  * @property null|\Stripe\StripeObject $upi

@@ -26,8 +26,13 @@ namespace Stripe;
  * <code>Event</code> objects directly to an endpoint on your server. You can manage
  * webhooks in your
  * <a href="https://dashboard.stripe.com/account/webhooks">account settings</a>. Learn how
+<<<<<<< Updated upstream
  * to <a href="https://stripe.com/docs/webhooks">listen for events</a>
  * so that your integration can automatically trigger reactions.
+=======
+ * to [listen for events]
+ * (/docs/webhooks) so that your integration can automatically trigger reactions.
+>>>>>>> Stashed changes
  *
  * When using <a href="https://stripe.com/docs/connect">Connect</a>, you can also receive event notifications
  * that occur in connected accounts. For these events, there's an
@@ -323,6 +328,7 @@ class Event extends ApiResource
     const TYPE_CHECKOUT_SESSION_ASYNC_PAYMENT_SUCCEEDED = 'checkout.session.async_payment_succeeded';
     const TYPE_CHECKOUT_SESSION_COMPLETED = 'checkout.session.completed';
     const TYPE_CHECKOUT_SESSION_EXPIRED = 'checkout.session.expired';
+<<<<<<< Updated upstream
     const TYPE_CLIMATE_ORDER_CANCELED = 'climate.order.canceled';
     const TYPE_CLIMATE_ORDER_CREATED = 'climate.order.created';
     const TYPE_CLIMATE_ORDER_DELAYED = 'climate.order.delayed';
@@ -330,6 +336,8 @@ class Event extends ApiResource
     const TYPE_CLIMATE_ORDER_PRODUCT_SUBSTITUTED = 'climate.order.product_substituted';
     const TYPE_CLIMATE_PRODUCT_CREATED = 'climate.product.created';
     const TYPE_CLIMATE_PRODUCT_PRICING_UPDATED = 'climate.product.pricing_updated';
+=======
+>>>>>>> Stashed changes
     const TYPE_COUPON_CREATED = 'coupon.created';
     const TYPE_COUPON_DELETED = 'coupon.deleted';
     const TYPE_COUPON_UPDATED = 'coupon.updated';
@@ -364,7 +372,10 @@ class Event extends ApiResource
     const TYPE_FINANCIAL_CONNECTIONS_ACCOUNT_DISCONNECTED = 'financial_connections.account.disconnected';
     const TYPE_FINANCIAL_CONNECTIONS_ACCOUNT_REACTIVATED = 'financial_connections.account.reactivated';
     const TYPE_FINANCIAL_CONNECTIONS_ACCOUNT_REFRESHED_BALANCE = 'financial_connections.account.refreshed_balance';
+<<<<<<< Updated upstream
     const TYPE_FINANCIAL_CONNECTIONS_ACCOUNT_REFRESHED_TRANSACTIONS = 'financial_connections.account.refreshed_transactions';
+=======
+>>>>>>> Stashed changes
     const TYPE_IDENTITY_VERIFICATION_SESSION_CANCELED = 'identity.verification_session.canceled';
     const TYPE_IDENTITY_VERIFICATION_SESSION_CREATED = 'identity.verification_session.created';
     const TYPE_IDENTITY_VERIFICATION_SESSION_PROCESSING = 'identity.verification_session.processing';

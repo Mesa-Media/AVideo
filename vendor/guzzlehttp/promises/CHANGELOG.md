@@ -1,6 +1,7 @@
 # CHANGELOG
 
 
+<<<<<<< Updated upstream
 ## 2.0.2 - 2023-12-03
 
 ### Changed
@@ -8,6 +9,8 @@
 - Replaced `call_user_func*` with native calls
 
 
+=======
+>>>>>>> Stashed changes
 ## 2.0.1 - 2023-08-03
 
 ### Changed

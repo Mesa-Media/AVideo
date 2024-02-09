@@ -1103,6 +1103,7 @@ class SSH2
     private $errorOnMultipleChannels;
 
     /**
+<<<<<<< Updated upstream
      * Terrapin Countermeasure
      *
      * "During initial KEX, terminate the connection if any unexpected or out-of-sequence packet is received"
@@ -1113,6 +1114,8 @@ class SSH2
     private $extra_packets;
 
     /**
+=======
+>>>>>>> Stashed changes
      * Default Constructor.
      *
      * $host can either be a string, representing the host, or a stream resource.
@@ -1132,7 +1135,10 @@ class SSH2
                 4 => 'NET_SSH2_MSG_DEBUG',
                 5 => 'NET_SSH2_MSG_SERVICE_REQUEST',
                 6 => 'NET_SSH2_MSG_SERVICE_ACCEPT',
+<<<<<<< Updated upstream
                 7 => 'NET_SSH2_MSG_EXT_INFO', // RFC 8308
+=======
+>>>>>>> Stashed changes
                 20 => 'NET_SSH2_MSG_KEXINIT',
                 21 => 'NET_SSH2_MSG_NEWKEYS',
                 30 => 'NET_SSH2_MSG_KEXDH_INIT',

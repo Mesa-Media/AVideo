@@ -80,7 +80,7 @@ services:
       - app_net
 
   live:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.live
     restart: "unless-stopped"
@@ -160,6 +160,7 @@ services:
 
   #http://localhost:8081
   phpmyadmin:
+    platform: linux/amd64
     image: "phpmyadmin/phpmyadmin"
     restart: "unless-stopped"
     environment:
@@ -177,6 +178,7 @@ services:
 
   #http://localhost:8082
   phpmyadmin_encoder:
+    platform: linux/amd64
     image: "phpmyadmin/phpmyadmin"
     restart: "unless-stopped"
     environment:

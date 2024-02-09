@@ -98,9 +98,12 @@ require __DIR__ . '/lib/Card.php';
 require __DIR__ . '/lib/CashBalance.php';
 require __DIR__ . '/lib/Charge.php';
 require __DIR__ . '/lib/Checkout/Session.php';
+<<<<<<< Updated upstream
 require __DIR__ . '/lib/Climate/Order.php';
 require __DIR__ . '/lib/Climate/Product.php';
 require __DIR__ . '/lib/Climate/Supplier.php';
+=======
+>>>>>>> Stashed changes
 require __DIR__ . '/lib/CountrySpec.php';
 require __DIR__ . '/lib/Coupon.php';
 require __DIR__ . '/lib/CreditNote.php';
@@ -119,7 +122,10 @@ require __DIR__ . '/lib/FinancialConnections/Account.php';
 require __DIR__ . '/lib/FinancialConnections/AccountOwner.php';
 require __DIR__ . '/lib/FinancialConnections/AccountOwnership.php';
 require __DIR__ . '/lib/FinancialConnections/Session.php';
+<<<<<<< Updated upstream
 require __DIR__ . '/lib/FinancialConnections/Transaction.php';
+=======
+>>>>>>> Stashed changes
 require __DIR__ . '/lib/FundingInstructions.php';
 require __DIR__ . '/lib/Identity/VerificationReport.php';
 require __DIR__ . '/lib/Identity/VerificationSession.php';
@@ -169,10 +175,13 @@ require __DIR__ . '/lib/Service/BillingPortal/SessionService.php';
 require __DIR__ . '/lib/Service/ChargeService.php';
 require __DIR__ . '/lib/Service/Checkout/CheckoutServiceFactory.php';
 require __DIR__ . '/lib/Service/Checkout/SessionService.php';
+<<<<<<< Updated upstream
 require __DIR__ . '/lib/Service/Climate/ClimateServiceFactory.php';
 require __DIR__ . '/lib/Service/Climate/OrderService.php';
 require __DIR__ . '/lib/Service/Climate/ProductService.php';
 require __DIR__ . '/lib/Service/Climate/SupplierService.php';
+=======
+>>>>>>> Stashed changes
 require __DIR__ . '/lib/Service/CoreServiceFactory.php';
 require __DIR__ . '/lib/Service/CountrySpecService.php';
 require __DIR__ . '/lib/Service/CouponService.php';
@@ -187,7 +196,10 @@ require __DIR__ . '/lib/Service/FileService.php';
 require __DIR__ . '/lib/Service/FinancialConnections/AccountService.php';
 require __DIR__ . '/lib/Service/FinancialConnections/FinancialConnectionsServiceFactory.php';
 require __DIR__ . '/lib/Service/FinancialConnections/SessionService.php';
+<<<<<<< Updated upstream
 require __DIR__ . '/lib/Service/FinancialConnections/TransactionService.php';
+=======
+>>>>>>> Stashed changes
 require __DIR__ . '/lib/Service/Identity/IdentityServiceFactory.php';
 require __DIR__ . '/lib/Service/Identity/VerificationReportService.php';
 require __DIR__ . '/lib/Service/Identity/VerificationSessionService.php';

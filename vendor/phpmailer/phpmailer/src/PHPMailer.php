@@ -757,7 +757,11 @@ class PHPMailer
      *
      * @var string
      */
+<<<<<<< Updated upstream
     const VERSION = '6.9.1';
+=======
+    const VERSION = '6.8.1';
+>>>>>>> Stashed changes
 
     /**
      * Error severity: message only, continue processing.

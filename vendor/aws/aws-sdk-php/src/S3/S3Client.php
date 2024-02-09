@@ -505,7 +505,13 @@ class S3Client extends AwsClient implements S3ClientInterface
         $signing_name = empty($command->getAuthSchemes())
             ? $this->getSigningName($request->getUri()->getHost())
             : $command->getAuthSchemes()['name'];
+<<<<<<< Updated upstream
         $signature_version = $this->getSignatureVersionFromCommand($command);
+=======
+        $signature_version = empty($command->getAuthSchemes())
+            ? $this->getConfig('signature_version')
+            : $command->getAuthSchemes()['version'];
+>>>>>>> Stashed changes
 
         /** @var \Aws\Signature\SignatureInterface $signer */
         $signer = call_user_func(

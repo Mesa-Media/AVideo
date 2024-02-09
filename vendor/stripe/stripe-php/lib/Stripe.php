@@ -58,7 +58,11 @@ class Stripe
     /** @var float Initial delay between retries, in seconds */
     private static $initialNetworkRetryDelay = 0.5;
 
+<<<<<<< Updated upstream
     const VERSION = '13.8.0';
+=======
+    const VERSION = '13.2.0';
+>>>>>>> Stashed changes
 
     /**
      * @return string the API key used for requests

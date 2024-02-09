@@ -1,5 +1,6 @@
 # Changelog
 
+<<<<<<< Updated upstream
 ## 13.8.0 - 2024-01-04
 * [#1627](https://github.com/stripe/stripe-php/pull/1627) Update generated code
   * Add support for `retrieve` method on resource `Tax.Registration`
@@ -48,6 +49,8 @@
 ## 13.2.1 - 2023-11-06
 * [#1602](https://github.com/stripe/stripe-php/pull/1602) Fix error when "id" is not a string.
 
+=======
+>>>>>>> Stashed changes
 ## 13.2.0 - 2023-11-02
 * [#1599](https://github.com/stripe/stripe-php/pull/1599) Update generated code
   * Add support for new resource `Tax.Registration`

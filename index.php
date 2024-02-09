@@ -114,3 +114,10 @@ function __($text)
 {
     return $text;
 }
+
+function test(){
+    echo "TEST";
+    error_log("SOMETHING");
+}
+
+test();
